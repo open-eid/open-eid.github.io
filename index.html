@@ -1028,6 +1028,7 @@ Note that not all of the external base libraries are included in the component m
 </tr>
 </tbody>
 </table>
+<p><a name="_DigiDoc3_Client_interfaces"></a></p>
 <h4 id="digidoc3-client-interfaces">DigiDoc3 Client interfaces</h4>
 <p>Provided:</p>
 <ul>
@@ -1154,6 +1155,99 @@ Note that not all of the external base libraries are included in the component m
 <li><a href="#_Error_reports_repository">Error reports repository interface</a></li>
 <li><a href="#_Eesti.ee_e-mail_checking">Eesti.ee e-mail checking service interface</a></li>
 <li><a href="#_Certificate_renewal_service">Certificate's renewal service interface</a></li>
+<li><a href="#_Mobile-ID_validity_checking">Mobile-ID validity checking service interface</a></li>
+<li>Interfaces with base libraries: Qt5</li>
+</ul>
+<p><a name="_DigiDoc4_Client"></a></p>
+<h3 id="digidoc4-client">DigiDoc4 Client</h3>
+<p><img alt="" src="./index_files/comp_digidoc4_signing.png" /><br />
+<strong>Figure: DigiDoc4 Client signing and crypto-components</strong></p>
+<p><img alt="" src="./index_files/comp_digidoc4_eid.png" /><br />
+<strong>Figure: DigiDoc4 Client ID-card management components</strong></p>
+<p><strong>Table: DigiDoc4 Client</strong></p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Description</th>
+<th>Owner/ Developer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DigiDoc4 Client</td>
+<td>DigiDoc4 Client is an update of both <a href="#_DigiDoc3_Client">DigiDoc3 Client</a> and <a href="#_ID-card_utility">ID-card utility</a> - it combines the functionality of both applications. Major changes provided by the new client are refreshed UI and the improvements in the workflow/UX of the application. Architectural components and interfaces of the application mirror the existing applications. Code repository: <a href="https://github.com/open-eid/DigiDoc4-Client">https://github.com/open-eid/DigiDoc4-Client</a> .</td>
+<td>RIA</td>
+</tr>
+<tr>
+<td>-</td>
+<td>See the list of components of <a href="#_DigiDoc3_Client">DigiDoc3 Client</a> and <a href="#_ID-card_utility">ID-card utility</a></td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<p><a name="_DigiDoc4_Client_interfaces"></a></p>
+<h4 id="digidoc4-interfaces">DigiDoc4 interfaces</h4>
+<p>DigiDoc4 interfaces are the combination of <a href="#_DigiDoc3_Client_interfaces">DigiDoc3 Client-</a> and <a href="#_ID-card_utility_interfaces">ID-card utility interfaces</a>.</p>
+<p><a name="_TeRa"></a></p>
+<h3 id="tera-timestamping-application">TeRa timestamping application</h3>
+<p><img alt="" src="./index_files/comp_tera.png" /><br />
+<strong>Figure: Components of TeRa timestamping application</strong></p>
+<p><strong>Table: Components of TeRa timestamping application</strong></p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Description</th>
+<th>Owner/ Developer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TeRa</td>
+<td>. Code repository: <a href="https://github.com/open-eid/TeRa">https://github.com/open-eid/TeRa</a> .</td>
+<td>RIA</td>
+</tr>
+<tr>
+<td>Central configuration client</td>
+<td>Described in chap. <a href="#_comp_central_conf">Central configuration service</a></td>
+<td>RIA/SK</td>
+</tr>
+<tr>
+<td>Timestamping proxy</td>
+<td>Proxy service used by RIA. The proxy is used to provide well-known name for the timestamping service; it allows flexible change of service providers and possibility to support providers at the same time.</td>
+<td>RIA</td>
+</tr>
+<tr>
+<td>Time-stamping service</td>
+<td>Trusted timestamping service based on RFC 3161 protocol</td>
+<td>Service provider</td>
+</tr>
+</tbody>
+</table>
+<p><a name="_TeRa_interfaces"></a></p>
+<h4 id="tera-interfaces">TeRa interfaces</h4>
+<p>Provided:</p>
+<ul>
+<li>Graphical user interface – interface for searching and timestamping of DDOC/BDOC v1.0 signature containers on user's machines.<ul>
+<li>User: end-user</li>
+<li>Accessible with: GUI elements</li>
+</ul>
+</li>
+<li>Command line (CLI) interface – interface for searching and timestamping of DDOC/BDOC v1.0 signature containers via CLI.<ul>
+<li>User: end-user</li>
+<li>Accessible with: command line / terminal</li>
+</ul>
+</li>
+<li>PIN dialog – for inserting PIN value in all supported operating systems.<ul>
+<li>User: end-user</li>
+<li>Accessible with: GUI elements</li>
+</ul>
+</li>
+</ul>
+<p>Required:</p>
+<ul>
+<li><a href="#central-configuration-client-components-interfaces">Central configuration client interface</a></li>
 <li><a href="#_Mobile-ID_validity_checking">Mobile-ID validity checking service interface</a></li>
 <li>Interfaces with base libraries: Qt5</li>
 </ul>
@@ -1558,11 +1652,32 @@ Note that not all of the external base libraries are included in the component m
 <p><img alt="" src="./index_files/web_auth.png" />  </p>
 <p><strong>Figure: Web authentication components</strong></p>
 <p><strong>Table: Web authentication components</strong></p>
-<p>| Component | Description | Owner/ Developer |
-| pkcs11-loader.js |  A JavaScript component that is used to load the OpenSC PKCS#11 driver to the Firefox browser’s cryptographic devices list during each initialization of the browser. Needed during authentication process with eID-card in Firefox browser in all supported operating systems. Code repository: <a href="https://github.com/open-eid/firefox-pkcs11-loader">https://github.com/open-eid/firefox-pkcs11-loader</a> Wiki: <a href="https://github.com/open-eid/firefox-pkcs11-loader/wiki">https://github.com/open-eid/firefox-pkcs11-loader/wiki</a> | RIA/SK |
-| pkcs11-loader.js |  A JavaScript component that is used to load the OpenSC PKCS#11 driver to the Firefox browser’s cryptographic devices list during each initialization of the browser. Needed during authentication process with eID-card in Firefox browser in all supported operating systems. Code repository: <a href="https://github.com/open-eid/firefox-pkcs11-loader">https://github.com/open-eid/firefox-pkcs11-loader</a> Wiki: <a href="https://github.com/open-eid/firefox-pkcs11-loader/wiki">https://github.com/open-eid/firefox-pkcs11-loader/wiki</a> | RIA/SK |
-| OSX native certificate selection and PIN dialog |  PIN dialog and certificate selection windows provided by the operating system’s native components. |  - |
-| Minidriver | Described in chap. <a href="#_comp_drivers">Drivers</a> | RIA/SK |</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Description</th>
+<th>Owner/ Developer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pkcs11-loader.js</td>
+<td>A JavaScript component that is used to load the OpenSC PKCS#11 driver to the Firefox browser’s cryptographic devices list during each initialization of the browser. Needed during authentication process with eID-card in Firefox browser in all supported operating systems. Code repository: <a href="https://github.com/open-eid/firefox-pkcs11-loader">https://github.com/open-eid/firefox-pkcs11-loader</a> Wiki: <a href="https://github.com/open-eid/firefox-pkcs11-loader/wiki">https://github.com/open-eid/firefox-pkcs11-loader/wiki</a></td>
+<td>RIA/SK</td>
+</tr>
+<tr>
+<td>OSX native certificate selection and PIN dialog</td>
+<td>PIN dialog and certificate selection windows provided by the operating system’s native components.</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Minidriver</td>
+<td>Described in chap. <a href="#_comp_drivers">Drivers</a></td>
+<td>RIA/SK</td>
+</tr>
+</tbody>
+</table>
 <p><a name="_comp_drivers"></a></p>
 <h2 id="drivers">Drivers</h2>
 <p><img alt="" src="./index_files/drivers.png" /><br />
@@ -2149,5 +2264,5 @@ Note that not all of the external base libraries are included in the component m
 
 <!--
 MkDocs version : 0.17.2
-Build Date UTC : 2017-12-25 16:48:02
+Build Date UTC : 2018-01-03 07:53:58
 -->

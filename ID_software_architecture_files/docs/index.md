@@ -894,6 +894,7 @@ Note that not all of the external base libraries are included in the component m
 | CDigiDoc |  Described in chap. [Software libraries](#_comp_libraries) | RIA/SK |
 | Minidriver |  Used via CNG interface in Windows environment only. Described in chap. [Drivers](#_comp_drivers) | RIA/SK |
 
+<a name="_DigiDoc3_Client_interfaces"></a>
 #### DigiDoc3 Client interfaces
 
 Provided:
@@ -965,7 +966,64 @@ Required:
 *   Interfaces with base libraries: Qt5
 
 
+<a name="_DigiDoc4_Client"></a>
+### DigiDoc4 Client
 
+  ![](index_files/comp_digidoc4_signing.png)  
+**Figure: DigiDoc4 Client signing and crypto-components**
+
+  ![](index_files/comp_digidoc4_eid.png)  
+**Figure: DigiDoc4 Client ID-card management components**
+
+**Table: DigiDoc4 Client**
+
+| Component | Description | Owner/ Developer |
+| - | - | - |
+| DigiDoc4 Client | DigiDoc4 Client is an update of both [DigiDoc3 Client](#_DigiDoc3_Client) and [ID-card utility](#_ID-card_utility) - it combines the functionality of both applications. Major changes provided by the new client are refreshed UI and the improvements in the workflow/UX of the application. Architectural components and interfaces of the application mirror the existing applications. Code repository: [https://github.com/open-eid/DigiDoc4-Client](https://github.com/open-eid/DigiDoc4-Client) . | RIA |
+| - | See the list of components of [DigiDoc3 Client](#_DigiDoc3_Client) and [ID-card utility](#_ID-card_utility) | - |
+
+
+<a name="_DigiDoc4_Client_interfaces"></a>
+#### DigiDoc4 interfaces 
+
+DigiDoc4 interfaces are the combination of [DigiDoc3 Client-](#_DigiDoc3_Client_interfaces) and [ID-card utility interfaces](#_ID-card_utility_interfaces).
+
+
+<a name="_TeRa"></a>
+### TeRa timestamping application
+
+  ![](index_files/comp_tera.png)  
+**Figure: Components of TeRa timestamping application**
+
+**Table: Components of TeRa timestamping application**
+
+| Component | Description | Owner/ Developer |
+| - | - | - |
+| TeRa | . Code repository: [https://github.com/open-eid/TeRa](https://github.com/open-eid/TeRa) . | RIA |
+| Central configuration client |  Described in chap. [Central configuration service](#_comp_central_conf) | RIA/SK |
+| Timestamping proxy | Proxy service used by RIA. The proxy is used to provide well-known name for the timestamping service; it allows flexible change of service providers and possibility to support providers at the same time. | RIA |
+| Time-stamping service | Trusted timestamping service based on RFC 3161 protocol | Service provider |
+
+<a name="_TeRa_interfaces"></a>
+#### TeRa interfaces
+
+Provided:
+
+*   Graphical user interface – interface for searching and timestamping of DDOC/BDOC v1.0 signature containers on user's machines.
+    *   User: end-user
+    *   Accessible with: GUI elements
+*   Command line (CLI) interface – interface for searching and timestamping of DDOC/BDOC v1.0 signature containers via CLI.
+    *   User: end-user
+    *   Accessible with: command line / terminal
+*   PIN dialog – for inserting PIN value in all supported operating systems.
+    *   User: end-user
+    *   Accessible with: GUI elements
+
+Required:
+
+*   [Central configuration client interface](#central-configuration-client-components-interfaces)
+*   [Mobile-ID validity checking service interface](#_Mobile-ID_validity_checking)
+*   Interfaces with base libraries: Qt5
 
 
 <a name="_comp_libraries"></a>
@@ -1248,9 +1306,9 @@ Authentication in web browsers is done with the browsers’ and operating system
 **Table: Web authentication components**
 
 | Component | Description | Owner/ Developer |
-| pkcs11-loader.js |  A JavaScript component that is used to load the OpenSC PKCS#11 driver to the Firefox browser’s cryptographic devices list during each initialization of the browser. Needed during authentication process with eID-card in Firefox browser in all supported operating systems. Code repository: [https://github.com/open-eid/firefox-pkcs11-loader](https://github.com/open-eid/firefox-pkcs11-loader) Wiki: [https://github.com/open-eid/firefox-pkcs11-loader/wiki](https://github.com/open-eid/firefox-pkcs11-loader/wiki) | RIA/SK |
-| pkcs11-loader.js |  A JavaScript component that is used to load the OpenSC PKCS#11 driver to the Firefox browser’s cryptographic devices list during each initialization of the browser. Needed during authentication process with eID-card in Firefox browser in all supported operating systems. Code repository: [https://github.com/open-eid/firefox-pkcs11-loader](https://github.com/open-eid/firefox-pkcs11-loader) Wiki: [https://github.com/open-eid/firefox-pkcs11-loader/wiki](https://github.com/open-eid/firefox-pkcs11-loader/wiki) | RIA/SK |
-| OSX native certificate selection and PIN dialog |  PIN dialog and certificate selection windows provided by the operating system’s native components. |  - |
+| - | - | - |
+| pkcs11-loader.js | A JavaScript component that is used to load the OpenSC PKCS#11 driver to the Firefox browser’s cryptographic devices list during each initialization of the browser. Needed during authentication process with eID-card in Firefox browser in all supported operating systems. Code repository: [https://github.com/open-eid/firefox-pkcs11-loader](https://github.com/open-eid/firefox-pkcs11-loader) Wiki: [https://github.com/open-eid/firefox-pkcs11-loader/wiki](https://github.com/open-eid/firefox-pkcs11-loader/wiki) | RIA/SK |
+| OSX native certificate selection and PIN dialog | PIN dialog and certificate selection windows provided by the operating system’s native components. | - |
 | Minidriver | Described in chap. [Drivers](#_comp_drivers) | RIA/SK |
 
 <a name="_comp_drivers"></a>
