@@ -847,6 +847,8 @@ The main functions offered by ID-software are described in the following table.
 | - | - |
 | Handling BDOC documents | Handling documents in [BDOC 2.1](http://id.ee/public/bdoc-spec212-eng.pdf) (XAdES/ASiC-E) digital signature format that is a profile of [ETSI XAdES](http://www.etsi.org/deliver/etsi_ts/101900_101999/101903/01.04.02_60/ts_101903v010402p.pdf) (XML Advanced Electronic Signature) and [ETSI ASiC](http://www.etsi.org/deliver/etsi_ts/102900_102999/102918/01.02.01_60/ts_102918v010201p.pdf) formats. More information on the formats’ life cycle can be found from [http://www.id.ee/?lang=en&id=34336](http://www.id.ee/?lang=en&id=34336) . |
 | Handling DDOC documents | Handling documents in [DIGIDOC-XML 1.3 (DDOC)](http://id.ee/public/DigiDoc_format_1.3.pdf) digital signature format that is a profile of [ETSI XAdES](http://www.etsi.org/deliver/etsi_ts/101900_101999/101903/01.04.02_60/ts_101903v010402p.pdf) (XML Advanced Electronic Signature) format. More information on the formats’ life cycle can be found from [http://www.id.ee/?lang=en&id=34336](http://www.id.ee/?lang=en&id=34336) |
+| Verification of PAdES documents | Validating the signatures of PDF documents in [PAdES](http://www.etsi.org/deliver/etsi_en/319100_319199/31914201/01.01.01_60/en_31914201v010101p.pdf) digital signature format that is a profile of [ETSI PAdES](http://www.etsi.org/deliver/etsi_en/319100_319199/31914201/01.01.01_60/en_31914201v010101p.pdf). |
+| Verification of ASiC-S documents | Validating timestamp and signatures of enclosed DDOC document in the Time Stamp Token (TST) based [ETSI ASIC-S](http://www.etsi.org/deliver/etsi_ts/102900_102999/102918/01.02.01_60/ts_102918v010201p.pdf) containers. |
 | Calculating RSA signature | Calculating the RSA signature value in browser or desktop/server environment. The operation involves connecting with the signature token’s driver, sending the data to be signed and receiving digital signature value calculated with the token owner’s RSA private key. The following cryptographic tokens are supported: hardware-based tokens (e.g. PKCS#11-based eID cards, USB cryptostick and Mobile-ID); software-based tokens (e.g. PKCS#12 software token) |
 | Handling CDOC documents | Encrypting and decrypting documents in [ENCDOC-XML 1.0 (CDOC)](http://id.ee/public/SK-CDOC-1.0-20120625_EN.pdf) format. |
 | Card management operations | Renewal of the certificates on the card, PIN/PUK management, reading personal data file. |
@@ -979,7 +981,8 @@ Required:
 
 | Component | Description | Owner/ Developer |
 | - | - | - |
-| DigiDoc4 Client | DigiDoc4 Client is an update of both [DigiDoc3 Client](#_DigiDoc3_Client) and [ID-card utility](#_ID-card_utility) - it combines the functionality of both applications. Major changes provided by the new client are refreshed UI and the improvements in the workflow/UX of the application. Architectural components and interfaces of the application mirror the existing applications. Code repository: [https://github.com/open-eid/DigiDoc4-Client](https://github.com/open-eid/DigiDoc4-Client) . | RIA |
+| DigiDoc4 Client | DigiDoc4 Client is an update of both [DigiDoc3 Client](#_DigiDoc3_Client) and [ID-card utility](#_ID-card_utility) - it combines the functionality of both applications.<br/>Major changes provided by the new client are refreshed UI and the improvements in the workflow/UX of the application. Architectural components and interfaces of the application mirror the existing applications.<br/>Code repository: [https://github.com/open-eid/DigiDoc4-Client](https://github.com/open-eid/DigiDoc4-Client) . | RIA |
+| SiVa | *Si*gnature *Ve*rification Service is an online web service for validating digitally signed documents.<br/>SiVa is used by the DigiDoc4 Client (by libdigidocpp base library) to validate documents in formats that are not natively supported; currently the service is used to validate PDF (ETSI PAdES) documents.<br/>See also [Signature Verification Service interface](#_SiVa_verification_service). | RIA |
 | - | See the list of components of [DigiDoc3 Client](#_DigiDoc3_Client) and [ID-card utility](#_ID-card_utility) | - |
 
 
@@ -999,9 +1002,9 @@ DigiDoc4 interfaces are the combination of [DigiDoc3 Client-](#_DigiDoc3_Client_
 
 | Component | Description | Owner/ Developer |
 | - | - | - |
-| TeRa | . Code repository: [https://github.com/open-eid/TeRa](https://github.com/open-eid/TeRa) . | RIA |
-| Central configuration client |  Described in chap. [Central configuration service](#_comp_central_conf) | RIA/SK |
-| Timestamping proxy | Proxy service used by RIA. The proxy is used to provide well-known name for the timestamping service; it allows flexible change of service providers and possibility to support providers at the same time. | RIA |
+| TeRa | TeRa (*Te*mbeldamis*Ra*kendus) is a timestamping utility that searches the local filesystem for DDOC and BDOC v1 files and timestamps them creating new ASiC-S containers in Time stamp token format.<br/>Timestamping is necessary in order to ensure the long term verification of the documents in case if the format becomes attackable, e.g. in case of weak hashes used in the signed documents.<br/>Code repository: [https://github.com/open-eid/TeRa](https://github.com/open-eid/TeRa). | RIA |
+| Central configuration client | Described in chap. [Central configuration service](#_comp_central_conf) | RIA/SK |
+| Timestamping proxy | Proxy service used by RIA. The proxy is used to provide well-known interface for the timestamping service; it allows flexible change of service providers and possibility to support multiple providers at the same time.<br/>See also [Time-stamping proxy interface](#_Time_stamping_proxy). | RIA |
 | Time-stamping service | Trusted timestamping service based on RFC 3161 protocol | Service provider |
 
 <a name="_TeRa_interfaces"></a>
@@ -1022,7 +1025,7 @@ Provided:
 Required:
 
 *   [Central configuration client interface](#central-configuration-client-components-interfaces)
-*   [Mobile-ID validity checking service interface](#_Mobile-ID_validity_checking)
+*   [Time-stamping proxy interface](#_Time_stamping_proxy)
 *   Interfaces with base libraries: Qt5
 
 
@@ -1625,7 +1628,18 @@ The following chapter describes interfaces that different ID-software components
 *   Accessible with: HTTP
 *   Accessible from: to be specified. 
 
+#### <a name="_SiVa_verification_service"></a>Signature Verification Service interface (since v3.12.x)
 
+*   User: Libdigidocpp (DigiDoc3 and DigiDoc4 clients)
+*   Accessible with: HTTPS protocol
+*   Accessible from: [https://siva.eesti.ee/validate](https://siva.eesti.ee/validate)
+*   Documentation: [http://open-eid.github.io/SiVa/](http://open-eid.github.io/SiVa/)
+
+#### <a name="_Time_stamping_proxy"></a>Time-stamping proxy interface
+
+*   User: TeRa utility
+*   Accessible with: HTTPS protocol
+*   Accessible from: [https://puhver.ria.ee/tsa](https://puhver.ria.ee/tsa)
 
 
 <a name="_deployment_model"></a>

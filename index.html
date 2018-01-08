@@ -912,6 +912,14 @@ LGPL/BSD3
 <td>Handling documents in <a href="http://id.ee/public/DigiDoc_format_1.3.pdf">DIGIDOC-XML 1.3 (DDOC)</a> digital signature format that is a profile of <a href="http://www.etsi.org/deliver/etsi_ts/101900_101999/101903/01.04.02_60/ts_101903v010402p.pdf">ETSI XAdES</a> (XML Advanced Electronic Signature) format. More information on the formats’ life cycle can be found from <a href="http://www.id.ee/?lang=en&amp;id=34336">http://www.id.ee/?lang=en&amp;id=34336</a></td>
 </tr>
 <tr>
+<td>Verification of PAdES documents</td>
+<td>Validating the signatures of PDF documents in <a href="http://www.etsi.org/deliver/etsi_en/319100_319199/31914201/01.01.01_60/en_31914201v010101p.pdf">PAdES</a> digital signature format that is a profile of <a href="http://www.etsi.org/deliver/etsi_en/319100_319199/31914201/01.01.01_60/en_31914201v010101p.pdf">ETSI PAdES</a>.</td>
+</tr>
+<tr>
+<td>Verification of ASiC-S documents</td>
+<td>Validating timestamp and signatures of enclosed DDOC document in the Time Stamp Token (TST) based <a href="http://www.etsi.org/deliver/etsi_ts/102900_102999/102918/01.02.01_60/ts_102918v010201p.pdf">ETSI ASIC-S</a> containers.</td>
+</tr>
+<tr>
 <td>Calculating RSA signature</td>
 <td>Calculating the RSA signature value in browser or desktop/server environment. The operation involves connecting with the signature token’s driver, sending the data to be signed and receiving digital signature value calculated with the token owner’s RSA private key. The following cryptographic tokens are supported: hardware-based tokens (e.g. PKCS#11-based eID cards, USB cryptostick and Mobile-ID); software-based tokens (e.g. PKCS#12 software token)</td>
 </tr>
@@ -1176,7 +1184,12 @@ Note that not all of the external base libraries are included in the component m
 <tbody>
 <tr>
 <td>DigiDoc4 Client</td>
-<td>DigiDoc4 Client is an update of both <a href="#_DigiDoc3_Client">DigiDoc3 Client</a> and <a href="#_ID-card_utility">ID-card utility</a> - it combines the functionality of both applications. Major changes provided by the new client are refreshed UI and the improvements in the workflow/UX of the application. Architectural components and interfaces of the application mirror the existing applications. Code repository: <a href="https://github.com/open-eid/DigiDoc4-Client">https://github.com/open-eid/DigiDoc4-Client</a> .</td>
+<td>DigiDoc4 Client is an update of both <a href="#_DigiDoc3_Client">DigiDoc3 Client</a> and <a href="#_ID-card_utility">ID-card utility</a> - it combines the functionality of both applications.<br/>Major changes provided by the new client are refreshed UI and the improvements in the workflow/UX of the application. Architectural components and interfaces of the application mirror the existing applications.<br/>Code repository: <a href="https://github.com/open-eid/DigiDoc4-Client">https://github.com/open-eid/DigiDoc4-Client</a> .</td>
+<td>RIA</td>
+</tr>
+<tr>
+<td>SiVa</td>
+<td><em>Si</em>gnature <em>Ve</em>rification Service is an online web service for validating digitally signed documents.<br/>SiVa is used by the DigiDoc4 Client (by libdigidocpp base library) to validate documents in formats that are not natively supported; currently the service is used to validate PDF (ETSI PAdES) documents.<br/>See also <a href="#_SiVa_verification_service">Signature Verification Service interface</a>.</td>
 <td>RIA</td>
 </tr>
 <tr>
@@ -1205,7 +1218,7 @@ Note that not all of the external base libraries are included in the component m
 <tbody>
 <tr>
 <td>TeRa</td>
-<td>. Code repository: <a href="https://github.com/open-eid/TeRa">https://github.com/open-eid/TeRa</a> .</td>
+<td>TeRa (<em>Te</em>mbeldamis<em>Ra</em>kendus) is a timestamping utility that searches the local filesystem for DDOC and BDOC v1 files and timestamps them creating new ASiC-S containers in Time stamp token format.<br/>Timestamping is necessary in order to ensure the long term verification of the documents in case if the format becomes attackable, e.g. in case of weak hashes used in the signed documents.<br/>Code repository: <a href="https://github.com/open-eid/TeRa">https://github.com/open-eid/TeRa</a>.</td>
 <td>RIA</td>
 </tr>
 <tr>
@@ -1215,7 +1228,7 @@ Note that not all of the external base libraries are included in the component m
 </tr>
 <tr>
 <td>Timestamping proxy</td>
-<td>Proxy service used by RIA. The proxy is used to provide well-known name for the timestamping service; it allows flexible change of service providers and possibility to support providers at the same time.</td>
+<td>Proxy service used by RIA. The proxy is used to provide well-known interface for the timestamping service; it allows flexible change of service providers and possibility to support multiple providers at the same time.<br/>See also <a href="#_Time_stamping_proxy">Time-stamping proxy interface</a>.</td>
 <td>RIA</td>
 </tr>
 <tr>
@@ -1248,7 +1261,7 @@ Note that not all of the external base libraries are included in the component m
 <p>Required:</p>
 <ul>
 <li><a href="#central-configuration-client-components-interfaces">Central configuration client interface</a></li>
-<li><a href="#_Mobile-ID_validity_checking">Mobile-ID validity checking service interface</a></li>
+<li><a href="#_Time_stamping_proxy">Time-stamping proxy interface</a></li>
 <li>Interfaces with base libraries: Qt5</li>
 </ul>
 <p><a name="_comp_libraries"></a></p>
@@ -2155,6 +2168,19 @@ Note that not all of the external base libraries are included in the component m
 <li>Accessible with: HTTP</li>
 <li>Accessible from: to be specified. </li>
 </ul>
+<h4 id="signature-verification-service-interface-since-v312x"><a name="_SiVa_verification_service"></a>Signature Verification Service interface (since v3.12.x)</h4>
+<ul>
+<li>User: Libdigidocpp (DigiDoc3 and DigiDoc4 clients)</li>
+<li>Accessible with: HTTPS protocol</li>
+<li>Accessible from: <a href="https://siva.eesti.ee/validate">https://siva.eesti.ee/validate</a></li>
+<li>Documentation: <a href="http://open-eid.github.io/SiVa/">http://open-eid.github.io/SiVa/</a></li>
+</ul>
+<h4 id="time-stamping-proxy-interface"><a name="_Time_stamping_proxy"></a>Time-stamping proxy interface</h4>
+<ul>
+<li>User: TeRa utility</li>
+<li>Accessible with: HTTPS protocol</li>
+<li>Accessible from: <a href="https://puhver.ria.ee/tsa">https://puhver.ria.ee/tsa</a></li>
+</ul>
 <p><a name="_deployment_model"></a></p>
 <h1 id="deployment-model"><a name="_tmp2">Deployment model</a></h1>
 <p>The following subchapters describe physical deployment of ID-software components in collaboration with external components that were depicted in chap. <a href="#_component_model">Component model</a> in case of the most common use cases.</p>
@@ -2264,5 +2290,5 @@ Note that not all of the external base libraries are included in the component m
 
 <!--
 MkDocs version : 0.17.2
-Build Date UTC : 2018-01-03 07:53:58
+Build Date UTC : 2018-01-08 04:03:16
 -->
