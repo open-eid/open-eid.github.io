@@ -120,7 +120,7 @@ Authentication
 
 <tr>
 
-<td width="5%" rowspan="2">
+<td width="5%" rowspan="4">
 
 Desktop applications
 
@@ -142,7 +142,7 @@ yes (1)
 
 <td width="12%">
 
-yes
+yes (5)
 
 </td>
 
@@ -221,6 +221,110 @@ yes (1)
 <td width="10%">
 
 RIA/SK
+
+</td>
+
+<td width="8%">
+
+LGPL
+
+</td>
+
+</tr>
+
+<tr>
+
+<td width="14%">
+
+DigiDoc4 Client
+
+</td>
+
+<td width="10%">
+
+yes (1)
+
+</td>
+
+<td width="10%" >yes - validation only (1)</td>
+
+<td width="12%">
+
+yes (5)
+
+</td>
+
+<td width="12%">
+
+-
+
+</td>
+
+<td width="12%">
+
+yes (1)
+
+</td>
+
+<td width="14%">
+
+-
+
+</td>
+
+<td width="10%">
+
+RIA
+
+</td>
+
+<td width="8%">
+
+LGPL
+
+</td>
+
+</tr>
+
+<tr>
+
+<td width="14%">
+
+TeRa timestamping utility
+
+</td>
+
+<td width="10%" >yes - timestamping BDOC 1.0 (4)</td>
+
+<td width="10%" >yes - timestamping only (4)</td>
+
+<td width="12%">
+
+-
+
+</td>
+
+<td width="12%">
+
+-
+
+</td>
+
+<td width="12%">
+
+-
+
+</td>
+
+<td width="14%">
+
+-
+
+</td>
+
+<td width="10%">
+
+RIA
 
 </td>
 
@@ -730,6 +834,8 @@ Remarks:
 (1) - The functionality is provided via base components.  
 (2) - Only BDOC with time-marks is supported (TM profile). Additional information is provided in the component's documentation.  
 (3) - The component is used only once for setting the proper parameters for authentication in Firefox browser.  
+(4) - The utility is used to timestamp BDOC 1.0 or DDOC documents - it creates a ASiC-S container with RFC 3161 timestamp token applied to the original BDOC or DDOC document.  
+(5) - Supports also CDOC 1.1 format - encryption and decryption with ECDH (Elliptic-curve Diffie–Hellman).  
 
 
   
@@ -741,6 +847,8 @@ The main functions offered by ID-software are described in the following table.
 | - | - |
 | Handling BDOC documents | Handling documents in [BDOC 2.1](http://id.ee/public/bdoc-spec212-eng.pdf) (XAdES/ASiC-E) digital signature format that is a profile of [ETSI XAdES](http://www.etsi.org/deliver/etsi_ts/101900_101999/101903/01.04.02_60/ts_101903v010402p.pdf) (XML Advanced Electronic Signature) and [ETSI ASiC](http://www.etsi.org/deliver/etsi_ts/102900_102999/102918/01.02.01_60/ts_102918v010201p.pdf) formats. More information on the formats’ life cycle can be found from [http://www.id.ee/?lang=en&id=34336](http://www.id.ee/?lang=en&id=34336) . |
 | Handling DDOC documents | Handling documents in [DIGIDOC-XML 1.3 (DDOC)](http://id.ee/public/DigiDoc_format_1.3.pdf) digital signature format that is a profile of [ETSI XAdES](http://www.etsi.org/deliver/etsi_ts/101900_101999/101903/01.04.02_60/ts_101903v010402p.pdf) (XML Advanced Electronic Signature) format. More information on the formats’ life cycle can be found from [http://www.id.ee/?lang=en&id=34336](http://www.id.ee/?lang=en&id=34336) |
+| Verification of PAdES documents | Validating the signatures of PDF documents in [PAdES](http://www.etsi.org/deliver/etsi_en/319100_319199/31914201/01.01.01_60/en_31914201v010101p.pdf) digital signature format that is a profile of [ETSI PAdES](http://www.etsi.org/deliver/etsi_en/319100_319199/31914201/01.01.01_60/en_31914201v010101p.pdf). |
+| Verification of ASiC-S documents | Validating timestamp and signatures of enclosed DDOC document in the Time Stamp Token (TST) based [ETSI ASIC-S](http://www.etsi.org/deliver/etsi_ts/102900_102999/102918/01.02.01_60/ts_102918v010201p.pdf) containers. |
 | Calculating RSA signature | Calculating the RSA signature value in browser or desktop/server environment. The operation involves connecting with the signature token’s driver, sending the data to be signed and receiving digital signature value calculated with the token owner’s RSA private key. The following cryptographic tokens are supported: hardware-based tokens (e.g. PKCS#11-based eID cards, USB cryptostick and Mobile-ID); software-based tokens (e.g. PKCS#12 software token) |
 | Handling CDOC documents | Encrypting and decrypting documents in [ENCDOC-XML 1.0 (CDOC)](http://id.ee/public/SK-CDOC-1.0-20120625_EN.pdf) format. |
 | Card management operations | Renewal of the certificates on the card, PIN/PUK management, reading personal data file. |
@@ -772,7 +880,7 @@ Note that not all of the external base libraries are included in the component m
 **Table: Components of DigiDoc3 Client**
 
 | Component | Description | Owner/ Developer |
-| - |  - | - |
+| - | - | - |
 | DigiDoc3 Client |  End-user desktop applications that own a common GUI. DigiDoc3 Client enables handling digitally signed documents. DigiDoc3 Crypto subcomponent enables file encryption/decryption. Wiki: [https://github.com/open-eid/qdigidoc/wiki](https://github.com/open-eid/qdigidoc/wiki) Code repository: [https://github.com/open-eid/qdigidoc](https://github.com/open-eid/qdigidoc) | RIA/SK |
 | DigiDoc3 Client base libraries |  Libdigidocpp (and its base libraries, including CDigiDoc), etc. See [ID-card utility's interfaces](#_ID-card_utility_interfaces) |  - |
 | Kill switch (v3.9-v3.11) |  Service for centrally managing DigiDoc3 Client application’s life cycle. The application periodically connects with the service to check if the application’s version is still supported. If not, then the application cannot be used any longer and a newer version must be installed. | RIA |
@@ -788,6 +896,7 @@ Note that not all of the external base libraries are included in the component m
 | CDigiDoc |  Described in chap. [Software libraries](#_comp_libraries) | RIA/SK |
 | Minidriver |  Used via CNG interface in Windows environment only. Described in chap. [Drivers](#_comp_drivers) | RIA/SK |
 
+<a name="_DigiDoc3_Client_interfaces"></a>
 #### DigiDoc3 Client interfaces
 
 Provided:
@@ -822,7 +931,7 @@ Required:
 **Table: Components of ID-card utility**
 
 | Component | Description | Owner/ Developer |
-| - |  - | - |
+| - | - | - |
 | ID-card utility | End-user desktop application for managing ID-card’s PIN/PUK codes replacement, certificates’ renewal and other services. Code repository: [https://github.com/open-eid/qesteidutil](https://github.com/open-eid/qesteidutil) . Wiki: [https://github.com/open-eid/qesteidutil/wiki](https://github.com/open-eid/qesteidutil/wiki) | RIA/SK |
 | ID-card utility’s base libraries |  See [ID-card utility's interfaces](#_ID-card_utility_interfaces) |  - |
 | ID-Updater |  Used in Windows and OSX only, described in chap. [Updating mechanisms](#_comp_update). In case of Windows platform, the ID-Updater can be executed from ID-card utility program. | RIA/SK |
@@ -859,7 +968,65 @@ Required:
 *   Interfaces with base libraries: Qt5
 
 
+<a name="_DigiDoc4_Client"></a>
+### DigiDoc4 Client
 
+  ![](index_files/comp_digidoc4_signing.png)  
+**Figure: DigiDoc4 Client signing and crypto-components**
+
+  ![](index_files/comp_digidoc4_eid.png)  
+**Figure: DigiDoc4 Client ID-card management components**
+
+**Table: DigiDoc4 Client**
+
+| Component | Description | Owner/ Developer |
+| - | - | - |
+| DigiDoc4 Client | DigiDoc4 Client is an update of both [DigiDoc3 Client](#_DigiDoc3_Client) and [ID-card utility](#_ID-card_utility) - it combines the functionality of both applications.<br/>Major changes provided by the new client are refreshed UI and the improvements in the workflow/UX of the application. Architectural components and interfaces of the application mirror the existing applications.<br/>Code repository: [https://github.com/open-eid/DigiDoc4-Client](https://github.com/open-eid/DigiDoc4-Client) . | RIA |
+| SiVa | *Si*gnature *Ve*rification Service is an online web service for validating digitally signed documents.<br/>SiVa is used by the DigiDoc4 Client (by libdigidocpp base library) to validate documents in formats that are not natively supported; currently the service is used to validate PDF (ETSI PAdES) documents.<br/>See also [Signature Verification Service interface](#_SiVa_verification_service). | RIA |
+| - | See the list of components of [DigiDoc3 Client](#_DigiDoc3_Client) and [ID-card utility](#_ID-card_utility) | - |
+
+
+<a name="_DigiDoc4_Client_interfaces"></a>
+#### DigiDoc4 interfaces 
+
+DigiDoc4 interfaces are the combination of [DigiDoc3 Client-](#_DigiDoc3_Client_interfaces) and [ID-card utility interfaces](#_ID-card_utility_interfaces).
+
+
+<a name="_TeRa"></a>
+### TeRa timestamping application
+
+  ![](index_files/comp_tera.png)  
+**Figure: Components of TeRa timestamping application**
+
+**Table: Components of TeRa timestamping application**
+
+| Component | Description | Owner/ Developer |
+| - | - | - |
+| TeRa | TeRa (*Te*mbeldamis*Ra*kendus) is a timestamping utility that searches the local filesystem for DDOC and BDOC v1 files and timestamps them creating new ASiC-S containers in Time stamp token format.<br/>Timestamping is necessary in order to ensure the long term verification of the documents in case if the format becomes attackable, e.g. in case of weak hashes used in the signed documents.<br/>Code repository: [https://github.com/open-eid/TeRa](https://github.com/open-eid/TeRa). | RIA |
+| Central configuration client | Described in chap. [Central configuration service](#_comp_central_conf) | RIA/SK |
+| Timestamping proxy | Proxy service used by RIA. The proxy is used to provide well-known interface for the timestamping service; it allows flexible change of service providers and possibility to support multiple providers at the same time.<br/>See also [Time-stamping proxy interface](#_Time_stamping_proxy). | RIA |
+| Time-stamping service | Trusted timestamping service based on RFC 3161 protocol | Service provider |
+
+<a name="_TeRa_interfaces"></a>
+#### TeRa interfaces
+
+Provided:
+
+*   Graphical user interface – interface for searching and timestamping of DDOC/BDOC v1.0 signature containers on user's machines.
+    *   User: end-user
+    *   Accessible with: GUI elements
+*   Command line (CLI) interface – interface for searching and timestamping of DDOC/BDOC v1.0 signature containers via CLI.
+    *   User: end-user
+    *   Accessible with: command line / terminal
+*   PIN dialog – for inserting PIN value in all supported operating systems.
+    *   User: end-user
+    *   Accessible with: GUI elements
+
+Required:
+
+*   [Central configuration client interface](#central-configuration-client-components-interfaces)
+*   [Time-stamping proxy interface](#_Time_stamping_proxy)
+*   Interfaces with base libraries: Qt5
 
 
 <a name="_comp_libraries"></a>
@@ -873,12 +1040,12 @@ Required:
 
 ![](index_files/sw_.net.png)  
 
-**Figure: .NET software libraries and components**p>
+**Figure: .NET software libraries and components**
 
 **Table: Software libraries and their components**
 
 | Component | Description | Owner/ Developer |
-| - |  - | - |
+| - | - | - |
 | DigiDoc4j | Java software library that enables handling documents in BDOC 2.1(XAdES/ASiC-E) and DIGIDOC-XML 1.3 formats. Documentation: [http://open-eid.github.io/digidoc4j/](http://open-eid.github.io/digidoc4j/) . Code repository: [https://github.com/open-eid/digidoc4j](https://github.com/open-eid/digidoc4j) | RIA/SK |
 | DigiDoc4j utility program | Small command line application that implements the main functionality of DigiDoc4j library. Used for testing purposes. Can also be used as a source for sample client code for using DigiDoc4j. See also [http://open-eid.github.io/digidoc4j/](http://open-eid.github.io/digidoc4j/) | RIA/SK |
 | JDigiDoc | Java software library that enables handling documents in BDOC 2.1 (XAdES/ASiC-E) and DIGIDOC-XML 1.3 formats and encryption/decryption in ENCDOC-XML 1.0 (CDOC). Documentation: [http://id.ee/public/SK-JDD-PRG-GUIDE.pdf](http://id.ee/public/SK-JDD-PRG-GUIDE.pdf) Code repository: [https://github.com/open-eid/jdigidoc](https://github.com/open-eid/jdigidoc) | RIA/SK |
@@ -1056,7 +1223,7 @@ The web signing component diagrams describe components that are needed for signa
 **Table: Components for signing in web environment**
 
 | Component | Description | Owner/ Developer |
-| - |  - | - |
+| - | - | - |
 | hwcrypto.js |  JavaScript library that enables communication with the browser signing modules (plug-in or extension) of the different web browsers. Wiki: [https://github.com/open-eid/hwcrypto.js/wiki](https://github.com/open-eid/hwcrypto.js/wiki) . Code repository: [https://github.com/open-eid/hwcrypto.js](https://github.com/open-eid/hwcrypto.js) | RIA/SK |
 | Web application |  A web application that implements signature creation with an eID-token in browser environment. |  - |
 | EstEID Firefox plug-in |  Browser signing module (NPAPI-based plug-in) that is used in Firefox (supported in Windows and Linux) and Safari (supported in Mac OS) browsers. The plug-in enables data exchange with the cryptographic token’s driver that is used for signing. In Windows environment, the driver that is implementing CNG/CAPI interface is used, along with the operating system’s native PIN insertion and certificate selection dialogs. Otherwise, PKCS#11 driver is used. Code repository: [https://github.com/open-eid/browser-token-signing](https://github.com/open-eid/browser-token-signing) . Wiki: [https://github.com/open-eid/browser-token-signing/wiki](https://github.com/open-eid/browser-token-signing/wiki) | RIA/SK |
@@ -1142,9 +1309,9 @@ Authentication in web browsers is done with the browsers’ and operating system
 **Table: Web authentication components**
 
 | Component | Description | Owner/ Developer |
-| pkcs11-loader.js |  A JavaScript component that is used to load the OpenSC PKCS#11 driver to the Firefox browser’s cryptographic devices list during each initialization of the browser. Needed during authentication process with eID-card in Firefox browser in all supported operating systems. Code repository: [https://github.com/open-eid/firefox-pkcs11-loader](https://github.com/open-eid/firefox-pkcs11-loader) Wiki: [https://github.com/open-eid/firefox-pkcs11-loader/wiki](https://github.com/open-eid/firefox-pkcs11-loader/wiki) | RIA/SK |
-| pkcs11-loader.js |  A JavaScript component that is used to load the OpenSC PKCS#11 driver to the Firefox browser’s cryptographic devices list during each initialization of the browser. Needed during authentication process with eID-card in Firefox browser in all supported operating systems. Code repository: [https://github.com/open-eid/firefox-pkcs11-loader](https://github.com/open-eid/firefox-pkcs11-loader) Wiki: [https://github.com/open-eid/firefox-pkcs11-loader/wiki](https://github.com/open-eid/firefox-pkcs11-loader/wiki) | RIA/SK |
-| OSX native certificate selection and PIN dialog |  PIN dialog and certificate selection windows provided by the operating system’s native components. |  - |
+| - | - | - |
+| pkcs11-loader.js | A JavaScript component that is used to load the OpenSC PKCS#11 driver to the Firefox browser’s cryptographic devices list during each initialization of the browser. Needed during authentication process with eID-card in Firefox browser in all supported operating systems. Code repository: [https://github.com/open-eid/firefox-pkcs11-loader](https://github.com/open-eid/firefox-pkcs11-loader) Wiki: [https://github.com/open-eid/firefox-pkcs11-loader/wiki](https://github.com/open-eid/firefox-pkcs11-loader/wiki) | RIA/SK |
+| OSX native certificate selection and PIN dialog | PIN dialog and certificate selection windows provided by the operating system’s native components. | - |
 | Minidriver | Described in chap. [Drivers](#_comp_drivers) | RIA/SK |
 
 <a name="_comp_drivers"></a>
@@ -1156,7 +1323,7 @@ Authentication in web browsers is done with the browsers’ and operating system
 **Table: Cryptographic token driver components**
 
 | Component | Description | Owner/ Developer |
-| - |  - | - |
+| - | - | - |
 | EstEID PKCS#11 driver | A driver for accessing eID-cards. Connects with the card via the operating system’s native PC/SC interface. Used as a default driver for signature creation with eID card in browser environment in case of OSX platform. Used as a default driver for authentication with eID card in browser environment in case of Firefox browser in OSX platform. Code repository: [https://github.com/open-eid/esteid-pkcs11](https://github.com/open-eid/esteid-pkcs11) Wiki: [https://github.com/open-eid/esteid-pkcs11/wiki](https://github.com/open-eid/esteid-pkcs11/wiki) | RIA/SK |
 | OpenSC PKCS#11 driver | A driver for accessing eID-cards. Connects with the card via the operating system’s native PC/SC interface. Used as a default driver for authentication with eID card and signature creation in web browser environment in case of Linux platform. Wiki: [https://github.com/OpenSC/OpenSC/wiki](https://github.com/OpenSC/OpenSC/wiki) |  - |
 | One-pin OpenSC PKCS#11 driver | Version of OpenSC PKCS#11 driver that only enables authentication functionality. Used as a default driver for authentication with eID card in browser environment in case of Windows platform. Wiki: [https://github.com/OpenSC/OpenSC/wiki](https://github.com/OpenSC/OpenSC/wiki) |  - |
@@ -1263,7 +1430,7 @@ The following chapter describes automatic updating mechanisms of different ID-so
 **Table: Updating mechanisms in Windows**
 
 | Component | Description | Owner/ Developer |
-| - |  - | - |
+| - | - | - |
 | ID-updater |  Service that is periodically checks if newer versions of related ID-software components are available for download, initiates the download and installation if necessary. Uses [Central configuration service](#_comp_central_conf) for determining the latest available software versions. | RIA/SK |
 | MS Update | Microsoft Update – see Microsoft’s documentation for more information. |  - |
 | Chrome Web Store | See [https://chrome.google.com/webstore/detail/token-signing/ckjefchnfjhjfedoccjbhjpbncimppeg](https://chrome.google.com/webstore/detail/token-signing/ckjefchnfjhjfedoccjbhjpbncimppeg) |  - |
@@ -1276,7 +1443,7 @@ The following chapter describes automatic updating mechanisms of different ID-so
 **Table: Updating mechanisms in OSX**
 
 | Component | Description | Owner/ Developer |
-| - |  - | - |
+| - | - | - |
 | ID-updater |  Described in chap. [Windows updating mechanism](#_Windows_updating_mechanism) | RIA/SK |
 | Apple App Store |  See Apple App Store documentation. |  - |
 | Chrome Web Store** | See [https://chrome.google.com/webstore/detail/token-signing/ckjefchnfjhjfedoccjbhjpbncimppeg](https://chrome.google.com/webstore/detail/token-signing/ckjefchnfjhjfedoccjbhjpbncimppeg) |  - |
@@ -1289,7 +1456,7 @@ The following chapter describes automatic updating mechanisms of different ID-so
 **Table: Updating mechanisms in Linux**
 
 | Component | Description | Owner/ Developer |
-| - |  - | - |
+| - | - | - |
 | Ubuntu package updates |  Managed and maintained by SK. The binary packages are released for installation and updating to [https://installer.id.ee/media/ubuntu/](https://installer.id.ee/media/ubuntu/) repository. | RIA/SK |
 | Packages updates for other distros |  Managed by the open-source community. Packages are built, added and updated in Estobuntu and Fedora distributions by the package maintainers. |  - |
 | Chrome Web Store | See [https://chrome.google.com/webstore/detail/token-signing/ckjefchnfjhjfedoccjbhjpbncimppeg](https://chrome.google.com/webstore/detail/token-signing/ckjefchnfjhjfedoccjbhjpbncimppeg) |  - |
@@ -1306,7 +1473,7 @@ The central configuration service's purpose is to enable on-line and central man
 **Table: Central configuration service's components**
 
 | Component | Description | Owner/ Developer |
-| - |  - | - |
+| - | - | - |
 | ID-Updater | ID-Updater component (only in Windows and OSX) requests data from the central configuration client component, the latest availabe ID-software versions are read from the configuration file. See also [Updating mechanisms](#_comp_update) | RIA/SK |
 | ID-card Utility | ID-card Utility requests configuration data from the central configuration client component. Described in chap. [ID-card Utility](#_ID-card_utility) | RIA/SK |
 | DigiDoc3 Client | DigiDoc3 Client requests configuration data from the central configuration client component. Described in chap. [DigiDoc3 Client](#_DigiDoc3_Client) | RIA/SK |
@@ -1461,7 +1628,18 @@ The following chapter describes interfaces that different ID-software components
 *   Accessible with: HTTP
 *   Accessible from: to be specified. 
 
+#### <a name="_SiVa_verification_service"></a>Signature Verification Service interface (since v3.12.x)
 
+*   User: Libdigidocpp (DigiDoc3 and DigiDoc4 clients)
+*   Accessible with: HTTPS protocol
+*   Accessible from: [https://siva.eesti.ee/validate](https://siva.eesti.ee/validate)
+*   Documentation: [http://open-eid.github.io/SiVa/](http://open-eid.github.io/SiVa/)
+
+#### <a name="_Time_stamping_proxy"></a>Time-stamping proxy interface
+
+*   User: TeRa utility
+*   Accessible with: HTTPS protocol
+*   Accessible from: [https://puhver.ria.ee/tsa](https://puhver.ria.ee/tsa)
 
 
 <a name="_deployment_model"></a>
