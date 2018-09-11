@@ -28,7 +28,7 @@ The document is targeted for:
 
 # <a name="_background">Background</a>
 
-The main owner/manager of the ID-software is Estonian Information System Authority (RIA, [https://www.ria.ee/en/](https://www.ria.ee/en/)).  
+The main owner/manager of the ID-software is Estonian Information System Authority (RIA, [https://www.ria.ee/en.html](https://www.ria.ee/en.html)).  
 Main contractor for developing the software is AS Sertifitseerimiskeskus (SK, [https://sk.ee/en](https://sk.ee/en)). In case of a few of the components, SK is also the owner.  
 
 Development of ID-software has been mainly done in Estonia, however, the ID-software is released for international usage.  
