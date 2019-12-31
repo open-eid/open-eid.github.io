@@ -1,2 +1,5 @@
 site_name: Architecture of ID-software 
+nav:
+  - Home: index.md
 theme: united
+dev_addr: '127.0.0.1:8080'
