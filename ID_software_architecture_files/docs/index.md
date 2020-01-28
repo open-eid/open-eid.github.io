@@ -29,19 +29,15 @@ The document is targeted for:
 # <a name="_background">Background</a>
 
 **Estonian Information System Authority** (RIA, [https://www.ria.ee/en.html](https://www.ria.ee/en.html)) is the main owner/manager of the ID-software.  
-**RaulWalter** (RW, [https://www.raulwalter.com](https://www.raulwalter.com)) is the main contractor for developing the software during 2019-2022.  
 
-Previously the software has been developed by:  
+The software is being developed and tested by:  
 
+*   **RaulWalter** (RW, [https://www.raulwalter.com](https://www.raulwalter.com)) as the main contractor during 2019-2022;  
+*   **Nortal** ([https://nortal.com](https://nortal.com)) during 2019-2020;  
+*   **TTT** ([https://www.testijad.ee](https://www.testijad.ee)) during 2019-2022;  
 *   SK ID Solutions (SK, [https://www.skidsolutions.eu/en](https://www.skidsolutions.eu/en));  
 *   Aktors ([http://www.aktors.ee/wp/](http://www.aktors.ee/wp/));  
-*   Nortal ([https://nortal.com](https://nortal.com));  
 *   CGI Estonia ([https://www.cgi.ee/et](https://www.cgi.ee/et)).
-
-Quality assurance, testing and test automation has been provided by:  
-
-*   TTT ([https://www.testijad.ee](https://www.testijad.ee)).
-
 
 Development of ID-software has been mainly done in Estonia, however, the ID-software is released for international usage.
 The software is distributed open-source (mainly under LGPL/BSD licence) and is accessible from the following locations:
@@ -52,6 +48,7 @@ The software is distributed open-source (mainly under LGPL/BSD licence) and is a
 ID-software components can be logically divided in the following groups:
 
 *   **Desktop applications** for end-users;
+*   **Mobile applications** for end-users;
 *   **Software libraries** for integrators/software developers to integrate the libraries’ functionality with third-party information systems/applications;
 *   **Web components** for integrators/software developers to add the signature creation and authentication functionality in web environment to third-party web applications;
 *   **Drivers** for communication with the cryptographic tokens that conduct the PKI operations;
@@ -68,7 +65,7 @@ The following table maps the main ID-software components, their owner/developer 
 <th rowspan="2">Licence</td>
 </tr>
 <tr>
-<th>Handling ASiC-E/BDOC/PADES documents</td>
+<th>Handling ASiC/BDOC/PADES documents</td>
 <th>Handling DDOC documents</td>
 <th>Handling CDOC documents</td>
 <th>Calculating RSA/ECDSA signature</td>
@@ -96,6 +93,29 @@ The following table maps the main ID-software components, their owner/developer 
 <td>-</td>
 <td>-</td>
 <td>-</td>
+<td>-</td>
+<td>RIA</td>
+<td>LGPL</td>
+</tr>
+<tr>
+<th rowspan="2">Mobile applications</td>
+<th>RIA DigiDoc (iOS)</th>
+<td>yes (1)</td>
+<td>yes - validation only (1)</td>
+<td>yes</td>
+<td>yes</td>
+<td>yes</td>
+<td>-</td>
+<td>RIA</td>
+<td>LGPL</td>
+</tr>
+<tr>
+<th>RIA DigiDoc (Android)</th>
+<td>yes (1)</td>
+<td>yes - validation only (1)</td>
+<td>yes</td>
+<td>yes</td>
+<td>yes</td>
 <td>-</td>
 <td>RIA</td>
 <td>LGPL</td>
@@ -218,7 +238,7 @@ The main functions offered by ID-software are described in the following table:
 
 | Function | Description |
 | - | - |
-| Handling ASiC-E/ASiC-S/BDOC/PADES documents | Handling documents in [BDOC 2.1](http://id.ee/public/bdoc-spec212-eng.pdf) (XAdES/ASiC-E) digital signature format that is a profile of [ETSI XAdES](http://www.etsi.org/deliver/etsi_ts/101900_101999/101903/01.04.02_60/ts_101903v010402p.pdf) (XML Advanced Electronic Signature) and [ETSI ASiC](http://www.etsi.org/deliver/etsi_ts/102900_102999/102918/01.02.01_60/ts_102918v010201p.pdf) formats. Validating timestamp and signatures of enclosed DDOC document in the Time Stamp Token (TST) based [ETSI ASIC-S](http://www.etsi.org/deliver/etsi_ts/102900_102999/102918/01.02.01_60/ts_102918v010201p.pdf) containers. Validating the signatures of PDF documents in [PAdES](http://www.etsi.org/deliver/etsi_en/319100_319199/31914201/01.01.01_60/en_31914201v010101p.pdf) digital signature format that is a profile of [ETSI PAdES](http://www.etsi.org/deliver/etsi_en/319100_319199/31914201/01.01.01_60/en_31914201v010101p.pdf). More information on the formats’ life cycle can be found from [http://www.id.ee/?lang=en&id=34336](http://www.id.ee/?lang=en&id=34336). |
+| Handling ASiC/BDOC/PADES documents | Handling documents in [BDOC 2.1](http://id.ee/public/bdoc-spec212-eng.pdf) digital signature format that is a profile of [ETSI XAdES](http://www.etsi.org/deliver/etsi_ts/101900_101999/101903/01.04.02_60/ts_101903v010402p.pdf) (XML Advanced Electronic Signature) and [ETSI ASiC](http://www.etsi.org/deliver/etsi_ts/102900_102999/102918/01.02.01_60/ts_102918v010201p.pdf) formats. Validating timestamp and signatures of enclosed DDOC document in the Time Stamp Token (TST) based [ETSI ASIC-S](http://www.etsi.org/deliver/etsi_ts/102900_102999/102918/01.02.01_60/ts_102918v010201p.pdf) containers. Validating the signatures of PDF documents in [PAdES](http://www.etsi.org/deliver/etsi_en/319100_319199/31914201/01.01.01_60/en_31914201v010101p.pdf) digital signature format that is a profile of [ETSI PAdES](http://www.etsi.org/deliver/etsi_en/319100_319199/31914201/01.01.01_60/en_31914201v010101p.pdf). More information on the formats’ life cycle can be found from [http://www.id.ee/?lang=en&id=34336](http://www.id.ee/?lang=en&id=34336). See [Libdigidocpp](http://open-eid.github.io/libdigidocpp/manual.html#format) and [Digidoc4j](https://github.com/open-eid/digidoc4j#features) documentation for supported formats. |
 | Handling DDOC documents | Handling documents in [DIGIDOC-XML 1.3 (DDOC)](http://id.ee/public/DigiDoc_format_1.3.pdf) digital signature format that is a profile of [ETSI XAdES](http://www.etsi.org/deliver/etsi_ts/101900_101999/101903/01.04.02_60/ts_101903v010402p.pdf) (XML Advanced Electronic Signature) format. More information on the formats’ life cycle can be found from [http://www.id.ee/?lang=en&id=34336](http://www.id.ee/?lang=en&id=34336). |
 | Handling CDOC documents | Encrypting and decrypting documents in [ENCDOC-XML 1.0 (CDOC)](http://id.ee/public/SK-CDOC-1.0-20120625_EN.pdf) also [CDOC 1.1](https://www.ria.ee/sites/default/files/content-editors/EID/cdoc.pdf) format. |
 | Calculating RSA/ECDSA signature | Calculating the RSA or ECDSA signature value in browser or desktop/server environment. The operation involves connecting with the signature token’s driver, sending the data to be signed and receiving digital signature value calculated with the token owner’s RSA or ECDSA private key. The following cryptographic tokens are supported: hardware-based tokens (e.g. PKCS#11-based eID cards, USB cryptostick, Mobile-ID and Smart-ID); software-based tokens (e.g. PKCS#12 software token). |
@@ -257,18 +277,18 @@ Note that not all of the external base libraries are included in the component m
 | DigiDoc4 Client base libraries | Libdigidocpp (and its base libraries), etc. See [DigiDoc4 Client interfaces](#_DigiDoc4_Client_interfaces). | - |
 | Mobile-ID (MID) REST service | REST service that is used by DigiDoc4 Client for signature creation with Mobile-ID. See also [https://github.com/sk-eid/mid](https://github.com/sk-eid/mid). | SK |
 | Smart-ID (SID) REST service | REST service that is used by DigiDoc4 Client for signature creation with Smart-ID. See also [https://github.com/SK-EID/smart-id-documentation](https://github.com/SK-EID/smart-id-documentation). | SK |
-| LDAP directory | Directory of active certificates issued by SK (as the CA in Estonia). The directory is used by DigiDoc4 Client for finding authentication certificate (and the respective public key) of the recipient of the encrypted document. See also [https://sk.ee/en/repository/ldap/ldap-kataloogi-kasutamine/](https://sk.ee/en/repository/ldap/ldap-kataloogi-kasutamine/). | SK |
-| Central configuration repository | Described in chap. [Central configuration service](#_comp_central_conf). | RIA |
-| Central configuration client | Described in chap. [Central configuration service](#_comp_central_conf). | RIA |
-| SiVa | *Si*gnature *Ve*rification Service is an online web service for validating digitally signed documents.<br/>SiVa is used by the DigiDoc4 Client (by libdigidocpp base library) to validate documents in formats that are not natively supported; currently the service is used to validate PDF (ETSI PAdES) documents.<br/>See also [Signature Verification Service interface](#_SiVa_verification_service). | RIA |
-| TSL repository | Repository for accessing the TSL ([Trust Service status List](http://www.etsi.org/deliver/etsi_ts/119600_119699/119612/02.02.01_60/ts_119612v020201p.pdf)) lists that can be used as a central source of trust anchor information during digital signature creation and validation processes. The European Commission’s TSL list ([https://ec.europa.eu/tools/lotl/eu-lotl.xml](https://ec.europa.eu/tools/lotl/eu-lotl.xml)) is used as the central TSL list (with references to national lists). | EU/ RIA |
-| Time-stamping proxy service interface | [RFC3161](https://tools.ietf.org/html/rfc3161) based time-stamping service. | RIA |
-| OCSP service | [RFC6960](https://tools.ietf.org/html/rfc6960) based OCSP service. Also offered by SK for Estonian and a number of foreign certificates (see [www.sk.ee](http://www.sk.ee/)). | SK |
-| Libdigidocpp | Described in chap. [Software libraries](#_comp_libraries). | RIA |
-| Minidriver | Used via CNG interface in Windows environment only. Described in chap. [Drivers](#_comp_drivers). | RIA/ IDEMIA |
-| ID-Updater | Used in Windows and macOS only, described in chap. [Updating mechanisms](#_comp_update). In case of Windows platform, the ID-Updater can be executed from DigiDoc4 Client program. | RIA |
+| LDAP directory | Directory of active certificates issued by SK (as the CA in Estonia). The directory is used by DigiDoc4 Client for finding authentication certificate (and the respective public key) of the recipient of the encrypted document. See also [https://www.skidsolutions.eu/en/repository/ldap/ldap-kataloogi-kasutamine/](https://www.skidsolutions.eu/en/repository/ldap/ldap-kataloogi-kasutamine/). | SK |
 | ID-card owner’s photo repository | Repository where the Estonian national ID-cards photos’ are kept. ID-card’s owner can download the photo after the user has been authenticated with PIN1 code. | RIA |
 | @eesti.ee e-mail checking service | Service that enables to set the properties of e-mail address (@eesti.ee) that is provided for Estonian national ID-card owners by the state. The user must be authenticated with PIN1 code. | RIA |
+| Central configuration repository | Described in chap. [Central configuration service](#_comp_central_conf). | RIA |
+| Central configuration client | Described in chap. [Central configuration service](#_comp_central_conf). | RIA |
+| Libdigidocpp | Described in chap. [Software libraries](#_comp_libraries). | RIA |
+| SiVa | Described in chap. [Software libraries](#_DigiDoc4_Client). | RIA |
+| TSL repository | Described in chap. [Software libraries](#_comp_libraries). | EU/RIA |
+| Time-stamping proxy service interface | Described in chap. [Software libraries](#_comp_libraries). | RIA |
+| OCSP service | Described in chap. [Software libraries](#_comp_libraries). | SK |
+| Minidriver | Used via CNG interface in Windows environment only. Described in chap. [Drivers](#_comp_drivers). | RIA/ IDEMIA |
+| ID-Updater | Used in Windows and macOS only, described in chap. [Updating mechanisms](#_comp_update). In case of Windows platform, the ID-Updater can be executed from DigiDoc4 Client program. | RIA |
 
 **Table: DigiDoc4 Client**
 
@@ -277,7 +297,7 @@ Note that not all of the external base libraries are included in the component m
 
 Provided:
 
-*   Graphical user interface - interface for handling ASiC-E/XAdES, BDOC, DDOC, CDOC documents, setting configuration parameters.
+*   Graphical user interface - interface for handling ASiC, BDOC, DDOC, CDOC documents, setting configuration parameters.
     *   User: end-user
     *   Accessible with: GUI elements
 *   PIN dialog – for inserting PIN value during signature creation or decryption operations in all operating systems except of Windows.
@@ -348,6 +368,67 @@ Required:
     *   CNG interface
 
 
+<a name="_comp_mobile"></a>
+## Mobile applications
+
+
+<a name="_RIA_DigiDoc"></a>
+### RIA DigiDoc
+
+![cmp RIA DigiDoc signing components](index_files/comp_mopp_signing.png "cmp RIA DigiDoc signing components")  
+**Figure: RIA DigiDoc signing and crypto-components**
+
+![cmp RIA DigiDoc management components](index_files/comp_mopp_eid.png "cmp RIA DigiDoc management components")  
+**Figure: RIA DigiDoc ID-card management components**
+
+| Component | Description | Owner |
+| - | - | - |
+| RIA DigiDoc | RIA DigiDoc enables handling digitally signed documents, encryption/decryption for managing ID-card’s PIN/PUK codes replacement and other services.<br/>Code repository: [https://github.com/open-eid/MOPP-Android](https://github.com/open-eid/MOPP-Android) and [https://github.com/open-eid/MOPP-iOS](https://github.com/open-eid/MOPP-iOS). | RIA |
+| RIA DigiDoc base libraries | Libdigidocpp (and its base libraries), etc. See [RIA DigiDoc interfaces](#_RIA_DigiDoc_interfaces). | - |
+| DigiDocService | SOAP service that is used by RIA DigiDoc for signature creation with Mobile-ID. See also [https://sk-eid.github.io/dds-documentation/](https://sk-eid.github.io/dds-documentation/). | SK |
+| LDAP directory | Described in chap. [DigiDoc4 Client](#_DigiDoc4_Client). | SK |
+| ID-card owner’s photo repository | Described in chap. [DigiDoc4 Client](#_DigiDoc4_Client). | RIA |
+| @eesti.ee e-mail checking service | Described in chap. [DigiDoc4 Client](#_DigiDoc4_Client). | RIA |
+| Central configuration repository | Described in chap. [Central configuration service](#_comp_central_conf). | RIA |
+| Libdigidocpp | Described in chap. [Software libraries](#_comp_libraries). | RIA |
+| SiVa | Described in chap. [Software libraries](#_comp_libraries). | RIA |
+| TSL repository | Described in chap. [Software libraries](#_comp_libraries). | EU/RIA |
+| Time-stamping proxy service interface | Described in chap. [Software libraries](#_comp_libraries). | RIA |
+| OCSP service | Described in chap. [Software libraries](#_comp_libraries). | SK |
+
+
+**Table: RIA DigiDoc**
+
+<a name="_RIA_DigiDoc_interfaces"></a>
+#### RIA DigiDoc interfaces
+
+Provided:
+
+*   Graphical user interface - interface for handling ASiC, BDOC, DDOC, CDOC documents, setting configuration parameters.
+    *   User: end-user
+    *   Accessible with: GUI elements
+*   PIN dialog – for inserting PIN value during signature creation or decryption operations in all operating systems except of Windows.
+    *   User: end-user
+    *   Accessible with: GUI elements
+*   Graphical user interface – interface for handling card management operations and using the external services (listed under “Required interfaces”).
+    *   User: end-user
+    *   Accessible with: GUI elements
+*   PIN dialog – for inserting PIN/PUK value in all supported operating systems.
+    *   User: end-user
+    *   Accessible with: GUI elements
+
+Required:
+
+*   [Central configuration server interface](#_comp_central_conf_server_interfaces)
+*   [ID-card owners’ photo repository interface](#_ID-card_owners’_photo)
+*   [Eesti.ee e-mail checking service interface](#_Eesti.ee_e-mail_checking)
+*   [DigiDocService](#_DigiDocService)
+*   [LDAP directory interface](#_LDAP_directory_interface)
+*   Interfaces with base libraries:
+    *   [Libdigidocpp library’s API](#_Libdigidocpp_library’s_interfaces) – for handling documents in supported digital signature formats (BDOC and DDOC)
+    *   External base libraries: libldap, openssl
+
+
 <a name="_comp_libraries"></a>
 ## Software libraries
 
@@ -363,13 +444,13 @@ Required:
 | DigiDoc4j-util program | Small command line application that implements the main functionality of DigiDoc4j library. Used for testing purposes. Can also be used as a source for sample client code for using DigiDoc4j. See also [http://open-eid.github.io/digidoc4j](http://open-eid.github.io/digidoc4j). | RIA |
 | CDoc4j | Java software library that enables handling documents in CDoc 1.1 format. Documentation: [https://github.com/open-eid/cdoc4j/wiki/Examples-of-how-to-use-it](https://github.com/open-eid/cdoc4j/wiki/Examples-of-how-to-use-it) . Code repository: [https://github.com/open-eid/cdoc4j](https://github.com/open-eid/cdoc4j). | RIA |
 | CDoc4j-util program | Small command line application that implements the main functionality of CDoc4j library. Used for testing purposes. Can also be used as a source for sample client code for using CDoc4j. See also [https://github.com/open-eid/cdoc4j/tree/master/util](https://github.com/open-eid/cdoc4j/tree/master/util). | RIA |
-| Libdigidocpp | C++ software library that enables handling documents in BDOC 2.1 (XAdES/ASiC-E) and DIGIDOC-XML 1.3 formats (via CDigiDoc base library). Wiki: [https://github.com/open-eid/libdigidocpp/wiki](https://github.com/open-eid/libdigidocpp/wiki) Code repository: [https://github.com/open-eid/libdigidocpp](https://github.com/open-eid/libdigidocpp) Documentation: [http://open-eid.github.io/libdigidocpp](http://open-eid.github.io/libdigidocpp). | RIA |
+| Libdigidocpp | C++ software library that enables handling documents in BDOC 2.1, ASiC and DIGIDOC-XML 1.3 formats (via CDigiDoc base library). Wiki: [https://github.com/open-eid/libdigidocpp/wiki](https://github.com/open-eid/libdigidocpp/wiki) Code repository: [https://github.com/open-eid/libdigidocpp](https://github.com/open-eid/libdigidocpp) Documentation: [http://open-eid.github.io/libdigidocpp](http://open-eid.github.io/libdigidocpp). | RIA |
 | digidoc-tool program | Small command line application (digidoc-tool.exe) that implements the main functionality of Libdigidocpp library. Used for testing purposes. Can also be used as a source for sample client code for using Libdigidocpp. See also [http://open-eid.github.io/libdigidocpp](http://open-eid.github.io/libdigidocpp). | RIA |
 | DigiDocCSharp | .NET C# wrapper classes for using Libidigidocpp library’s functionality in .NET environment. Created with Swig tool. See also [https://github.com/open-eid/libdigidocpp/blob/master/examples/DigiDocCSharp/README.md](https://github.com/open-eid/libdigidocpp/blob/master/examples/DigiDocCSharp/README.md). | RIA |
-| SiVa | Described in chap. [DigiDoc4 Client](#_DigiDoc4_Client). | RIA |
-| TSL repository | Described in chap. [DigiDoc4 Client](#_DigiDoc4_Client). | EU/RIA |
-| Time-stamping proxy service interface | Described in chap. [DigiDoc4 Client](#_DigiDoc4_Client). | RIA |
-| OCSP service | Described in chap. [DigiDoc4 Client](#_DigiDoc4_Client). | SK |
+| SiVa | *Si*gnature *Ve*rification Service is an online web service for validating digitally signed documents.<br/>SiVa is used by the DigiDoc4 Client (by libdigidocpp base library) to validate documents in formats that are not natively supported; currently the service is used to validate PDF (ETSI PAdES) documents.<br/>See also [Signature Verification Service interface](#_SiVa_verification_service). | RIA |
+| TSL repository | Repository for accessing the TSL ([Trust Service status List](http://www.etsi.org/deliver/etsi_ts/119600_119699/119612/02.02.01_60/ts_119612v020201p.pdf)) lists that can be used as a central source of trust anchor information during digital signature creation and validation processes. The European Commission’s TSL list ([https://ec.europa.eu/tools/lotl/eu-lotl.xml](https://ec.europa.eu/tools/lotl/eu-lotl.xml)) is used as the central TSL list (with references to national lists). | EU/ RIA |
+| Time-stamping proxy service interface | [RFC3161](https://tools.ietf.org/html/rfc3161) based time-stamping service. | RIA |
+| OCSP service | [RFC6960](https://tools.ietf.org/html/rfc6960) based OCSP service. Also offered by SK for Estonian and a number of foreign certificates (see [www.skidsolutions.eu/en](http://www.skidsolutions.eu/en/)). | SK |
 
 **Table: Software libraries and their components**
 
@@ -757,6 +838,18 @@ The following chapter describes automatic updating mechanisms of different ID-so
 
 **Table: Updating mechanisms in Linux**
 
+### Mobile updating mechanism
+
+![cmp Updating (Mobile)](index_files/up_mopp.png "cmp Updating (Mobile)")  
+**Figure: Updating mechanism in Mobile**
+
+| Component | Description | Owner |
+| - | - | - |
+| Google Play | See Google Play documentation. | Google |
+| Apple App Store | See Apple App Store documentation. | Apple |
+
+**Table: Updating mechanisms in Mobile**
+
 <a name="_comp_central_conf"></a>
 ## Central configuration service
 
@@ -768,7 +861,7 @@ The central configuration service's purpose is to enable on-line and central man
 
 | Component | Description | Owner |
 | - | - | - |
-| ID-Updater | ID-Updater component (only in Windows and macOS) requests data from the central configuration client component, the latest availabe ID-software versions are read from the configuration file. See also [Updating mechanisms](#_comp_update). | RIA |
+| ID-Updater | ID-Updater component (only in Windows and macOS) requests data from the central configuration client component, the latest available ID-software versions are read from the configuration file. See also [Updating mechanisms](#_comp_update). | RIA |
 | DigiDoc4 Client | DigiDoc4 Client requests configuration data from the central configuration client component. Described in chap. [DigiDoc4 Client](#_DigiDoc4_Client). | RIA |
 | Central configuration client | Central Configuration Client component manages the configuration file validation and updating processes, returns the validated configuration data to the Requesting Application (DigiDoc4 Client) and if necessary, updates the data from Central Configuration Server. | RIA |
 | Central configuration service | Central Configuration Server component provides configuration data on-line to the Central Configuration Client component. | RIA |
@@ -831,6 +924,14 @@ The following chapter describes interfaces that different ID-software components
 *   Accessible from: [https://dd-mid.ria.ee/mid-api](https://dd-mid.ria.ee/mid-api), [https://mid.sk.ee/mid-api](https://mid.sk.ee/mid-api)
 *   Documentation: [https://github.com/sk-eid/mid](https://github.com/sk-eid/mid)
 
+<a name="_DigiDocService"></a>
+#### DigiDocService
+
+*   User: RIA DigiDoc
+*   Accessible with: SOAP over HTTPS
+*   Accessible from: [https://digidocservice.sk.ee](https://digidocservice.sk.ee)
+*   Documentation: [https://sk-eid.github.io/dds-documentation/](https://sk-eid.github.io/dds-documentation/)
+
 <a name="_SID_REST_service"></a>
 #### Smart-ID REST service
 
@@ -845,7 +946,7 @@ The following chapter describes interfaces that different ID-software components
 *   User: DigiDoc4 Client
 *   Accessible with: LDAP protocol
 *   Accessible from: ldaps://esteid.ldap.sk.ee, ldaps://k3.ldap.sk.ee
-*   Documentation: [https://sk.ee/en/repository/ldap/ldap-kataloogi-kasutamine/](https://sk.ee/en/repository/ldap/ldap-kataloogi-kasutamine/)
+*   Documentation: [https://www.skidsolutions.eu/en/repository/ldap/ldap-kataloogi-kasutamine/](https://www.skidsolutions.eu/en/repository/ldap/ldap-kataloogi-kasutamine/)
 
 <a name="_TSL_repositories’_interfaces"></a>
 #### TSL repositories’ interfaces
@@ -911,8 +1012,8 @@ The following subchapters describe physical deployment of ID-software components
 
 Additional notes:
 
-*   A digital signing software library (i.e. DigiDoc4j or Libdigidocpp) can be used for creating a XAdES/ASiC-E container and adding the created signature value to the container.
-*   Long term validation data is added to the XAdES/ASiC-E signature by obtaining OCSP confirmation and a time-stamp.
+*   A digital signing software library (i.e. DigiDoc4j or Libdigidocpp) can be used for creating a ASiC container and adding the created signature value to the container.
+*   Long term validation data is added to the ASiC signature by obtaining OCSP confirmation and a time-stamp.
 *   Mobile-ID REST services is required in order to sign with Mobile-ID.
 *   Smart-ID REST services is required in order to sign with Smart-ID.
 *   Signature value is calculated either in the Mobile-ID SIM card, Smart-ID mobile application or eID-card’s chip.
@@ -927,9 +1028,23 @@ Additional notes:
 
 Additional notes:
 
-*   DigiDoc4 Client is used for creating the XAdES/ASiC-E container and adding the signature value to the container.
-*   Long term validation data is added to the XAdES/ASiC-E signature by obtaining OCSP confirmation and a time-stamp.
+*   DigiDoc4 Client is used for creating the ASiC container and adding the signature value to the container.
+*   Long term validation data is added to the ASiC signature by obtaining OCSP confirmation and a time-stamp.
 *   Mobile-ID REST services is required in order to sign with Mobile-ID.
 *   Smart-ID REST services is required in order to sign with Smart-ID.
 *   Signature value is calculated either in the Mobile-ID SIM card, Smart-ID mobile application or ID-card’s chip.
+*   Trust anchor data is retrieved from TSL lists – the European Commission’s central TSL and national TSL’s of the EU member states.
+
+<a name="_deploy_mobile"></a>
+## Signing with RIA DigiDoc
+
+![cmp Signing with RIA DigiDoc](index_files/depl_mopp.png "cmp Signing with RIA DigiDoc")  
+**Figure: Deployment of components during signature creation with RIA DigiDoc**
+
+Additional notes:
+
+*   RIA DigiDoc is used for creating the ASiC container and adding the signature value to the container.
+*   Long term validation data is added to the ASiC signature by obtaining OCSP confirmation and a time-stamp.
+*   DigiDocService SOAP services is required in order to sign with Mobile-ID.
+*   Signature value is calculated either in the Mobile-ID SIM card or ID-card’s chip.
 *   Trust anchor data is retrieved from TSL lists – the European Commission’s central TSL and national TSL’s of the EU member states.
