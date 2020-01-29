@@ -184,7 +184,7 @@ The software is distributed open-source (mainly under LGPL/BSD licence) and is a
 <tr>
 <th rowspan="3">Software libraries</td>
 <th>DigiDoc4j (Java)</th>
-<td>yes</td>
+<td>yes (4)</td>
 <td>yes (1)</td>
 <td>-</td>
 <td>yes (1)</td>
@@ -290,7 +290,8 @@ The software is distributed open-source (mainly under LGPL/BSD licence) and is a
 <p>Remarks:</p>
 <p>(1) - The functionality is provided via base components.<br />
 (2) - The component is used only once for setting the proper parameters for authentication in Firefox browser.<br />
-(3) - The utility is used to timestamp BDOC 1.0 or DDOC documents - it creates a ASiC-S container with RFC 3161 timestamp token applied to the original BDOC or DDOC document.  </p>
+(3) - The utility is used to timestamp BDOC 1.0 or DDOC documents - it creates a ASiC-S container with RFC 3161 timestamp token applied to the original BDOC or DDOC document.<br />
+(4) - PADES handling is not supported.  </p>
 <p>The main functions offered by ID-software are described in the following table:</p>
 <table>
 <thead>
@@ -557,10 +558,8 @@ Note that not all of the external base libraries are included in the component m
 <h2 id="mobile-applications">Mobile applications</h2>
 <p><a name="_RIA_DigiDoc"></a></p>
 <h3 id="ria-digidoc">RIA DigiDoc</h3>
-<p><img alt="cmp RIA DigiDoc signing components" src="index_files/comp_mopp_signing.png" title="cmp RIA DigiDoc signing components" /><br />
-<strong>Figure: RIA DigiDoc signing and crypto-components</strong></p>
-<p><img alt="cmp RIA DigiDoc management components" src="index_files/comp_mopp_eid.png" title="cmp RIA DigiDoc management components" /><br />
-<strong>Figure: RIA DigiDoc ID-card management components</strong></p>
+<p><img alt="cmp RIA DigiDoc components" src="index_files/comp_mopp_signing.png" title="cmp RIA DigiDoc components" /><br />
+<strong>Figure: RIA DigiDoc management, signing and crypto-components</strong></p>
 <table>
 <thead>
 <tr>
@@ -589,16 +588,6 @@ Note that not all of the external base libraries are included in the component m
 <td>LDAP directory</td>
 <td>Described in chap. <a href="#_DigiDoc4_Client">DigiDoc4 Client</a>.</td>
 <td>SK</td>
-</tr>
-<tr>
-<td>ID-card owner’s photo repository</td>
-<td>Described in chap. <a href="#_DigiDoc4_Client">DigiDoc4 Client</a>.</td>
-<td>RIA</td>
-</tr>
-<tr>
-<td>@eesti.ee e-mail checking service</td>
-<td>Described in chap. <a href="#_DigiDoc4_Client">DigiDoc4 Client</a>.</td>
-<td>RIA</td>
 </tr>
 <tr>
 <td>Central configuration repository</td>
@@ -647,7 +636,7 @@ Note that not all of the external base libraries are included in the component m
 <li>Accessible with: GUI elements</li>
 </ul>
 </li>
-<li>Graphical user interface – interface for handling card management operations and using the external services (listed under “Required interfaces”).<ul>
+<li>Graphical user interface – interface for handling card management operations.<ul>
 <li>User: end-user</li>
 <li>Accessible with: GUI elements</li>
 </ul>
@@ -661,8 +650,6 @@ Note that not all of the external base libraries are included in the component m
 <p>Required:</p>
 <ul>
 <li><a href="#_comp_central_conf_server_interfaces">Central configuration server interface</a></li>
-<li><a href="#_ID-card_owners’_photo">ID-card owners’ photo repository interface</a></li>
-<li><a href="#_Eesti.ee_e-mail_checking">Eesti.ee e-mail checking service interface</a></li>
 <li><a href="#_DigiDocService">DigiDocService</a></li>
 <li><a href="#_LDAP_directory_interface">LDAP directory interface</a></li>
 <li>Interfaces with base libraries:<ul>
@@ -763,6 +750,7 @@ Note that not all of the external base libraries are included in the component m
 </ul>
 </li>
 <li>Interfaces with cryptographic token’s drivers (described in chap. <a href="#_comp_drivers">Drivers</a>)<ul>
+<li>PKCS#11 interface</li>
 <li>PKCS#12 interface</li>
 </ul>
 </li>
@@ -796,6 +784,7 @@ Note that not all of the external base libraries are included in the component m
 </ul>
 </li>
 <li>Interfaces with cryptographic token’s drivers (described in chap. <a href="#_comp_drivers">Drivers</a>)<ul>
+<li>PKCS#11 interface</li>
 <li>PKCS#12 interface</li>
 </ul>
 </li>
@@ -1519,6 +1508,7 @@ Note that not all of the external base libraries are included in the component m
 <li>User: DigiDoc4j or Libdigidocpp software libraries</li>
 <li>Accessible with: HTTP protocol</li>
 <li>Accessible from:<ul>
+<li>OCSP URL from signer certificate Authority Information Access extension.</li>
 <li>SK’s OCSP service for SK issued certificates: <a href="http://ocsp.sk.ee/">http://ocsp.sk.ee/</a></li>
 <li>SK’s Proxy OCSP service for international use: <a href="http://ocsp.sk.ee/_proxy">http://ocsp.sk.ee/_proxy</a></li>
 <li>SK’s test OCSP service: <a href="http://demo.sk.ee/ocsp">http://demo.sk.ee/ocsp</a></li>
@@ -1530,7 +1520,7 @@ Note that not all of the external base libraries are included in the component m
 <ul>
 <li>User: Libdigidocpp (DigiDoc4 Client)</li>
 <li>Accessible with: HTTPS protocol</li>
-<li>Accessible from: <a href="https://siva.eesti.ee/V2/validate">https://siva.eesti.ee/V2/validate</a></li>
+<li>Accessible from: <a href="https://siva.eesti.ee/V3/validate">https://siva.eesti.ee/V3/validate</a></li>
 <li>Documentation: <a href="http://open-eid.github.io/SiVa/">http://open-eid.github.io/SiVa/</a></li>
 </ul>
 <p><a name="_ID-card_owners’_photo"></a></p>
@@ -1670,5 +1660,5 @@ Note that not all of the external base libraries are included in the component m
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2020-01-28 06:22:52
+Build Date UTC : 2020-01-29 13:38:38
 -->

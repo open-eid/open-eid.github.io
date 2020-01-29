@@ -123,7 +123,7 @@ The following table maps the main ID-software components, their owner/developer 
 <tr>
 <th rowspan="3">Software libraries</td>
 <th>DigiDoc4j (Java)</th>
-<td>yes</td>
+<td>yes (4)</td>
 <td>yes (1)</td>
 <td>-</td>
 <td>yes (1)</td>
@@ -231,6 +231,7 @@ Remarks:
 (1) - The functionality is provided via base components.  
 (2) - The component is used only once for setting the proper parameters for authentication in Firefox browser.  
 (3) - The utility is used to timestamp BDOC 1.0 or DDOC documents - it creates a ASiC-S container with RFC 3161 timestamp token applied to the original BDOC or DDOC document.  
+(4) - PADES handling is not supported.  
 
 
 
@@ -375,11 +376,8 @@ Required:
 <a name="_RIA_DigiDoc"></a>
 ### RIA DigiDoc
 
-![cmp RIA DigiDoc signing components](index_files/comp_mopp_signing.png "cmp RIA DigiDoc signing components")  
-**Figure: RIA DigiDoc signing and crypto-components**
-
-![cmp RIA DigiDoc management components](index_files/comp_mopp_eid.png "cmp RIA DigiDoc management components")  
-**Figure: RIA DigiDoc ID-card management components**
+![cmp RIA DigiDoc components](index_files/comp_mopp_signing.png "cmp RIA DigiDoc components")  
+**Figure: RIA DigiDoc management, signing and crypto-components**
 
 | Component | Description | Owner |
 | - | - | - |
@@ -387,8 +385,6 @@ Required:
 | RIA DigiDoc base libraries | Libdigidocpp (and its base libraries), etc. See [RIA DigiDoc interfaces](#_RIA_DigiDoc_interfaces). | - |
 | DigiDocService | SOAP service that is used by RIA DigiDoc for signature creation with Mobile-ID. See also [https://sk-eid.github.io/dds-documentation/](https://sk-eid.github.io/dds-documentation/). | SK |
 | LDAP directory | Described in chap. [DigiDoc4 Client](#_DigiDoc4_Client). | SK |
-| ID-card owner’s photo repository | Described in chap. [DigiDoc4 Client](#_DigiDoc4_Client). | RIA |
-| @eesti.ee e-mail checking service | Described in chap. [DigiDoc4 Client](#_DigiDoc4_Client). | RIA |
 | Central configuration repository | Described in chap. [Central configuration service](#_comp_central_conf). | RIA |
 | Libdigidocpp | Described in chap. [Software libraries](#_comp_libraries). | RIA |
 | SiVa | Described in chap. [Software libraries](#_comp_libraries). | RIA |
@@ -410,7 +406,7 @@ Provided:
 *   PIN dialog – for inserting PIN value during signature creation or decryption operations in all operating systems except of Windows.
     *   User: end-user
     *   Accessible with: GUI elements
-*   Graphical user interface – interface for handling card management operations and using the external services (listed under “Required interfaces”).
+*   Graphical user interface – interface for handling card management operations.
     *   User: end-user
     *   Accessible with: GUI elements
 *   PIN dialog – for inserting PIN/PUK value in all supported operating systems.
@@ -420,8 +416,6 @@ Provided:
 Required:
 
 *   [Central configuration server interface](#_comp_central_conf_server_interfaces)
-*   [ID-card owners’ photo repository interface](#_ID-card_owners’_photo)
-*   [Eesti.ee e-mail checking service interface](#_Eesti.ee_e-mail_checking)
 *   [DigiDocService](#_DigiDocService)
 *   [LDAP directory interface](#_LDAP_directory_interface)
 *   Interfaces with base libraries:
@@ -470,6 +464,7 @@ Required:
 *   Interfaces with base libraries:
     *   Other base libraries: see [http://open-eid.github.io/digidoc4j](http://open-eid.github.io/digidoc4j)
 *   Interfaces with cryptographic token’s drivers (described in chap. [Drivers](#_comp_drivers))
+    *   PKCS#11 interface
     *   PKCS#12 interface
 
 ### DigiDoc4j utility program’s interfaces
@@ -497,6 +492,7 @@ Required:
 *   Interfaces with base libraries:
     *   Other base libraries: BouncyCastle
 *   Interfaces with cryptographic token’s drivers (described in chap. [Drivers](#_comp_drivers))
+    *   PKCS#11 interface
     *   PKCS#12 interface
 
 ### CDoc4j utility program’s interfaces
@@ -971,6 +967,7 @@ The following chapter describes interfaces that different ID-software components
 *   User: DigiDoc4j or Libdigidocpp software libraries
 *   Accessible with: HTTP protocol
 *   Accessible from:
+    *   OCSP URL from signer certificate Authority Information Access extension.
     *   SK’s OCSP service for SK issued certificates: [http://ocsp.sk.ee/](http://ocsp.sk.ee/)
     *   SK’s Proxy OCSP service for international use: [http://ocsp.sk.ee/_proxy](http://ocsp.sk.ee/_proxy)
     *   SK’s test OCSP service: [http://demo.sk.ee/ocsp](http://demo.sk.ee/ocsp)
@@ -980,7 +977,7 @@ The following chapter describes interfaces that different ID-software components
 
 *   User: Libdigidocpp (DigiDoc4 Client)
 *   Accessible with: HTTPS protocol
-*   Accessible from: [https://siva.eesti.ee/V2/validate](https://siva.eesti.ee/V2/validate)
+*   Accessible from: [https://siva.eesti.ee/V3/validate](https://siva.eesti.ee/V3/validate)
 *   Documentation: [http://open-eid.github.io/SiVa/](http://open-eid.github.io/SiVa/)
 
 <a name="_ID-card_owners’_photo"></a>
