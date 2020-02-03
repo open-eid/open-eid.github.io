@@ -939,7 +939,7 @@ The following chapter describes interfaces that different ID-software components
 <a name="_LDAP_directory_interface"></a>
 #### LDAP directory interface
 
-*   User: DigiDoc4 Client
+*   User: DigiDoc4 Client, RIA DigiDoc
 *   Accessible with: LDAP protocol
 *   Accessible from: ldaps://esteid.ldap.sk.ee, ldaps://k3.ldap.sk.ee
 *   Documentation: [https://www.skidsolutions.eu/en/repository/ldap/ldap-kataloogi-kasutamine/](https://www.skidsolutions.eu/en/repository/ldap/ldap-kataloogi-kasutamine/)
@@ -956,7 +956,7 @@ The following chapter describes interfaces that different ID-software components
 
 #### <a name="_Time_stamping_proxy"></a>Time-stamping proxy service interface
 
-*   User: DigiDoc4j, Libdigidocpp (DigiDoc4 Client), TeRa utility
+*   User: DigiDoc4j, Libdigidocpp (DigiDoc4 Client, RIA DigiDoc), TeRa utility
 *   Accessible with: HTTP protocol
 *   Accessible from: [http://dd-at.ria.ee/tsa](http://dd-at.ria.ee/tsa), [https://puhver.ria.ee/tsa](https://puhver.ria.ee/tsa)
 *   Documentation: [RFC3161](https://tools.ietf.org/html/rfc3161)
@@ -975,7 +975,7 @@ The following chapter describes interfaces that different ID-software components
 
 #### <a name="_SiVa_verification_service"></a>Signature Verification Service interface
 
-*   User: Libdigidocpp (DigiDoc4 Client)
+*   User: Libdigidocpp (DigiDoc4 Client, RIA DigiDoc)
 *   Accessible with: HTTPS protocol
 *   Accessible from: [https://siva.eesti.ee/V3/validate](https://siva.eesti.ee/V3/validate)
 *   Documentation: [http://open-eid.github.io/SiVa/](http://open-eid.github.io/SiVa/)
@@ -983,14 +983,14 @@ The following chapter describes interfaces that different ID-software components
 <a name="_ID-card_owners’_photo"></a>
 #### ID-card owners’ photo repository interface
 
-*   User: ID-card utility program
+*   User: DigiDoc4 Client
 *   Accessible with: HTTPS protocol
 *   Accessible from: [https://sisene.www.eesti.ee/idportaal/portaal.idpilt](https://sisene.www.eesti.ee/idportaal/portaal.idpilt)
 
 <a name="_Eesti.ee_e-mail_checking"></a>
 #### Eesti.ee e-mail checking service interface
 
-*   User: ID-card utility program
+*   User: DigiDoc4 Client
 *   Accessible with: HTTPS
 *   Accessible from: [https://sisene.www.eesti.ee/idportaal/postisysteem.naita_suunamised](https://sisene.www.eesti.ee/idportaal/postisysteem.naita_suunamised)
 
