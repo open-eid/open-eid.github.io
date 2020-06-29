@@ -868,18 +868,13 @@ Note that not all of the external base libraries are included in the component m
 <td>-</td>
 </tr>
 <tr>
-<td>EstEID Firefox plug-in</td>
-<td>Browser signing module (NPAPI-based plug-in) that is used in Safari (supported in macOS) browser. The plug-in enables data exchange with the cryptographic token’s driver that is used for signing. PKCS#11 driver is used. Code repository: <a href="https://github.com/open-eid/browser-token-signing">https://github.com/open-eid/browser-token-signing</a>. Wiki: <a href="https://github.com/open-eid/browser-token-signing/wiki">https://github.com/open-eid/browser-token-signing/wiki</a>.</td>
-<td>RIA</td>
-</tr>
-<tr>
 <td>EstEIDPluginBHO</td>
 <td>Browser signing module (BHO-based plug-in) that is used in Internet explorer browser (supported in Windows operating system). The plug-in enables data exchange with the cryptographic token’s driver that is used for signing. By default, the CNG/CAPI and minidriver is used along with its certificate selection and PIN insertion dialogs. Alternatively, in case of using PKCS#11 driver, the operating system's native PIN insertion dialog is used, certificate is selected via CAPI interface. Code repository: <a href="https://github.com/open-eid/browser-token-signing">https://github.com/open-eid/browser-token-signing</a>. Wiki: <a href="https://github.com/open-eid/browser-token-signing/wiki">https://github.com/open-eid/browser-token-signing/wiki</a>.</td>
 <td>RIA</td>
 </tr>
 <tr>
 <td>chrome-token-signing</td>
-<td>Used in Chrome and Firefox. Comprises two subcomponents: browser extension component and native macOS/Linux/Windows component that implements Native Messaging API (JSON). The browser extension enables data exchange with the native component that in turn interacts with the cryptographic token’s driver for signing. Code repository: <a href="https://github.com/open-eid/chrome-token-signing">https://github.com/open-eid/chrome-token-signing</a>. Wiki: <a href="https://github.com/open-eid/chrome-token-signing/wiki">https://github.com/open-eid/chrome-token-signing/wiki</a>.</td>
+<td>Used in Chrome, Edge Chromium and Firefox. Comprises two subcomponents: browser extension component and native macOS/Linux/Windows component that implements Native Messaging API (JSON). The browser extension enables data exchange with the native component that in turn interacts with the cryptographic token’s driver for signing. Code repository: <a href="https://github.com/open-eid/chrome-token-signing">https://github.com/open-eid/chrome-token-signing</a>. Wiki: <a href="https://github.com/open-eid/chrome-token-signing/wiki">https://github.com/open-eid/chrome-token-signing/wiki</a>.</td>
 <td>RIA</td>
 </tr>
 <tr>
@@ -912,37 +907,10 @@ Note that not all of the external base libraries are included in the component m
 <p>Required:</p>
 <ul>
 <li>Interfaces with browser signing modules:<ul>
-<li><a href="#_EstEID_Firefox_plug-in’s">EstEID Firefox plug-in’s interfaces</a></li>
 <li><a href="#_EstEIDPluginBHO_plug-in’s_interface">EstEIDPluginBHO plug-in’s interfaces</a></li>
 <li><a href="#_Chrome-token-signing_extension’s_in">Chrome-token-signing extension’s interfaces</a></li>
 <li><a href="#_Safari-token-signing_extension’s_in">Safari-token-signing extension’s interfaces</a></li>
 <li><a href="#_Edge-token-signing_extension’s_in">Edge-token-signing extension’s interfaces</a></li>
-</ul>
-</li>
-</ul>
-<h4 id="esteid-firefox-plug-ins-interfaces"><a name="_EstEID_Firefox_plug-in’s"></a>EstEID Firefox plug-in’s interfaces</h4>
-<p>Provided:</p>
-<ul>
-<li><a href="https://github.com/hwcrypto/hwcrypto.js/wiki/API">EstEID Firefox plug-in’s API</a><ul>
-<li>User: a web application in browser environment, hwcrypto.js library</li>
-<li>Accessible with: C++</li>
-</ul>
-</li>
-<li>PIN dialog – for inserting PIN2 value during signature creation in all operating systems except of Windows<ul>
-<li>User: end-user</li>
-<li>Accessible with: GUI elements</li>
-</ul>
-</li>
-<li>Certificate selection dialog<ul>
-<li>User: end-user</li>
-<li>Accessible with: GUI elements</li>
-</ul>
-</li>
-</ul>
-<p>Required:</p>
-<ul>
-<li>Interfaces with cryptographic token’s drivers (described in chap. <a href="#_comp_drivers">Drivers</a>)<ul>
-<li>PKCS#11 interface</li>
 </ul>
 </li>
 </ul>
@@ -1098,7 +1066,7 @@ Note that not all of the external base libraries are included in the component m
 </tr>
 <tr>
 <td>Minidriver</td>
-<td>Used as a default driver for accessing Estonian eID-cards via CNG interface for signature creation in web browser environment in case of Windows platform. Used as a default driver for authentication with eID card in Chrome and Internet Explorer browsers in case of Windows platform. Code repository: <a href="https://github.com/open-eid/minidriver">https://github.com/open-eid/minidriver</a>. Wiki: <a href="https://github.com/open-eid/minidriver/wiki">https://github.com/open-eid/minidriver/wiki</a>.</td>
+<td>Used as a default driver for accessing Estonian eID-cards via CNG interface for signature creation in web browser environment in case of Windows platform. Used as a default driver for authentication with eID card in Chrome, Edge and Internet Explorer browsers in case of Windows platform. Code repository: <a href="https://github.com/open-eid/minidriver">https://github.com/open-eid/minidriver</a>. Wiki: <a href="https://github.com/open-eid/minidriver/wiki">https://github.com/open-eid/minidriver/wiki</a>.</td>
 <td>RIA/ IDEMIA</td>
 </tr>
 <tr>
@@ -1244,7 +1212,7 @@ Note that not all of the external base libraries are included in the component m
 </tr>
 <tr>
 <td>Windows Store</td>
-<td>see Microsoft’s documentation for more information.</td>
+<td>See <a href="https://microsoftedge.microsoft.com/addons/detail/fofaekogmodbjplbmlbmjiglndceaajh">https://microsoftedge.microsoft.com/addons/detail/fofaekogmodbjplbmlbmjiglndceaajh</a> and <a href="https://www.microsoft.com/en-us/p/token-signing/9n5fkx7gtdrq">https://www.microsoft.com/en-us/p/token-signing/9n5fkx7gtdrq</a>.</td>
 <td>Microsoft</td>
 </tr>
 <tr>
@@ -1660,5 +1628,5 @@ Note that not all of the external base libraries are included in the component m
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2020-02-01 15:42:33
+Build Date UTC : 2020-06-26 10:01:05
 -->

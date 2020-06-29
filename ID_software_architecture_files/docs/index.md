@@ -1,8 +1,8 @@
 # <a name="home">ARCHITECTURE OF ID-SOFTWARE</a>
 
-Document version: 2.0  
-Software version: 20.01  
-Last updated: 31.12.2019  
+Document version: 2.1  
+Software version: 20.05  
+Last updated: 26.06.2020  
 
 
 # <a name="_intro">Introduction</a>
@@ -556,9 +556,8 @@ The web signing component diagrams describe components that are needed for signa
 | - | - | - |
 | hwcrypto.js | JavaScript library that enables communication with the browser signing modules (plug-in or extension) of the different web browsers. Wiki: [https://github.com/open-eid/hwcrypto.js/wiki](https://github.com/open-eid/hwcrypto.js/wiki). Code repository: [https://github.com/open-eid/hwcrypto.js](https://github.com/open-eid/hwcrypto.js). | RIA |
 | Web application | A web application that implements signature creation with an eID-token in browser environment. | - |
-| EstEID Firefox plug-in | Browser signing module (NPAPI-based plug-in) that is used in Safari (supported in macOS) browser. The plug-in enables data exchange with the cryptographic token’s driver that is used for signing. PKCS#11 driver is used. Code repository: [https://github.com/open-eid/browser-token-signing](https://github.com/open-eid/browser-token-signing). Wiki: [https://github.com/open-eid/browser-token-signing/wiki](https://github.com/open-eid/browser-token-signing/wiki). | RIA |
 | EstEIDPluginBHO | Browser signing module (BHO-based plug-in) that is used in Internet explorer browser (supported in Windows operating system). The plug-in enables data exchange with the cryptographic token’s driver that is used for signing. By default, the CNG/CAPI and minidriver is used along with its certificate selection and PIN insertion dialogs. Alternatively, in case of using PKCS#11 driver, the operating system's native PIN insertion dialog is used, certificate is selected via CAPI interface. Code repository: [https://github.com/open-eid/browser-token-signing](https://github.com/open-eid/browser-token-signing). Wiki: [https://github.com/open-eid/browser-token-signing/wiki](https://github.com/open-eid/browser-token-signing/wiki). | RIA |
-| chrome-token-signing | Used in Chrome and Firefox. Comprises two subcomponents: browser extension component and native macOS/Linux/Windows component that implements Native Messaging API (JSON). The browser extension enables data exchange with the native component that in turn interacts with the cryptographic token’s driver for signing. Code repository: [https://github.com/open-eid/chrome-token-signing](https://github.com/open-eid/chrome-token-signing). Wiki: [https://github.com/open-eid/chrome-token-signing/wiki](https://github.com/open-eid/chrome-token-signing/wiki). | RIA |
+| chrome-token-signing | Used in Chrome, Edge Chromium and Firefox. Comprises two subcomponents: browser extension component and native macOS/Linux/Windows component that implements Native Messaging API (JSON). The browser extension enables data exchange with the native component that in turn interacts with the cryptographic token’s driver for signing. Code repository: [https://github.com/open-eid/chrome-token-signing](https://github.com/open-eid/chrome-token-signing). Wiki: [https://github.com/open-eid/chrome-token-signing/wiki](https://github.com/open-eid/chrome-token-signing/wiki). | RIA |
 | safari-token-signing | Used in Safari. Comprises two subcomponents: browser extension component and native macOS component that implements Native Messaging API (JSON). The browser extension enables data exchange with the native component that in turn interacts with the cryptographic token’s driver for signing. Code repository: [https://github.com/open-eid/safari-token-signing](https://github.com/open-eid/safari-token-signing). Wiki: [https://github.com/open-eid/browser-token-signing/wiki](https://github.com/open-eid/browser-token-signing/wiki). | RIA |
 | edge-token-signing | Used in Edge. Comprises two subcomponents: browser extension component and native Windows component that implements Native Messaging API (JSON). The browser extension enables data exchange with the native component that in turn interacts with the cryptographic token’s driver for signing. Code repository: [https://github.com/open-eid/edge-token-signing](https://github.com/open-eid/edge-token-signing). | RIA |
 | Minidriver | Used via CNG interface in Windows environment only. Described in chap. [Drivers](#_comp_drivers). | RIA/ IDEMIA |
@@ -576,30 +575,10 @@ Provided:
 Required:
 
 *   Interfaces with browser signing modules:
-    *   [EstEID Firefox plug-in’s interfaces](#_EstEID_Firefox_plug-in’s)
     *   [EstEIDPluginBHO plug-in’s interfaces](#_EstEIDPluginBHO_plug-in’s_interface)
     *   [Chrome-token-signing extension’s interfaces](#_Chrome-token-signing_extension’s_in)
     *   [Safari-token-signing extension’s interfaces](#_Safari-token-signing_extension’s_in)
     *   [Edge-token-signing extension’s interfaces](#_Edge-token-signing_extension’s_in)
-
-#### <a name="_EstEID_Firefox_plug-in’s"></a>EstEID Firefox plug-in’s interfaces
-
-Provided:
-
-*   [EstEID Firefox plug-in’s API](https://github.com/hwcrypto/hwcrypto.js/wiki/API)
-    *   User: a web application in browser environment, hwcrypto.js library
-    *   Accessible with: C++
-*   PIN dialog – for inserting PIN2 value during signature creation in all operating systems except of Windows
-    *   User: end-user
-    *   Accessible with: GUI elements
-*   Certificate selection dialog
-    *   User: end-user
-    *   Accessible with: GUI elements
-
-Required:
-
-*   Interfaces with cryptographic token’s drivers (described in chap. [Drivers](#_comp_drivers))
-    *   PKCS#11 interface
 
 #### <a name="_EstEIDPluginBHO_plug-in’s_interface"></a>EstEIDPluginBHO plug-in’s interfaces
 
@@ -699,7 +678,7 @@ Authentication in web browsers is done with the browsers’ and operating system
 | - | - | - |
 | OpenSC PKCS#11 driver | A driver for accessing eID-cards. Connects with the card via the operating system’s native PC/SC interface. Used as a default driver for authentication with eID card and signature creation in web browser environment in case of Linux platform. Wiki: [https://github.com/OpenSC/OpenSC/wiki](https://github.com/OpenSC/OpenSC/wiki). | OpenSC |
 | One-pin OpenSC PKCS#11 driver | Version of OpenSC PKCS#11 driver that only enables authentication functionality. Used as a default driver for authentication with eID card in browser environment in case of Windows platform. Wiki: [https://github.com/OpenSC/OpenSC/wiki](https://github.com/OpenSC/OpenSC/wiki). | OpenSC |
-| Minidriver | Used as a default driver for accessing Estonian eID-cards via CNG interface for signature creation in web browser environment in case of Windows platform. Used as a default driver for authentication with eID card in Chrome and Internet Explorer browsers in case of Windows platform. Code repository: [https://github.com/open-eid/minidriver](https://github.com/open-eid/minidriver). Wiki: [https://github.com/open-eid/minidriver/wiki](https://github.com/open-eid/minidriver/wiki). | RIA/ IDEMIA |
+| Minidriver | Used as a default driver for accessing Estonian eID-cards via CNG interface for signature creation in web browser environment in case of Windows platform. Used as a default driver for authentication with eID card in Chrome, Edge and Internet Explorer browsers in case of Windows platform. Code repository: [https://github.com/open-eid/minidriver](https://github.com/open-eid/minidriver). Wiki: [https://github.com/open-eid/minidriver/wiki](https://github.com/open-eid/minidriver/wiki). | RIA/ IDEMIA |
 | ATR Filter | Base component for Minidriver (see [http://support.microsoft.com/kb/981665](http://support.microsoft.com/kb/981665) for more information). | - |
 | EstEID CTK Tokend | A driver for accessing eID-cards. Connects with the card via the operating system’s native PC/SC interface. Used as a default driver for authentication with eID card in browser environment in case macOS platform. Code repository: [https://github.com/open-eid/esteid-ctk-tokend](https://github.com/open-eid/esteid-ctk-tokend). | RIA |
 | PKCS#12 implementation via base library | An implementation of PKCS#12 interface by the component’s base libraries. | - |
@@ -803,7 +782,7 @@ The following chapter describes automatic updating mechanisms of different ID-so
 | - | - | - |
 | ID-updater | Service that is periodically checks if newer versions of related ID-software components are available for download, initiates the download and installation if necessary. Uses [Central configuration service](#_comp_central_conf) for determining the latest available software versions. | RIA |
 | MS Update | Microsoft Update – see Microsoft’s documentation for more information. | Microsoft |
-| Windows Store | see Microsoft’s documentation for more information. | Microsoft |
+| Windows Store | See [https://microsoftedge.microsoft.com/addons/detail/fofaekogmodbjplbmlbmjiglndceaajh](https://microsoftedge.microsoft.com/addons/detail/fofaekogmodbjplbmlbmjiglndceaajh) and [https://www.microsoft.com/en-us/p/token-signing/9n5fkx7gtdrq](https://www.microsoft.com/en-us/p/token-signing/9n5fkx7gtdrq). | Microsoft |
 | Chrome Web Store | See [https://chrome.google.com/webstore/detail/token-signing/ckjefchnfjhjfedoccjbhjpbncimppeg](https://chrome.google.com/webstore/detail/token-signing/ckjefchnfjhjfedoccjbhjpbncimppeg). | Google |
 
 **Table: Updating mechanisms in Windows**
