@@ -9,38 +9,28 @@
         
         <link rel="shortcut icon" href="img/favicon.ico">
         <title>Architecture of ID-software</title>
-        <link href="css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/font-awesome.min.css" rel="stylesheet">
         <link href="css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
 
         <script src="js/jquery-1.10.2.min.js" defer></script>
-        <script src="js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="js/bootstrap.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
     <body class="homepage">
-
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
-
-                <!-- Collapsed navigation -->
-                <div class="navbar-header">
-                    <a class="navbar-brand" href=".">Architecture of ID-software</a>
-                </div>
+                <a class="navbar-brand" href=".">Architecture of ID-software</a>
 
                 <!-- Expanded navigation -->
-                <div class="navbar-collapse collapse">
+                <div id="navbar-collapse" class="navbar-collapse collapse">
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
@@ -50,32 +40,95 @@
         </div>
 
         <div class="container">
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#architecture-of-id-software">ARCHITECTURE OF ID-SOFTWARE</a></li>
-        <li class="main "><a href="#introduction">Introduction</a></li>
-        <li class="main "><a href="#background">Background</a></li>
-        <li class="main "><a href="#component-model">Component model</a></li>
-            <li><a href="#desktop-applications">Desktop applications</a></li>
-            <li><a href="#mobile-applications">Mobile applications</a></li>
-            <li><a href="#software-libraries">Software libraries</a></li>
-            <li><a href="#web-components">Web components</a></li>
-            <li><a href="#drivers">Drivers</a></li>
-            <li><a href="#updating-mechanisms">Updating mechanisms</a></li>
-            <li><a href="#central-configuration-service">Central configuration service</a></li>
-            <li><a href="#interfaces-with-external-services">Interfaces with external services</a></li>
-        <li class="main "><a href="#deployment-model">Deployment model</a></li>
-            <li><a href="#signing-in-web-browser">Signing in web browser</a></li>
-            <li><a href="#signing-with-digidoc4-client">Signing with DigiDoc4 Client</a></li>
-            <li><a href="#signing-with-ria-digidoc">Signing with RIA DigiDoc</a></li>
-    </ul>
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#architecture-of-id-software" class="nav-link">ARCHITECTURE OF ID-SOFTWARE</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#introduction" class="nav-link">Introduction</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#background" class="nav-link">Background</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#component-model" class="nav-link">Component model</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#desktop-applications" class="nav-link">Desktop applications</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#mobile-applications" class="nav-link">Mobile applications</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#software-libraries" class="nav-link">Software libraries</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#web-components" class="nav-link">Web components</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#drivers" class="nav-link">Drivers</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#updating-mechanisms" class="nav-link">Updating mechanisms</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#central-configuration-service" class="nav-link">Central configuration service</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#interfaces-with-external-services" class="nav-link">Interfaces with external services</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#deployment-model" class="nav-link">Deployment model</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#signing-in-web-browser" class="nav-link">Signing in web browser</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#signing-with-digidoc4-client" class="nav-link">Signing with DigiDoc4 Client</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#signing-with-ria-digidoc" class="nav-link">Signing with RIA DigiDoc</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
 </div></div>
-                <div class="col-md-9" role="main">
+                    <div class="col-md-9" role="main">
 
 <h1 id="architecture-of-id-software"><a name="home">ARCHITECTURE OF ID-SOFTWARE</a></h1>
-<p>Document version: 2.0<br />
-Software version: 20.01<br />
-Last updated: 31.12.2019  </p>
+<p>Document version: 2.1<br />
+Software version: 20.05<br />
+Last updated: 26.06.2020  </p>
 <h1 id="introduction"><a name="_intro">Introduction</a></h1>
 <p>The purpose of this document is to describe the architecture of ID-software.</p>
 <p><strong>ID-software</strong> is a collection of software components offering support for PKI-based functionality, i.e. operations with different cryptographic tokens (e.g. eID cards), handling digitally signed documents, file encryption/decryption and signing and authentication in web environment. The ID-software comprises end-user applications, software libraries, web components, drivers for communicating with the cryptographic tokens and other complementary components.</p>
@@ -1546,6 +1599,7 @@ Note that not all of the external base libraries are included in the component m
 <li>Signature value is calculated either in the Mobile-ID SIM card or ID-card’s chip.</li>
 <li>Trust anchor data is retrieved from TSL lists – the European Commission’s central TSL and national TSL’s of the EU member states.</li>
 </ul></div>
+            </div>
         </div>
 
         <footer class="col-md-12">
@@ -1559,21 +1613,21 @@ Note that not all of the external base libraries are included in the component m
         <script src="js/base.js" defer></script>
         <script src="search/main.js" defer></script>
 
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-    <div class="modal-dialog">
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
             </div>
             <div class="modal-body">
                 <p>
                     From here you can search these documents. Enter
                     your search terms below.
                 </p>
-                <form role="form">
+                <form>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
                 <div id="mkdocs-search-results"></div>
@@ -1582,12 +1636,12 @@ Note that not all of the external base libraries are included in the component m
             </div>
         </div>
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
             </div>
             <div class="modal-body">
               <table class="table">
@@ -1627,6 +1681,6 @@ Note that not all of the external base libraries are included in the component m
 </html>
 
 <!--
-MkDocs version : 1.0.4
-Build Date UTC : 2020-06-26 10:01:05
+MkDocs version : 1.1.2
+Build Date UTC : 2020-07-01 08:32:37.412824+00:00
 -->
