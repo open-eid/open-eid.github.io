@@ -1,0 +1,31 @@
+name: Github Pages
+on:
+  push:
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+    - name: Install dependencies
+      run: python3 -m pip install mkdocs-bootswatch 
+    - name: Build docs
+      run: |
+        GLOBIGNORE=ID_software_architecture_files:README.md:.git:.github
+        rm -rf *
+        cd ID_software_architecture_files
+        mkdocs build       
+        mv site/* ..
+        rmdir site
+    - name: Deploy
+      run: |
+        git config --local user.name 'github-actions[bot]'
+        git config --local user.email 'github-actions[bot]@users.noreply.github.com'
+        git add .
+        git commit -am "Update site"
+        git push origin master
