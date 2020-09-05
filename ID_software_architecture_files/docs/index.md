@@ -1,8 +1,8 @@
 # <a name="home">ARCHITECTURE OF ID-SOFTWARE</a>
 
-Document version: 2.1  
+Document version: 2.2  
 Software version: 20.05  
-Last updated: 26.06.2020  
+Last updated: 09.09.2020  
 
 
 # <a name="_intro">Introduction</a>
@@ -383,7 +383,8 @@ Required:
 | - | - | - |
 | RIA DigiDoc | RIA DigiDoc enables handling digitally signed documents, encryption/decryption for managing ID-card’s PIN/PUK codes replacement and other services.<br/>Code repository: [https://github.com/open-eid/MOPP-Android](https://github.com/open-eid/MOPP-Android) and [https://github.com/open-eid/MOPP-iOS](https://github.com/open-eid/MOPP-iOS). | RIA |
 | RIA DigiDoc base libraries | Libdigidocpp (and its base libraries), etc. See [RIA DigiDoc interfaces](#_RIA_DigiDoc_interfaces). | - |
-| DigiDocService | SOAP service that is used by RIA DigiDoc for signature creation with Mobile-ID. See also [https://sk-eid.github.io/dds-documentation/](https://sk-eid.github.io/dds-documentation/). | SK |
+| Mobile-ID (MID) REST service | REST service that is used by RIA DigiDoc for signature creation with Mobile-ID. See also [https://github.com/sk-eid/mid](https://github.com/sk-eid/mid). | SK |
+| Smart-ID (SID) REST service | REST service that is used by RIA DigiDoc for signature creation with Smart-ID. See also [https://github.com/SK-EID/smart-id-documentation](https://github.com/SK-EID/smart-id-documentation). | SK |
 | LDAP directory | Described in chap. [DigiDoc4 Client](#_DigiDoc4_Client). | SK |
 | Central configuration repository | Described in chap. [Central configuration service](#_comp_central_conf). | RIA |
 | Libdigidocpp | Described in chap. [Software libraries](#_comp_libraries). | RIA |
@@ -416,7 +417,8 @@ Provided:
 Required:
 
 *   [Central configuration server interface](#_comp_central_conf_server_interfaces)
-*   [DigiDocService](#_DigiDocService)
+*   [Mobile-ID (MID) REST service](#_MID_REST_service)
+*   [Smart-ID (MID) REST service](#_SID_REST_service)
 *   [LDAP directory interface](#_LDAP_directory_interface)
 *   Interfaces with base libraries:
     *   [Libdigidocpp library’s API](#_Libdigidocpp_library’s_interfaces) – for handling documents in supported digital signature formats (BDOC and DDOC)
@@ -512,7 +514,7 @@ Required:
 Provided:
 
 *   [Libdigidocpp API](http://open-eid.github.io/libdigidocpp)
-    *   User: DigiDoc4 Client, Libdigidocpp utility program, DigiDocCSharp .NET wrapper classes
+    *   User: DigiDoc4 Client, RIA DigiDoc, Libdigidocpp utility program, DigiDocCSharp .NET wrapper classes
     *   Accessible with: C++
 
 Required:
@@ -894,23 +896,15 @@ The following chapter describes interfaces that different ID-software components
 <a name="_MID_REST_service"></a>
 #### Mobile-ID REST service
 
-*   User: DigiDoc4 Client
+*   User: DigiDoc4 Client, RIA DigiDoc
 *   Accessible with: REST over HTTPS
 *   Accessible from: [https://dd-mid.ria.ee/mid-api](https://dd-mid.ria.ee/mid-api), [https://mid.sk.ee/mid-api](https://mid.sk.ee/mid-api)
 *   Documentation: [https://github.com/sk-eid/mid](https://github.com/sk-eid/mid)
 
-<a name="_DigiDocService"></a>
-#### DigiDocService
-
-*   User: RIA DigiDoc
-*   Accessible with: SOAP over HTTPS
-*   Accessible from: [https://digidocservice.sk.ee](https://digidocservice.sk.ee)
-*   Documentation: [https://sk-eid.github.io/dds-documentation/](https://sk-eid.github.io/dds-documentation/)
-
 <a name="_SID_REST_service"></a>
 #### Smart-ID REST service
 
-*   User: DigiDoc4 Client
+*   User: DigiDoc4 Client, RIA DigiDoc
 *   Accessible with: REST over HTTPS
 *   Accessible from: [https://dd-sid.ria.ee/v1](https://dd-sid.ria.ee/v1), [https://rp-api.smart-id.com/v1](https://rp-api.smart-id.com/v1)
 *   Documentation: [https://github.com/SK-EID/smart-id-documentation](https://github.com/SK-EID/smart-id-documentation)
@@ -1021,6 +1015,7 @@ Additional notes:
 
 *   RIA DigiDoc is used for creating the ASiC container and adding the signature value to the container.
 *   Long term validation data is added to the ASiC signature by obtaining OCSP confirmation and a time-stamp.
-*   DigiDocService SOAP services is required in order to sign with Mobile-ID.
+*   Mobile-ID REST services is required in order to sign with Mobile-ID.
+*   Smart-ID REST services is required in order to sign with Smart-ID.
 *   Signature value is calculated either in the Mobile-ID SIM card or ID-card’s chip.
 *   Trust anchor data is retrieved from TSL lists – the European Commission’s central TSL and national TSL’s of the EU member states.
