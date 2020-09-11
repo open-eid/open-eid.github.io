@@ -126,9 +126,9 @@
                     <div class="col-md-9" role="main">
 
 <h1 id="architecture-of-id-software"><a name="home">ARCHITECTURE OF ID-SOFTWARE</a></h1>
-<p>Document version: 2.1<br />
+<p>Document version: 2.2<br />
 Software version: 20.05<br />
-Last updated: 26.06.2020  </p>
+Last updated: 09.09.2020  </p>
 <h1 id="introduction"><a name="_intro">Introduction</a></h1>
 <p>The purpose of this document is to describe the architecture of ID-software.</p>
 <p><strong>ID-software</strong> is a collection of software components offering support for PKI-based functionality, i.e. operations with different cryptographic tokens (e.g. eID cards), handling digitally signed documents, file encryption/decryption and signing and authentication in web environment. The ID-software comprises end-user applications, software libraries, web components, drivers for communicating with the cryptographic tokens and other complementary components.</p>
@@ -633,8 +633,13 @@ Note that not all of the external base libraries are included in the component m
 <td>-</td>
 </tr>
 <tr>
-<td>DigiDocService</td>
-<td>SOAP service that is used by RIA DigiDoc for signature creation with Mobile-ID. See also <a href="https://sk-eid.github.io/dds-documentation/">https://sk-eid.github.io/dds-documentation/</a>.</td>
+<td>Mobile-ID (MID) REST service</td>
+<td>REST service that is used by RIA DigiDoc for signature creation with Mobile-ID. See also <a href="https://github.com/sk-eid/mid">https://github.com/sk-eid/mid</a>.</td>
+<td>SK</td>
+</tr>
+<tr>
+<td>Smart-ID (SID) REST service</td>
+<td>REST service that is used by RIA DigiDoc for signature creation with Smart-ID. See also <a href="https://github.com/SK-EID/smart-id-documentation">https://github.com/SK-EID/smart-id-documentation</a>.</td>
 <td>SK</td>
 </tr>
 <tr>
@@ -703,7 +708,8 @@ Note that not all of the external base libraries are included in the component m
 <p>Required:</p>
 <ul>
 <li><a href="#_comp_central_conf_server_interfaces">Central configuration server interface</a></li>
-<li><a href="#_DigiDocService">DigiDocService</a></li>
+<li><a href="#_MID_REST_service">Mobile-ID (MID) REST service</a></li>
+<li><a href="#_SID_REST_service">Smart-ID (MID) REST service</a></li>
 <li><a href="#_LDAP_directory_interface">LDAP directory interface</a></li>
 <li>Interfaces with base libraries:<ul>
 <li><a href="#_Libdigidocpp_library’s_interfaces">Libdigidocpp library’s API</a> – for handling documents in supported digital signature formats (BDOC and DDOC)</li>
@@ -859,7 +865,7 @@ Note that not all of the external base libraries are included in the component m
 <p>Provided:</p>
 <ul>
 <li><a href="http://open-eid.github.io/libdigidocpp">Libdigidocpp API</a><ul>
-<li>User: DigiDoc4 Client, Libdigidocpp utility program, DigiDocCSharp .NET wrapper classes</li>
+<li>User: DigiDoc4 Client, RIA DigiDoc, Libdigidocpp utility program, DigiDocCSharp .NET wrapper classes</li>
 <li>Accessible with: C++</li>
 </ul>
 </li>
@@ -1475,23 +1481,15 @@ Note that not all of the external base libraries are included in the component m
 <p><a name="_MID_REST_service"></a></p>
 <h4 id="mobile-id-rest-service">Mobile-ID REST service</h4>
 <ul>
-<li>User: DigiDoc4 Client</li>
+<li>User: DigiDoc4 Client, RIA DigiDoc</li>
 <li>Accessible with: REST over HTTPS</li>
 <li>Accessible from: <a href="https://dd-mid.ria.ee/mid-api">https://dd-mid.ria.ee/mid-api</a>, <a href="https://mid.sk.ee/mid-api">https://mid.sk.ee/mid-api</a></li>
 <li>Documentation: <a href="https://github.com/sk-eid/mid">https://github.com/sk-eid/mid</a></li>
 </ul>
-<p><a name="_DigiDocService"></a></p>
-<h4 id="digidocservice">DigiDocService</h4>
-<ul>
-<li>User: RIA DigiDoc</li>
-<li>Accessible with: SOAP over HTTPS</li>
-<li>Accessible from: <a href="https://digidocservice.sk.ee">https://digidocservice.sk.ee</a></li>
-<li>Documentation: <a href="https://sk-eid.github.io/dds-documentation/">https://sk-eid.github.io/dds-documentation/</a></li>
-</ul>
 <p><a name="_SID_REST_service"></a></p>
 <h4 id="smart-id-rest-service">Smart-ID REST service</h4>
 <ul>
-<li>User: DigiDoc4 Client</li>
+<li>User: DigiDoc4 Client, RIA DigiDoc</li>
 <li>Accessible with: REST over HTTPS</li>
 <li>Accessible from: <a href="https://dd-sid.ria.ee/v1">https://dd-sid.ria.ee/v1</a>, <a href="https://rp-api.smart-id.com/v1">https://rp-api.smart-id.com/v1</a></li>
 <li>Documentation: <a href="https://github.com/SK-EID/smart-id-documentation">https://github.com/SK-EID/smart-id-documentation</a></li>
@@ -1595,7 +1593,8 @@ Note that not all of the external base libraries are included in the component m
 <ul>
 <li>RIA DigiDoc is used for creating the ASiC container and adding the signature value to the container.</li>
 <li>Long term validation data is added to the ASiC signature by obtaining OCSP confirmation and a time-stamp.</li>
-<li>DigiDocService SOAP services is required in order to sign with Mobile-ID.</li>
+<li>Mobile-ID REST services is required in order to sign with Mobile-ID.</li>
+<li>Smart-ID REST services is required in order to sign with Smart-ID.</li>
 <li>Signature value is calculated either in the Mobile-ID SIM card or ID-card’s chip.</li>
 <li>Trust anchor data is retrieved from TSL lists – the European Commission’s central TSL and national TSL’s of the EU member states.</li>
 </ul></div>
@@ -1682,5 +1681,5 @@ Note that not all of the external base libraries are included in the component m
 
 <!--
 MkDocs version : 1.1.2
-Build Date UTC : 2020-07-01 08:32:37.412824+00:00
+Build Date UTC : 2020-09-11 17:13:38.334036+00:00
 -->
