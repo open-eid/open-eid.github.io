@@ -132,9 +132,9 @@ Last updated: 09.09.2020  </p>
 <h1 id="introduction"><a name="_intro">Introduction</a></h1>
 <p>The purpose of this document is to describe the architecture of ID-software.</p>
 <p><strong>ID-software</strong> is a collection of software components offering support for PKI-based functionality, i.e. operations with different cryptographic tokens (e.g. eID cards), handling digitally signed documents, file encryption/decryption and signing and authentication in web environment. The ID-software comprises end-user applications, software libraries, web components, drivers for communicating with the cryptographic tokens and other complementary components.</p>
-<p>Main sources for information about ID-software are <a href="http://id.ee/?lang=en&amp;id=">www.id.ee</a> and <a href="https://github.com/open-eid">Open-EID GitHub repository</a>.</p>
+<p>Main sources for information about ID-software are <a href="https://www.id.ee/en/">www.id.ee</a> and <a href="https://github.com/open-eid">Open-EID GitHub repository</a>.</p>
 <p>This document covers description of ID-software and its components, their deployment in different environments, provided and required interfaces. The document does not include components that have reached the end of their support nor the components that have not yet been released.</p>
-<p>The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is <strong>version 20.01</strong>. Latest version numbers of the various ID-software components are provided at <a href="http://www.id.ee/?lang=en&amp;id=36798">http://www.id.ee/?lang=en&amp;id=36798</a>.</p>
+<p>The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is <strong>version 20.05</strong>. Latest version numbers of the various ID-software components are provided at <a href="https://www.id.ee/en/article/information-on-the-latest-software-versions/">https://www.id.ee/en/article/information-on-the-latest-software-versions/</a>.</p>
 <p>The document is targeted for:</p>
 <ul>
 <li>Owners/managers of the software;</li>
@@ -158,7 +158,7 @@ Last updated: 09.09.2020  </p>
 The software is distributed open-source (mainly under LGPL/BSD licence) and is accessible from the following locations:</p>
 <ul>
 <li>GitHub repository for the source code, wiki documentation, beta and (optionally) production versions of binary packages: <a href="https://github.com/open-eid">https://github.com/open-eid</a>.</li>
-<li>Release repository for production versions of binaries: <a href="https://installer.id.ee/">https://installer.id.ee/</a></li>
+<li>Release repository for production versions of binaries: <a href="https://www.id.ee/en/article/install-id-software/">https://www.id.ee/en/article/install-id-software/</a></li>
 </ul>
 <p>ID-software components can be logically divided in the following groups:</p>
 <ul>
@@ -356,15 +356,15 @@ The software is distributed open-source (mainly under LGPL/BSD licence) and is a
 <tbody>
 <tr>
 <td>Handling ASiC/BDOC/PADES documents</td>
-<td>Handling documents in <a href="http://id.ee/public/bdoc-spec212-eng.pdf">BDOC 2.1</a> digital signature format that is a profile of <a href="http://www.etsi.org/deliver/etsi_ts/101900_101999/101903/01.04.02_60/ts_101903v010402p.pdf">ETSI XAdES</a> (XML Advanced Electronic Signature) and <a href="http://www.etsi.org/deliver/etsi_ts/102900_102999/102918/01.02.01_60/ts_102918v010201p.pdf">ETSI ASiC</a> formats. Validating timestamp and signatures of enclosed DDOC document in the Time Stamp Token (TST) based <a href="http://www.etsi.org/deliver/etsi_ts/102900_102999/102918/01.02.01_60/ts_102918v010201p.pdf">ETSI ASIC-S</a> containers. Validating the signatures of PDF documents in <a href="http://www.etsi.org/deliver/etsi_en/319100_319199/31914201/01.01.01_60/en_31914201v010101p.pdf">PAdES</a> digital signature format that is a profile of <a href="http://www.etsi.org/deliver/etsi_en/319100_319199/31914201/01.01.01_60/en_31914201v010101p.pdf">ETSI PAdES</a>. More information on the formats’ life cycle can be found from <a href="http://www.id.ee/?lang=en&amp;id=34336">http://www.id.ee/?lang=en&amp;id=34336</a>. See <a href="http://open-eid.github.io/libdigidocpp/manual.html#format">Libdigidocpp</a> and <a href="https://github.com/open-eid/digidoc4j#features">Digidoc4j</a> documentation for supported formats.</td>
+<td>Handling documents in <a href="https://www.id.ee/wp-content/uploads/2020/06/bdoc-spec212-eng.pdf">BDOC 2.1</a> digital signature format that is a profile of <a href="http://www.etsi.org/deliver/etsi_ts/101900_101999/101903/01.04.02_60/ts_101903v010402p.pdf">ETSI XAdES</a> (XML Advanced Electronic Signature) and <a href="http://www.etsi.org/deliver/etsi_ts/102900_102999/102918/01.02.01_60/ts_102918v010201p.pdf">ETSI ASiC</a> formats. Validating timestamp and signatures of enclosed DDOC document in the Time Stamp Token (TST) based <a href="http://www.etsi.org/deliver/etsi_ts/102900_102999/102918/01.02.01_60/ts_102918v010201p.pdf">ETSI ASIC-S</a> containers. Validating the signatures of PDF documents in <a href="http://www.etsi.org/deliver/etsi_en/319100_319199/31914201/01.01.01_60/en_31914201v010101p.pdf">PAdES</a> digital signature format that is a profile of <a href="http://www.etsi.org/deliver/etsi_en/319100_319199/31914201/01.01.01_60/en_31914201v010101p.pdf">ETSI PAdES</a>. More information on the formats’ life cycle can be found from <a href="https://www.id.ee/en/article/digidoc-container-format-life-cycle-2/">https://www.id.ee/en/article/digidoc-container-format-life-cycle-2/</a>. See <a href="http://open-eid.github.io/libdigidocpp/manual.html#format">Libdigidocpp</a> and <a href="https://github.com/open-eid/digidoc4j#features">Digidoc4j</a> documentation for supported formats.</td>
 </tr>
 <tr>
 <td>Handling DDOC documents</td>
-<td>Handling documents in <a href="http://id.ee/public/DigiDoc_format_1.3.pdf">DIGIDOC-XML 1.3 (DDOC)</a> digital signature format that is a profile of <a href="http://www.etsi.org/deliver/etsi_ts/101900_101999/101903/01.04.02_60/ts_101903v010402p.pdf">ETSI XAdES</a> (XML Advanced Electronic Signature) format. More information on the formats’ life cycle can be found from <a href="http://www.id.ee/?lang=en&amp;id=34336">http://www.id.ee/?lang=en&amp;id=34336</a>.</td>
+<td>Handling documents in <a href="https://www.id.ee/wp-content/uploads/2020/08/digidoc_format_1.3.pdf">DIGIDOC-XML 1.3 (DDOC)</a> digital signature format that is a profile of <a href="http://www.etsi.org/deliver/etsi_ts/101900_101999/101903/01.04.02_60/ts_101903v010402p.pdf">ETSI XAdES</a> (XML Advanced Electronic Signature) format. More information on the formats’ life cycle can be found from <a href="https://www.id.ee/en/article/digidoc-container-format-life-cycle-2/">https://www.id.ee/en/article/digidoc-container-format-life-cycle-2/</a>.</td>
 </tr>
 <tr>
 <td>Handling CDOC documents</td>
-<td>Encrypting and decrypting documents in <a href="http://id.ee/public/SK-CDOC-1.0-20120625_EN.pdf">ENCDOC-XML 1.0 (CDOC)</a> also <a href="https://www.ria.ee/sites/default/files/content-editors/EID/cdoc.pdf">CDOC 1.1</a> format.</td>
+<td>Encrypting and decrypting documents in <a href="https://www.id.ee/wp-content/uploads/2020/02/SK-CDOC-1.0-20120625_EN.pdf">ENCDOC-XML 1.0 (CDOC)</a> also <a href="https://www.ria.ee/sites/default/files/content-editors/EID/cdoc.pdf">CDOC 1.1</a> format.</td>
 </tr>
 <tr>
 <td>Calculating RSA/ECDSA signature</td>
@@ -1681,5 +1681,5 @@ Note that not all of the external base libraries are included in the component m
 
 <!--
 MkDocs version : 1.1.2
-Build Date UTC : 2020-09-11 17:13:38.334036+00:00
+Build Date UTC : 2020-09-25 04:50:10.940061+00:00
 -->
