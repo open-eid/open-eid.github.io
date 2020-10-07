@@ -1,11 +1,11 @@
-# <a name="home">ARCHITECTURE OF ID-SOFTWARE</a>
+# ARCHITECTURE OF ID-SOFTWARE
 
-Document version: 2.2  
-Software version: 20.05  
-Last updated: 09.09.2020  
+Document version: 2.3  
+Software version: 20.09  
+Last updated: 06.10.2020  
 
 
-# <a name="_intro">Introduction</a>
+# Introduction
 
 The purpose of this document is to describe the architecture of ID-software.
 
@@ -15,7 +15,7 @@ Main sources for information about ID-software are [www.id.ee](https://www.id.ee
 
 This document covers description of ID-software and its components, their deployment in different environments, provided and required interfaces. The document does not include components that have reached the end of their support nor the components that have not yet been released.
 
-The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is **version 20.05**. Latest version numbers of the various ID-software components are provided at [https://www.id.ee/en/article/information-on-the-latest-software-versions/](https://www.id.ee/en/article/information-on-the-latest-software-versions/).
+The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is **version 20.09**. Latest version numbers of the various ID-software components are provided at [https://www.id.ee/en/article/information-on-the-latest-software-versions/](https://www.id.ee/en/article/information-on-the-latest-software-versions/).
 
 The document is targeted for:
 
@@ -26,7 +26,7 @@ The document is targeted for:
 *   International audience – contributors/integrators from countries other than Estonia who wish to use the software internationally and/or contribute in its development.
 
 
-# <a name="_background">Background</a>
+# Background
 
 **Estonian Information System Authority** (RIA, [https://www.ria.ee/en.html](https://www.ria.ee/en.html)) is the main owner/manager of the ID-software.  
 
@@ -75,7 +75,7 @@ The following table maps the main ID-software components, their owner/developer 
 </thead>
 <tbody>
 <tr>
-<th rowspan="2">Desktop applications</td>
+<th><a href="#desktop-applications">Desktop applications</a></td>
 <th>DigiDoc4 Client</th>
 <td>yes (1)</td>
 <td>yes - validation only (1)</td>
@@ -87,18 +87,7 @@ The following table maps the main ID-software components, their owner/developer 
 <td>LGPL</td>
 </tr>
 <tr>
-<th>TeRa timestamping utility</th>
-<td>yes - timestamping BDOC 1.0 (3)</td>
-<td>yes - timestamping only (3)</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>RIA</td>
-<td>LGPL</td>
-</tr>
-<tr>
-<th rowspan="2">Mobile applications</td>
+<th rowspan="2"><a href="#mobile-applications">Mobile applications</a></td>
 <th>RIA DigiDoc (iOS)</th>
 <td>yes (1)</td>
 <td>yes - validation only (1)</td>
@@ -121,7 +110,7 @@ The following table maps the main ID-software components, their owner/developer 
 <td>LGPL</td>
 </tr>
 <tr>
-<th rowspan="3">Software libraries</td>
+<th rowspan="3"><a href="#software-libraries">Software libraries</a></td>
 <th>DigiDoc4j (Java)</th>
 <td>yes (4)</td>
 <td>yes (1)</td>
@@ -155,7 +144,7 @@ The following table maps the main ID-software components, their owner/developer 
 <td>LGPL</td>
 </tr>
 <tr>
-<th rowspan="3">Web components</td>
+<th rowspan="3"><a href="#web-components">Web components</a></td>
 <th>Browser signing modules</th>
 <td>-</td>
 <td>-</td>
@@ -189,7 +178,7 @@ The following table maps the main ID-software components, their owner/developer 
 <td>LGPL</td>
 </tr>
 <tr>
-<th rowspan="3">Driver components</td>
+<th rowspan="3"><a href="#drivers">Driver components</a></td>
 <th>Minidriver</th>
 <td>-</td>
 <td>-</td>
@@ -248,7 +237,7 @@ The main functions offered by ID-software are described in the following table:
 
 **Table: Functions offered by ID-software**
 
-# <a name="_component_model">Component model</a>
+# Component model
 
 The following chapter depicts ID-software component diagrams, including variations of the components used in different supported environments.  
 In the context of the component diagrams in this document, the ID-software components have been divided to two different packages to show the component’s owner:
@@ -323,47 +312,6 @@ Required:
 *   Interfaces with base libraries:
     *   [Libdigidocpp library’s API](#_Libdigidocpp_library’s_interfaces) – for handling documents in supported digital signature formats (BDOC and DDOC)
     *   External base libraries: Qt5, libldap, openssl
-*   Interfaces with cryptographic token’s drivers (described in chap. [Drivers](#_comp_drivers))
-    *   PKCS#11 interface
-    *   CNG interface
-
-
-<a name="_TeRa"></a>
-### TeRa timestamping application
-
-![cmp TeRa utility](index_files/comp_tera.png "cmp TeRa utility")  
-**Figure: Components of TeRa timestamping application**
-
-| Component | Description | Owner |
-| - | - | - |
-| TeRa | TeRa (*Te*mbeldamis*Ra*kendus) is a timestamping utility that searches the local filesystem for DDOC and BDOC v1 files and timestamps them creating new ASiC-S containers in Time stamp token format.<br/>Timestamping is necessary in order to ensure the long term verification of the documents in case if the format becomes attackable, e.g. in case of weak hashes used in the signed documents.<br/>Code repository: [https://github.com/open-eid/TeRa](https://github.com/open-eid/TeRa). | RIA |
-| Central configuration repository | Described in chap. [Central configuration service](#_comp_central_conf). | RIA |
-| Central configuration client | Described in chap. [Central configuration service](#_comp_central_conf). | RIA |
-| Time-stamping proxy service interface | Proxy service used by RIA. The proxy is used to provide well-known interface for the timestamping service; it allows flexible change of service providers and possibility to support multiple providers at the same time.<br/>See also [Time-stamping proxy service interface](#_Time_stamping_proxy). | RIA |
-| Minidriver | Used via CNG interface in Windows environment only. Described in chap. [Drivers](#_comp_drivers). | RIA/ IDEMIA |
-
-**Table: Components of TeRa timestamping application**
-
-<a name="_TeRa_interfaces"></a>
-#### TeRa interfaces
-
-Provided:
-
-*   Graphical user interface – interface for searching and timestamping of DDOC/BDOC v1.0 signature containers on user's machines.
-    *   User: end-user
-    *   Accessible with: GUI elements
-*   Command line (CLI) interface – interface for searching and timestamping of DDOC/BDOC v1.0 signature containers via CLI.
-    *   User: end-user
-    *   Accessible with: command line / terminal
-*   PIN dialog – for inserting PIN value in all supported operating systems except of Windows.
-    *   User: end-user
-    *   Accessible with: GUI elements
-
-Required:
-
-*   [Central configuration client interface](#_comp_central_conf_client_interfaces)
-*   [Time-stamping proxy service interface](#_Time_stamping_proxy)
-*   Interfaces with base libraries: Qt5, libzip
 *   Interfaces with cryptographic token’s drivers (described in chap. [Drivers](#_comp_drivers))
     *   PKCS#11 interface
     *   CNG interface
@@ -929,7 +877,7 @@ The following chapter describes interfaces that different ID-software components
 
 #### <a name="_Time_stamping_proxy"></a>Time-stamping proxy service interface
 
-*   User: DigiDoc4j, Libdigidocpp (DigiDoc4 Client, RIA DigiDoc), TeRa utility
+*   User: DigiDoc4j, Libdigidocpp (DigiDoc4 Client, RIA DigiDoc)
 *   Accessible with: HTTP protocol
 *   Accessible from: [http://dd-at.ria.ee/tsa](http://dd-at.ria.ee/tsa), [https://puhver.ria.ee/tsa](https://puhver.ria.ee/tsa)
 *   Documentation: [RFC3161](https://tools.ietf.org/html/rfc3161)
@@ -969,11 +917,10 @@ The following chapter describes interfaces that different ID-software components
 
 
 
-# <a name="_deployment_model">Deployment model</a>
+# Deployment model
 
-The following subchapters describe physical deployment of ID-software components in collaboration with external components that were depicted in chap. [Component model](#_component_model) in case of the most common use cases.
+The following subchapters describe physical deployment of ID-software components in collaboration with external components that were depicted in chap. [Component model](#component-model) in case of the most common use cases.
 
-<a name="_deploy_web"></a>
 ## Signing in web browser
 
 ![cmp Signing in web browser](index_files/depl_web.png "cmp Signing in web browser") 
@@ -990,7 +937,6 @@ Additional notes:
 *   When signing with eID smartcard then the browser signing module is necessary for enabling communication with the smart card connected to the user’s system. Hwcrypto.js library offers a single API for supporting signing modules of all the supported browsers.
 *   Optionally, trust anchor data is retrieved from TSL lists – the European Commission’s central TSL and national TSL’s of the EU member states.
 
-<a name="_deploy_desktop"></a>
 ## Signing with DigiDoc4 Client
 
 ![cmp Signing with DigiDoc4 Client](index_files/depl_client.png "cmp Signing with DigiDoc4 Client")  
@@ -1005,7 +951,6 @@ Additional notes:
 *   Signature value is calculated either in the Mobile-ID SIM card, Smart-ID mobile application or ID-card’s chip.
 *   Trust anchor data is retrieved from TSL lists – the European Commission’s central TSL and national TSL’s of the EU member states.
 
-<a name="_deploy_mobile"></a>
 ## Signing with RIA DigiDoc
 
 ![cmp Signing with RIA DigiDoc](index_files/depl_mopp.png "cmp Signing with RIA DigiDoc")  
