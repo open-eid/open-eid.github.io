@@ -125,16 +125,16 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="architecture-of-id-software"><a name="home">ARCHITECTURE OF ID-SOFTWARE</a></h1>
-<p>Document version: 2.2<br />
-Software version: 20.05<br />
-Last updated: 09.09.2020  </p>
-<h1 id="introduction"><a name="_intro">Introduction</a></h1>
+<h1 id="architecture-of-id-software">ARCHITECTURE OF ID-SOFTWARE</h1>
+<p>Document version: 2.3<br />
+Software version: 20.09<br />
+Last updated: 06.10.2020  </p>
+<h1 id="introduction">Introduction</h1>
 <p>The purpose of this document is to describe the architecture of ID-software.</p>
 <p><strong>ID-software</strong> is a collection of software components offering support for PKI-based functionality, i.e. operations with different cryptographic tokens (e.g. eID cards), handling digitally signed documents, file encryption/decryption and signing and authentication in web environment. The ID-software comprises end-user applications, software libraries, web components, drivers for communicating with the cryptographic tokens and other complementary components.</p>
 <p>Main sources for information about ID-software are <a href="https://www.id.ee/en/">www.id.ee</a> and <a href="https://github.com/open-eid">Open-EID GitHub repository</a>.</p>
 <p>This document covers description of ID-software and its components, their deployment in different environments, provided and required interfaces. The document does not include components that have reached the end of their support nor the components that have not yet been released.</p>
-<p>The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is <strong>version 20.05</strong>. Latest version numbers of the various ID-software components are provided at <a href="https://www.id.ee/en/article/information-on-the-latest-software-versions/">https://www.id.ee/en/article/information-on-the-latest-software-versions/</a>.</p>
+<p>The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is <strong>version 20.09</strong>. Latest version numbers of the various ID-software components are provided at <a href="https://www.id.ee/en/article/information-on-the-latest-software-versions/">https://www.id.ee/en/article/information-on-the-latest-software-versions/</a>.</p>
 <p>The document is targeted for:</p>
 <ul>
 <li>Owners/managers of the software;</li>
@@ -143,7 +143,7 @@ Last updated: 09.09.2020  </p>
 <li>Integrators/software developers interested in integrating the software with third-party information systems;</li>
 <li>International audience – contributors/integrators from countries other than Estonia who wish to use the software internationally and/or contribute in its development.</li>
 </ul>
-<h1 id="background"><a name="_background">Background</a></h1>
+<h1 id="background">Background</h1>
 <p><strong>Estonian Information System Authority</strong> (RIA, <a href="https://www.ria.ee/en.html">https://www.ria.ee/en.html</a>) is the main owner/manager of the ID-software.  </p>
 <p>The software is being developed and tested by:  </p>
 <ul>
@@ -189,7 +189,7 @@ The software is distributed open-source (mainly under LGPL/BSD licence) and is a
 </thead>
 <tbody>
 <tr>
-<th rowspan="2">Desktop applications</td>
+<th><a href="#desktop-applications">Desktop applications</a></td>
 <th>DigiDoc4 Client</th>
 <td>yes (1)</td>
 <td>yes - validation only (1)</td>
@@ -201,18 +201,7 @@ The software is distributed open-source (mainly under LGPL/BSD licence) and is a
 <td>LGPL</td>
 </tr>
 <tr>
-<th>TeRa timestamping utility</th>
-<td>yes - timestamping BDOC 1.0 (3)</td>
-<td>yes - timestamping only (3)</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>RIA</td>
-<td>LGPL</td>
-</tr>
-<tr>
-<th rowspan="2">Mobile applications</td>
+<th rowspan="2"><a href="#mobile-applications">Mobile applications</a></td>
 <th>RIA DigiDoc (iOS)</th>
 <td>yes (1)</td>
 <td>yes - validation only (1)</td>
@@ -235,7 +224,7 @@ The software is distributed open-source (mainly under LGPL/BSD licence) and is a
 <td>LGPL</td>
 </tr>
 <tr>
-<th rowspan="3">Software libraries</td>
+<th rowspan="3"><a href="#software-libraries">Software libraries</a></td>
 <th>DigiDoc4j (Java)</th>
 <td>yes (4)</td>
 <td>yes (1)</td>
@@ -269,7 +258,7 @@ The software is distributed open-source (mainly under LGPL/BSD licence) and is a
 <td>LGPL</td>
 </tr>
 <tr>
-<th rowspan="3">Web components</td>
+<th rowspan="3"><a href="#web-components">Web components</a></td>
 <th>Browser signing modules</th>
 <td>-</td>
 <td>-</td>
@@ -303,7 +292,7 @@ The software is distributed open-source (mainly under LGPL/BSD licence) and is a
 <td>LGPL</td>
 </tr>
 <tr>
-<th rowspan="3">Driver components</td>
+<th rowspan="3"><a href="#drivers">Driver components</a></td>
 <th>Minidriver</th>
 <td>-</td>
 <td>-</td>
@@ -338,7 +327,6 @@ The software is distributed open-source (mainly under LGPL/BSD licence) and is a
 </tr>
 </tbody>
 </table>
-
 <p><strong>Table: Mapping of ID-software components and functions</strong></p>
 <p>Remarks:</p>
 <p>(1) - The functionality is provided via base components.<br />
@@ -381,7 +369,7 @@ The software is distributed open-source (mainly under LGPL/BSD licence) and is a
 </tbody>
 </table>
 <p><strong>Table: Functions offered by ID-software</strong></p>
-<h1 id="component-model"><a name="_component_model">Component model</a></h1>
+<h1 id="component-model">Component model</h1>
 <p>The following chapter depicts ID-software component diagrams, including variations of the components used in different supported environments.<br />
 In the context of the component diagrams in this document, the ID-software components have been divided to two different packages to show the component’s owner:</p>
 <ul>
@@ -529,78 +517,6 @@ Note that not all of the external base libraries are included in the component m
 <li>External base libraries: Qt5, libldap, openssl</li>
 </ul>
 </li>
-<li>Interfaces with cryptographic token’s drivers (described in chap. <a href="#_comp_drivers">Drivers</a>)<ul>
-<li>PKCS#11 interface</li>
-<li>CNG interface</li>
-</ul>
-</li>
-</ul>
-<p><a name="_TeRa"></a></p>
-<h3 id="tera-timestamping-application">TeRa timestamping application</h3>
-<p><img alt="cmp TeRa utility" src="index_files/comp_tera.png" title="cmp TeRa utility" /><br />
-<strong>Figure: Components of TeRa timestamping application</strong></p>
-<table>
-<thead>
-<tr>
-<th>Component</th>
-<th>Description</th>
-<th>Owner</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>TeRa</td>
-<td>TeRa (<em>Te</em>mbeldamis<em>Ra</em>kendus) is a timestamping utility that searches the local filesystem for DDOC and BDOC v1 files and timestamps them creating new ASiC-S containers in Time stamp token format.<br/>Timestamping is necessary in order to ensure the long term verification of the documents in case if the format becomes attackable, e.g. in case of weak hashes used in the signed documents.<br/>Code repository: <a href="https://github.com/open-eid/TeRa">https://github.com/open-eid/TeRa</a>.</td>
-<td>RIA</td>
-</tr>
-<tr>
-<td>Central configuration repository</td>
-<td>Described in chap. <a href="#_comp_central_conf">Central configuration service</a>.</td>
-<td>RIA</td>
-</tr>
-<tr>
-<td>Central configuration client</td>
-<td>Described in chap. <a href="#_comp_central_conf">Central configuration service</a>.</td>
-<td>RIA</td>
-</tr>
-<tr>
-<td>Time-stamping proxy service interface</td>
-<td>Proxy service used by RIA. The proxy is used to provide well-known interface for the timestamping service; it allows flexible change of service providers and possibility to support multiple providers at the same time.<br/>See also <a href="#_Time_stamping_proxy">Time-stamping proxy service interface</a>.</td>
-<td>RIA</td>
-</tr>
-<tr>
-<td>Minidriver</td>
-<td>Used via CNG interface in Windows environment only. Described in chap. <a href="#_comp_drivers">Drivers</a>.</td>
-<td>RIA/ IDEMIA</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Table: Components of TeRa timestamping application</strong></p>
-<p><a name="_TeRa_interfaces"></a></p>
-<h4 id="tera-interfaces">TeRa interfaces</h4>
-<p>Provided:</p>
-<ul>
-<li>Graphical user interface – interface for searching and timestamping of DDOC/BDOC v1.0 signature containers on user's machines.<ul>
-<li>User: end-user</li>
-<li>Accessible with: GUI elements</li>
-</ul>
-</li>
-<li>Command line (CLI) interface – interface for searching and timestamping of DDOC/BDOC v1.0 signature containers via CLI.<ul>
-<li>User: end-user</li>
-<li>Accessible with: command line / terminal</li>
-</ul>
-</li>
-<li>PIN dialog – for inserting PIN value in all supported operating systems except of Windows.<ul>
-<li>User: end-user</li>
-<li>Accessible with: GUI elements</li>
-</ul>
-</li>
-</ul>
-<p>Required:</p>
-<ul>
-<li><a href="#_comp_central_conf_client_interfaces">Central configuration client interface</a></li>
-<li><a href="#_Time_stamping_proxy">Time-stamping proxy service interface</a></li>
-<li>Interfaces with base libraries: Qt5, libzip</li>
 <li>Interfaces with cryptographic token’s drivers (described in chap. <a href="#_comp_drivers">Drivers</a>)<ul>
 <li>PKCS#11 interface</li>
 <li>CNG interface</li>
@@ -1516,7 +1432,7 @@ Note that not all of the external base libraries are included in the component m
 </ul>
 <h4 id="time-stamping-proxy-service-interface"><a name="_Time_stamping_proxy"></a>Time-stamping proxy service interface</h4>
 <ul>
-<li>User: DigiDoc4j, Libdigidocpp (DigiDoc4 Client, RIA DigiDoc), TeRa utility</li>
+<li>User: DigiDoc4j, Libdigidocpp (DigiDoc4 Client, RIA DigiDoc)</li>
 <li>Accessible with: HTTP protocol</li>
 <li>Accessible from: <a href="http://dd-at.ria.ee/tsa">http://dd-at.ria.ee/tsa</a>, <a href="https://puhver.ria.ee/tsa">https://puhver.ria.ee/tsa</a></li>
 <li>Documentation: <a href="https://tools.ietf.org/html/rfc3161">RFC3161</a></li>
@@ -1556,9 +1472,8 @@ Note that not all of the external base libraries are included in the component m
 <li>Accessible with: HTTPS</li>
 <li>Accessible from: <a href="https://sisene.www.eesti.ee/idportaal/postisysteem.naita_suunamised">https://sisene.www.eesti.ee/idportaal/postisysteem.naita_suunamised</a></li>
 </ul>
-<h1 id="deployment-model"><a name="_deployment_model">Deployment model</a></h1>
-<p>The following subchapters describe physical deployment of ID-software components in collaboration with external components that were depicted in chap. <a href="#_component_model">Component model</a> in case of the most common use cases.</p>
-<p><a name="_deploy_web"></a></p>
+<h1 id="deployment-model">Deployment model</h1>
+<p>The following subchapters describe physical deployment of ID-software components in collaboration with external components that were depicted in chap. <a href="#component-model">Component model</a> in case of the most common use cases.</p>
 <h2 id="signing-in-web-browser">Signing in web browser</h2>
 <p><img alt="cmp Signing in web browser" src="index_files/depl_web.png" title="cmp Signing in web browser" /> </p>
 <p><strong>Figure: Signing in web browser via a web application</strong></p>
@@ -1572,7 +1487,6 @@ Note that not all of the external base libraries are included in the component m
 <li>When signing with eID smartcard then the browser signing module is necessary for enabling communication with the smart card connected to the user’s system. Hwcrypto.js library offers a single API for supporting signing modules of all the supported browsers.</li>
 <li>Optionally, trust anchor data is retrieved from TSL lists – the European Commission’s central TSL and national TSL’s of the EU member states.</li>
 </ul>
-<p><a name="_deploy_desktop"></a></p>
 <h2 id="signing-with-digidoc4-client">Signing with DigiDoc4 Client</h2>
 <p><img alt="cmp Signing with DigiDoc4 Client" src="index_files/depl_client.png" title="cmp Signing with DigiDoc4 Client" /><br />
 <strong>Figure: Deployment of components during signature creation with DigiDoc4 Client</strong></p>
@@ -1585,7 +1499,6 @@ Note that not all of the external base libraries are included in the component m
 <li>Signature value is calculated either in the Mobile-ID SIM card, Smart-ID mobile application or ID-card’s chip.</li>
 <li>Trust anchor data is retrieved from TSL lists – the European Commission’s central TSL and national TSL’s of the EU member states.</li>
 </ul>
-<p><a name="_deploy_mobile"></a></p>
 <h2 id="signing-with-ria-digidoc">Signing with RIA DigiDoc</h2>
 <p><img alt="cmp Signing with RIA DigiDoc" src="index_files/depl_mopp.png" title="cmp Signing with RIA DigiDoc" /><br />
 <strong>Figure: Deployment of components during signature creation with RIA DigiDoc</strong></p>
@@ -1681,5 +1594,5 @@ Note that not all of the external base libraries are included in the component m
 
 <!--
 MkDocs version : 1.1.2
-Build Date UTC : 2020-09-25 04:50:10.940061+00:00
+Build Date UTC : 2020-10-08 07:35:13.034510+00:00
 -->
