@@ -1,8 +1,8 @@
 # ARCHITECTURE OF ID-SOFTWARE
 
-Document version: 2.3  
-Software version: 20.09  
-Last updated: 06.10.2020  
+Document version: 2.4  
+Software version: 21.11  
+Last updated: 11.11.2021  
 
 
 # Introduction
@@ -11,11 +11,11 @@ The purpose of this document is to describe the architecture of ID-software.
 
 **ID-software** is a collection of software components offering support for PKI-based functionality, i.e. operations with different cryptographic tokens (e.g. eID cards), handling digitally signed documents, file encryption/decryption and signing and authentication in web environment. The ID-software comprises end-user applications, software libraries, web components, drivers for communicating with the cryptographic tokens and other complementary components.
 
-Main sources for information about ID-software are [www.id.ee](https://www.id.ee/en/) and [Open-EID GitHub repository](https://github.com/open-eid).
+Main sources for information about ID-software are [www.id.ee](https://www.id.ee/en/), [Open-EID GitHub repository](https://github.com/open-eid) and [Web-eID GitHub repository](https://github.com/web-eid).
 
 This document covers description of ID-software and its components, their deployment in different environments, provided and required interfaces. The document does not include components that have reached the end of their support nor the components that have not yet been released.
 
-The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is **version 20.09**. Latest version numbers of the various ID-software components are provided at [https://www.id.ee/en/article/information-on-the-latest-software-versions/](https://www.id.ee/en/article/information-on-the-latest-software-versions/).
+The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is **version 21.11**. Latest version numbers of the various ID-software components are provided at [https://www.id.ee/en/article/information-on-the-latest-software-versions/](https://www.id.ee/en/article/information-on-the-latest-software-versions/).
 
 The document is targeted for:
 
@@ -40,9 +40,9 @@ The software is being developed and tested by:
 *   CGI Estonia ([https://www.cgi.ee/et](https://www.cgi.ee/et)).
 
 Development of ID-software has been mainly done in Estonia, however, the ID-software is released for international usage.
-The software is distributed open-source (mainly under LGPL/BSD licence) and is accessible from the following locations:
+The software is distributed open-source (mainly under LGPL/BSD/MIT licence) and is accessible from the following locations:
 
-*   GitHub repository for the source code, wiki documentation, beta and (optionally) production versions of binary packages: [https://github.com/open-eid](https://github.com/open-eid).
+*   GitHub repository for the source code, wiki documentation, beta and (optionally) production versions of binary packages: [https://github.com/open-eid](https://github.com/open-eid) and [https://github.com/web-eid](https://github.com/web-eid).
 *   Release repository for production versions of binaries: [https://www.id.ee/en/article/install-id-software/](https://www.id.ee/en/article/install-id-software/)
 
 ID-software components can be logically divided in the following groups:
@@ -80,8 +80,8 @@ The following table maps the main ID-software components, their owner/developer 
 <td>yes (1)</td>
 <td>yes - validation only (1)</td>
 <td>yes</td>
-<td>-</td>
 <td>yes (1)</td>
+<td>yes</td>
 <td>-</td>
 <td>RIA</td>
 <td>LGPL</td>
@@ -91,7 +91,7 @@ The following table maps the main ID-software components, their owner/developer 
 <th>RIA DigiDoc (iOS)</th>
 <td>yes (1)</td>
 <td>yes - validation only (1)</td>
-<td>yes</td>
+<td>yes (1)</td>
 <td>yes</td>
 <td>yes</td>
 <td>-</td>
@@ -102,7 +102,7 @@ The following table maps the main ID-software components, their owner/developer 
 <th>RIA DigiDoc (Android)</th>
 <td>yes (1)</td>
 <td>yes - validation only (1)</td>
-<td>yes</td>
+<td>yes (1)</td>
 <td>yes</td>
 <td>yes</td>
 <td>-</td>
@@ -112,7 +112,7 @@ The following table maps the main ID-software components, their owner/developer 
 <tr>
 <th rowspan="3"><a href="#software-libraries">Software libraries</a></td>
 <th>DigiDoc4j (Java)</th>
-<td>yes (4)</td>
+<td>yes (3)</td>
 <td>yes (1)</td>
 <td>-</td>
 <td>yes (1)</td>
@@ -134,8 +134,8 @@ The following table maps the main ID-software components, their owner/developer 
 </tr>
 <tr>
 <th>Libdigidocpp (C++, .NET)</th>
-<td>yes</td>
-<td>yes (1)</td>
+<td>yes (3)</td>
+<td>yes - validation only (1)</td>
 <td>-</td>
 <td>yes (1)</td>
 <td>-</td>
@@ -149,14 +149,14 @@ The following table maps the main ID-software components, their owner/developer 
 <td>-</td>
 <td>-</td>
 <td>-</td>
-<td>yes (1)</td>
+<td>yes</td>
 <td>-</td>
 <td>-</td>
 <td>RIA</td>
-<td>LGPL</td>
+<td>MIT</td>
 </tr>
 <tr>
-<th>hwcrypto.js (JavaScript)</th>
+<th>web-eid.js (JavaScript)</th>
 <td>-</td>
 <td>-</td>
 <td>-</td>
@@ -183,9 +183,9 @@ The following table maps the main ID-software components, their owner/developer 
 <td>-</td>
 <td>-</td>
 <td>-</td>
-<td>yes (1)</td>
+<td>yes</td>
 <td>-</td>
-<td>yes (1)</td>
+<td>yes</td>
 <td>RIA/ IDEMIA</td>
 <td>LGPL/ BSD3/ IDEMIA</td>
 </tr>
@@ -194,9 +194,9 @@ The following table maps the main ID-software components, their owner/developer 
 <td>-</td>
 <td>-</td>
 <td>-</td>
-<td>yes (1)</td>
+<td>yes</td>
 <td>-</td>
-<td>yes (1)</td>
+<td>yes</td>
 <td>OpenSC</td>
 <td>LGPL</td>
 </tr>
@@ -205,9 +205,9 @@ The following table maps the main ID-software components, their owner/developer 
 <td>-</td>
 <td>-</td>
 <td>-</td>
-<td>yes (1)</td>
+<td>yes</td>
 <td>-</td>
-<td>yes (1)</td>
+<td>yes</td>
 <td>RIA</td>
 <td>LGPL</td>
 </tr>
@@ -219,8 +219,7 @@ Remarks:
 
 (1) - The functionality is provided via base components.  
 (2) - The component is used only once for setting the proper parameters for authentication in Firefox browser.  
-(3) - The utility is used to timestamp BDOC 1.0 or DDOC documents - it creates a ASiC-S container with RFC 3161 timestamp token applied to the original BDOC or DDOC document.  
-(4) - PADES handling is not supported.  
+(3) - PADES handling is not supported.  
 
 
 
@@ -310,7 +309,7 @@ Required:
 *   [Smart-ID (MID) REST service](#_SID_REST_service)
 *   [LDAP directory interface](#_LDAP_directory_interface)
 *   Interfaces with base libraries:
-    *   [Libdigidocpp library’s API](#_Libdigidocpp_library’s_interfaces) – for handling documents in supported digital signature formats (BDOC and DDOC)
+    *   [Libdigidocpp library’s API](#_Libdigidocpp_library’s_interfaces) – for handling documents in supported digital signature formats (BDOC, DDOC and PDF)
     *   External base libraries: Qt5, libldap, openssl
 *   Interfaces with cryptographic token’s drivers (described in chap. [Drivers](#_comp_drivers))
     *   PKCS#11 interface
@@ -369,7 +368,7 @@ Required:
 *   [Smart-ID (MID) REST service](#_SID_REST_service)
 *   [LDAP directory interface](#_LDAP_directory_interface)
 *   Interfaces with base libraries:
-    *   [Libdigidocpp library’s API](#_Libdigidocpp_library’s_interfaces) – for handling documents in supported digital signature formats (BDOC and DDOC)
+    *   [Libdigidocpp library’s API](#_Libdigidocpp_library’s_interfaces) – for handling documents in supported digital signature formats (BDOC, DDOC and PDF)
     *   External base libraries: libldap, openssl
 
 
@@ -398,7 +397,8 @@ Required:
 
 **Table: Software libraries and their components**
 
-### <a name="_DigiDoc4j_library’s_interfaces"></a>DigiDoc4j library’s interfaces
+<a name="_DigiDoc4j_library’s_interfaces"></a>
+### DigiDoc4j library’s interfaces
 
 Provided:
 
@@ -429,7 +429,8 @@ Required:
 
 *   DigiDoc4j API: see chap. [DigiDoc4j library’s interfaces](#_DigiDoc4j_library’s_interfaces)
 
-### <a name="_CDoc4j_library’s_interfaces"></a>CDoc4j library’s interfaces
+<a name="_CDoc4j_library’s_interfaces"></a>
+### CDoc4j library’s interfaces
 
 Provided:
 
@@ -457,7 +458,8 @@ Required:
 
 *   CDoc4j API: see chap. [CDoc4j library’s interfaces](#_CDoc4j_library’s_interfaces)
 
-### <a name="_Libdigidocpp_library’s_interfaces"></a>Libdigidocpp library’s interfaces
+<a name="_Libdigidocpp_library’s_interfaces"></a>
+### Libdigidocpp library’s interfaces
 
 Provided:
 
@@ -504,74 +506,36 @@ The web signing component diagrams describe components that are needed for signa
 
 | Component | Description | Owner |
 | - | - | - |
-| hwcrypto.js | JavaScript library that enables communication with the browser signing modules (plug-in or extension) of the different web browsers. Wiki: [https://github.com/open-eid/hwcrypto.js/wiki](https://github.com/open-eid/hwcrypto.js/wiki). Code repository: [https://github.com/open-eid/hwcrypto.js](https://github.com/open-eid/hwcrypto.js). | RIA |
+| web-eid.js | JavaScript library that enables communication with the browser signing extension of the different web browsers. Code and documentation repository: [https://github.com/web-eid/web-eid.js](https://github.com/web-eid/web-eid.js). | RIA |
 | Web application | A web application that implements signature creation with an eID-token in browser environment. | - |
-| EstEIDPluginBHO | Browser signing module (BHO-based plug-in) that is used in Internet explorer browser (supported in Windows operating system). The plug-in enables data exchange with the cryptographic token’s driver that is used for signing. By default, the CNG/CAPI and minidriver is used along with its certificate selection and PIN insertion dialogs. Alternatively, in case of using PKCS#11 driver, the operating system's native PIN insertion dialog is used, certificate is selected via CAPI interface. Code repository: [https://github.com/open-eid/browser-token-signing](https://github.com/open-eid/browser-token-signing). Wiki: [https://github.com/open-eid/browser-token-signing/wiki](https://github.com/open-eid/browser-token-signing/wiki). | RIA |
-| chrome-token-signing | Used in Chrome, Edge Chromium and Firefox. Comprises two subcomponents: browser extension component and native macOS/Linux/Windows component that implements Native Messaging API (JSON). The browser extension enables data exchange with the native component that in turn interacts with the cryptographic token’s driver for signing. Code repository: [https://github.com/open-eid/chrome-token-signing](https://github.com/open-eid/chrome-token-signing). Wiki: [https://github.com/open-eid/chrome-token-signing/wiki](https://github.com/open-eid/chrome-token-signing/wiki). | RIA |
-| safari-token-signing | Used in Safari. Comprises two subcomponents: browser extension component and native macOS component that implements Native Messaging API (JSON). The browser extension enables data exchange with the native component that in turn interacts with the cryptographic token’s driver for signing. Code repository: [https://github.com/open-eid/safari-token-signing](https://github.com/open-eid/safari-token-signing). Wiki: [https://github.com/open-eid/browser-token-signing/wiki](https://github.com/open-eid/browser-token-signing/wiki). | RIA |
-| edge-token-signing | Used in Edge. Comprises two subcomponents: browser extension component and native Windows component that implements Native Messaging API (JSON). The browser extension enables data exchange with the native component that in turn interacts with the cryptographic token’s driver for signing. Code repository: [https://github.com/open-eid/edge-token-signing](https://github.com/open-eid/edge-token-signing). | RIA |
-| Minidriver | Used via CNG interface in Windows environment only. Described in chap. [Drivers](#_comp_drivers). | RIA/ IDEMIA |
+| Web-eID | Used in Chrome, Edge and Firefox. Comprises two subcomponents: browser extension component and native macOS/Linux/Windows component that implements Native Messaging API (JSON). The browser extension enables data exchange with the native component that in turn interacts with the cryptographic token’s driver for authentication and signing. Code repository: [https://github.com/web-eid/web-eid-app](https://github.com/web-eid/web-eid-app). Documentation: [https://web-eid.eu](https://web-eid.eu). | RIA |
+| Web-eID safari | Used in Safari. Comprises two subcomponents: browser extension component and native macOS component that implements Native Messaging API (JSON). The browser extension enables data exchange with the native component that in turn interacts with the cryptographic token’s driver for signing. Code repository: [https://github.com/web-eid/web-eid-app](https://github.com/web-eid/web-eid-app). | RIA |
 
 **Table: Components for signing in web environment**
 
-#### Hwcrypto.js library’s interfaces
+#### Web-eID.js library’s interfaces
 
 Provided:
 
-*   [hwcrypto.js library’s API](https://github.com/open-eid/hwcrypto.js/wiki/ModernAPI)
+*   [Web-eID.js library’s API](https://github.com/web-eid/web-eid.js#quickstart)
     *   User: a web application in browser environment
     *   Accessible with: JavaScript
 
 Required:
 
 *   Interfaces with browser signing modules:
-    *   [EstEIDPluginBHO plug-in’s interfaces](#_EstEIDPluginBHO_plug-in’s_interface)
-    *   [Chrome-token-signing extension’s interfaces](#_Chrome-token-signing_extension’s_in)
-    *   [Safari-token-signing extension’s interfaces](#_Safari-token-signing_extension’s_in)
-    *   [Edge-token-signing extension’s interfaces](#_Edge-token-signing_extension’s_in)
+    *   [Web-eID extension’s interfaces](#_web-eid_extension’s_in)
+    *   [Web-eID Safari extension’s interfaces](#_web-eid-safari_extension’s_in)
 
-#### <a name="_EstEIDPluginBHO_plug-in’s_interface"></a>EstEIDPluginBHO plug-in’s interfaces
-
-Provided:
-
-*   [EstEIDPluginBHO plug-in’s API](https://github.com/hwcrypto/hwcrypto.js/wiki/API)
-    *   User: a web application in browser environment, hwcrypto.js library
-    *   Accessible with: C++
-
-Required:
-
-*   Interfaces with cryptographic token’s drivers (described in chap. [Drivers](#_comp_drivers))
-    *   CNG/CAPI interface
-    *   PKCS#11 interface
-
-#### <a name="_Chrome-token-signing_extension’s_in"></a>Chrome-token-signing interfaces
+<a name="_web-eid_extension’s_in"></a>
+#### Web-eID interfaces
 
 Provided:
 
-*   [Chrome-token-signing extension’s API](https://github.com/open-eid/chrome-token-signing/wiki/Extension#api)
-    *   User: a web application in browser environment, hwcrypto.js library
+*   [Web-eID extension’s API](https://github.com/web-eid/web-eid-webextension)
+    *   User: a web application in browser environment, web-eid.js and hwcrypto.js library
     *   Accessible with: C++
-*   PIN dialog – for inserting PIN2 value during signature creation
-    *   User: end-user
-    *   Accessible with: GUI elements
-*   Certificate selection dialog
-    *   User: end-user
-    *   Accessible with: GUI elements
-
-Required:
-
-*   Interfaces with cryptographic token’s drivers (described in chap. [Drivers](#_comp_drivers))
-    *   CNG/CAPI interface
-    *   PKCS#11 interface
-
-#### <a name="_Safari-token-signing_extension’s_in"></a>Safari-token-signing interfaces
-
-Provided:
-
-*   [Safari-token-signing extension’s API](https://github.com/open-eid/chrome-token-signing/wiki/Extension#api)
-    *   User: a web application in browser environment, hwcrypto.js library
-    *   Accessible with: C++
-*   PIN dialog – for inserting PIN2 value during signature creation
+*   PIN dialog – for inserting PIN1 or PIN2 value during authentication and signature creation
     *   User: end-user
     *   Accessible with: GUI elements
 *   Certificate selection dialog
@@ -583,14 +547,15 @@ Required:
 *   Interfaces with cryptographic token’s drivers (described in chap. [Drivers](#_comp_drivers))
     *   PKCS#11 interface
 
-#### <a name="_Edge-token-signing_extension’s_in"></a>Edge-token-signing interfaces
+<a name="_web-eid-safari_extension’s_in"></a>
+#### Web-eID Safari extension’s interfaces
 
 Provided:
 
-*   [Edge-token-signing extension’s API](https://github.com/open-eid/chrome-token-signing/wiki/Extension#api)
-    *   User: a web application in browser environment, hwcrypto.js library
+*   [Web-eID Safari extension’s API](https://github.com/web-eid/web-eid-webextension)
+    *   User: a web application in browser environment, web-eid.js and hwcrypto.js library
     *   Accessible with: C++
-*   PIN dialog – for inserting PIN2 value during signature creation
+*   PIN dialog – for inserting PIN1 or PIN2 value during authentication and signature creation
     *   User: end-user
     *   Accessible with: GUI elements
 *   Certificate selection dialog
@@ -600,7 +565,7 @@ Provided:
 Required:
 
 *   Interfaces with cryptographic token’s drivers (described in chap. [Drivers](#_comp_drivers))
-    *   CNG/CAPI interface
+    *   PKCS#11 interface
 
 ### Web authentication components
 
@@ -613,7 +578,7 @@ Authentication in web browsers is done with the browsers’ and operating system
 | Component | Description | Owner |
 | - | - | - |
 | firefox-pkcs11-loader | A JavaScript component that is used to load the OpenSC PKCS#11 driver to the Firefox browser’s cryptographic devices list during each initialization of the browser. Needed during authentication process with eID-card in Firefox browser in all supported operating systems. Code repository: [https://github.com/open-eid/firefox-pkcs11-loader](https://github.com/open-eid/firefox-pkcs11-loader). Wiki: [https://github.com/open-eid/firefox-pkcs11-loader/wiki](https://github.com/open-eid/firefox-pkcs11-loader/wiki). | RIA |
-| macOS native certificate selection and PIN dialog | PIN dialog and certificate selection windows provided by the operating system’s native components. | Apple |
+| CTK Tokend | Described in chap. [Drivers](#_comp_drivers). | RIA |
 | Minidriver | Described in chap. [Drivers](#_comp_drivers). | RIA/ IDEMIA |
 
 **Table: Web authentication components**
@@ -628,14 +593,15 @@ Authentication in web browsers is done with the browsers’ and operating system
 | - | - | - |
 | OpenSC PKCS#11 driver | A driver for accessing eID-cards. Connects with the card via the operating system’s native PC/SC interface. Used as a default driver for authentication with eID card and signature creation in web browser environment in case of Linux platform. Wiki: [https://github.com/OpenSC/OpenSC/wiki](https://github.com/OpenSC/OpenSC/wiki). | OpenSC |
 | One-pin OpenSC PKCS#11 driver | Version of OpenSC PKCS#11 driver that only enables authentication functionality. Used as a default driver for authentication with eID card in browser environment in case of Windows platform. Wiki: [https://github.com/OpenSC/OpenSC/wiki](https://github.com/OpenSC/OpenSC/wiki). | OpenSC |
-| Minidriver | Used as a default driver for accessing Estonian eID-cards via CNG interface for signature creation in web browser environment in case of Windows platform. Used as a default driver for authentication with eID card in Chrome, Edge and Internet Explorer browsers in case of Windows platform. Code repository: [https://github.com/open-eid/minidriver](https://github.com/open-eid/minidriver). Wiki: [https://github.com/open-eid/minidriver/wiki](https://github.com/open-eid/minidriver/wiki). | RIA/ IDEMIA |
+| Minidriver | Used as a default driver for accessing Estonian eID-cards via CNG interface for signature creation in web browser environment in case of Windows platform. Used as a default driver for authentication with eID card in Chrome and Edge browsers in case of Windows platform. Code repository: [https://github.com/open-eid/minidriver](https://github.com/open-eid/minidriver). Wiki: [https://github.com/open-eid/minidriver/wiki](https://github.com/open-eid/minidriver/wiki). | RIA/ IDEMIA |
 | ATR Filter | Base component for Minidriver (see [http://support.microsoft.com/kb/981665](http://support.microsoft.com/kb/981665) for more information). | - |
 | EstEID CTK Tokend | A driver for accessing eID-cards. Connects with the card via the operating system’s native PC/SC interface. Used as a default driver for authentication with eID card in browser environment in case macOS platform. Code repository: [https://github.com/open-eid/esteid-ctk-tokend](https://github.com/open-eid/esteid-ctk-tokend). | RIA |
 | PKCS#12 implementation via base library | An implementation of PKCS#12 interface by the component’s base libraries. | - |
 
 **Table: Cryptographic token driver components**
 
-### <a name="_Cryptographic_tokens_drivers’"></a><a name="_PKCS#11_drivers"></a>PKCS#11 driver interfaces
+<a name="_Cryptographic_tokens_drivers’"></a><a name="_PKCS#11_drivers"></a>
+### PKCS#11 driver interfaces
 
 Components:
 
@@ -655,7 +621,8 @@ Required:
 
 *   PC/SC: see chap. [PC/SC driver](#_PC/SC_driver)
 
-### <a name="_Minidriver"></a>Minidriver interfaces
+<a name="_Minidriver"></a>
+### Minidriver interfaces
 
 Provided:
 
@@ -679,7 +646,8 @@ Required:
 
 *   PC/SC: see chap. [PC/SC driver](#_PC/SC_driver)
 
-### <a name="_PKCS#12_implementation_via"></a>PKCS#12 implementation via base library
+<a name="_PKCS#12_implementation_via"></a>
+### PKCS#12 implementation via base library
 
 Provided:
 
@@ -732,8 +700,9 @@ The following chapter describes automatic updating mechanisms of different ID-so
 | - | - | - |
 | ID-updater | Service that is periodically checks if newer versions of related ID-software components are available for download, initiates the download and installation if necessary. Uses [Central configuration service](#_comp_central_conf) for determining the latest available software versions. | RIA |
 | MS Update | Microsoft Update – see Microsoft’s documentation for more information. | Microsoft |
-| Windows Store | See [https://microsoftedge.microsoft.com/addons/detail/fofaekogmodbjplbmlbmjiglndceaajh](https://microsoftedge.microsoft.com/addons/detail/fofaekogmodbjplbmlbmjiglndceaajh) and [https://www.microsoft.com/en-us/p/token-signing/9n5fkx7gtdrq](https://www.microsoft.com/en-us/p/token-signing/9n5fkx7gtdrq). | Microsoft |
-| Chrome Web Store | See [https://chrome.google.com/webstore/detail/token-signing/ckjefchnfjhjfedoccjbhjpbncimppeg](https://chrome.google.com/webstore/detail/token-signing/ckjefchnfjhjfedoccjbhjpbncimppeg). | Google |
+| Windows Store | See [https://microsoftedge.microsoft.com/addons/detail/gnmckgbandlkacikdndelhfghdejfido](https://microsoftedge.microsoft.com/addons/detail/gnmckgbandlkacikdndelhfghdejfido). | Microsoft |
+| Chrome Web Store | See [https://chrome.google.com/webstore/detail/token-signing/ncibgoaomkmdpilpocfeponihegamlic](https://chrome.google.com/webstore/detail/token-signing/ncibgoaomkmdpilpocfeponihegamlic). | Google |
+| Firefox Web Store | See [https://addons.mozilla.org/en-US/firefox/addon/web-eid-webextension/](https://addons.mozilla.org/en-US/firefox/addon/web-eid-webextension/). | Firefox |
 
 **Table: Updating mechanisms in Windows**
 
@@ -746,7 +715,8 @@ The following chapter describes automatic updating mechanisms of different ID-so
 | - | - | - |
 | ID-updater | Described in chap. [Windows updating mechanism](#_Windows_updating_mechanism). | RIA |
 | Apple App Store | See Apple App Store documentation. | Apple |
-| Chrome Web Store** | See [https://chrome.google.com/webstore/detail/token-signing/ckjefchnfjhjfedoccjbhjpbncimppeg](https://chrome.google.com/webstore/detail/token-signing/ckjefchnfjhjfedoccjbhjpbncimppeg). | Google |
+| Chrome Web Store** | See [https://chrome.google.com/webstore/detail/token-signing/ncibgoaomkmdpilpocfeponihegamlic](https://chrome.google.com/webstore/detail/token-signing/ncibgoaomkmdpilpocfeponihegamlic). | Google |
+| Firefox Web Store | See [https://addons.mozilla.org/en-US/firefox/addon/web-eid-webextension/](https://addons.mozilla.org/en-US/firefox/addon/web-eid-webextension/). | Firefox |
 
 **Table: Updating mechanisms in macOS**
 
@@ -759,7 +729,8 @@ The following chapter describes automatic updating mechanisms of different ID-so
 | - | - | - |
 | Ubuntu package updates | Managed and maintained by RIA. The binary packages are released for installation and updating to [https://installer.id.ee/media/ubuntu/](https://installer.id.ee/media/ubuntu/) repository. | RIA |
 | Packages updates for other distros | Managed by the open-source community. Packages are built, added and updated in Estobuntu and Fedora distributions by the package maintainers. | - |
-| Chrome Web Store | See [https://chrome.google.com/webstore/detail/token-signing/ckjefchnfjhjfedoccjbhjpbncimppeg](https://chrome.google.com/webstore/detail/token-signing/ckjefchnfjhjfedoccjbhjpbncimppeg). | Google |
+| Chrome Web Store | See [https://chrome.google.com/webstore/detail/token-signing/ncibgoaomkmdpilpocfeponihegamlic](https://chrome.google.com/webstore/detail/token-signing/ncibgoaomkmdpilpocfeponihegamlic). | Google |
+| Firefox Web Store | See [https://addons.mozilla.org/en-US/firefox/addon/web-eid-webextension/](https://addons.mozilla.org/en-US/firefox/addon/web-eid-webextension/). | Firefox |
 
 **Table: Updating mechanisms in Linux**
 
@@ -863,7 +834,7 @@ The following chapter describes interfaces that different ID-software components
 *   User: DigiDoc4 Client, RIA DigiDoc
 *   Accessible with: LDAP protocol
 *   Accessible from: ldaps://esteid.ldap.sk.ee, ldaps://k3.ldap.sk.ee
-*   Documentation: [https://www.skidsolutions.eu/en/repository/ldap/ldap-kataloogi-kasutamine/](https://www.skidsolutions.eu/en/repository/ldap/ldap-kataloogi-kasutamine/)
+*   Documentation: [https://www.skidsolutions.eu/en/repository/ldap/](https://www.skidsolutions.eu/en/repository/ldap/)
 
 <a name="_TSL_repositories’_interfaces"></a>
 #### TSL repositories’ interfaces
@@ -875,11 +846,12 @@ The following chapter describes interfaces that different ID-software components
     *   National TSL URLs in the European Commission’s TSL, e,g, Estonian TSL: [http://sr.riik.ee/tsl/estonian-tsl.xml](http://sr.riik.ee/tsl/estonian-tsl.xml)
 *   Documentation: [http://www.etsi.org/deliver/etsi_ts/119600_119699/119612/02.02.01_60/ts_119612v020201p.pdf](http://www.etsi.org/deliver/etsi_ts/119600_119699/119612/02.02.01_60/ts_119612v020201p.pdf)
 
-#### <a name="_Time_stamping_proxy"></a>Time-stamping proxy service interface
+<a name="_Time_stamping_proxy"></a>
+#### Time-stamping proxy service interface
 
 *   User: DigiDoc4j, Libdigidocpp (DigiDoc4 Client, RIA DigiDoc)
 *   Accessible with: HTTP protocol
-*   Accessible from: [http://dd-at.ria.ee/tsa](http://dd-at.ria.ee/tsa), [https://puhver.ria.ee/tsa](https://puhver.ria.ee/tsa)
+*   Accessible from: [http://dd-at.ria.ee/tsa](http://dd-at.ria.ee/tsa)
 *   Documentation: [RFC3161](https://tools.ietf.org/html/rfc3161)
 
 <a name="_OCSP_service_interface"></a>
@@ -890,11 +862,11 @@ The following chapter describes interfaces that different ID-software components
 *   Accessible from:
     *   OCSP URL from signer certificate Authority Information Access extension.
     *   SK’s OCSP service for SK issued certificates: [http://ocsp.sk.ee/](http://ocsp.sk.ee/)
-    *   SK’s Proxy OCSP service for international use: [http://ocsp.sk.ee/_proxy](http://ocsp.sk.ee/_proxy)
     *   SK’s test OCSP service: [http://demo.sk.ee/ocsp](http://demo.sk.ee/ocsp)
 *   Documentation: [RFC6960](https://tools.ietf.org/html/rfc6960)
 
-#### <a name="_SiVa_verification_service"></a>Signature Verification Service interface
+<a name="_SiVa_verification_service"></a>
+#### Signature Verification Service interface
 
 *   User: Libdigidocpp (DigiDoc4 Client, RIA DigiDoc)
 *   Accessible with: HTTPS protocol
