@@ -1,7 +1,7 @@
 # ARCHITECTURE OF ID-SOFTWARE
 
 Document version: 2.4  
-Software version: 21.11  
+Software version: 22.01  
 Last updated: 11.11.2021  
 
 
