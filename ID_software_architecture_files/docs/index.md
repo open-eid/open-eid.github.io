@@ -1,8 +1,8 @@
 # ARCHITECTURE OF ID-SOFTWARE
 
-Document version: 2.4  
-Software version: 22.01  
-Last updated: 11.11.2021  
+Document version: 2.5  
+Software version: 22.05  
+Last updated: 4.5.2022  
 
 
 # Introduction
@@ -15,7 +15,7 @@ Main sources for information about ID-software are [www.id.ee](https://www.id.ee
 
 This document covers description of ID-software and its components, their deployment in different environments, provided and required interfaces. The document does not include components that have reached the end of their support nor the components that have not yet been released.
 
-The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is **version 22.01**. Latest version numbers of the various ID-software components are provided at [https://www.id.ee/en/article/information-on-the-latest-software-versions/](https://www.id.ee/en/article/information-on-the-latest-software-versions/).
+The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is **version 22.05**. Latest version numbers of the various ID-software components are provided at [https://www.id.ee/en/article/information-on-the-latest-software-versions/](https://www.id.ee/en/article/information-on-the-latest-software-versions/).
 
 The document is targeted for:
 
@@ -167,7 +167,7 @@ The following table maps the main ID-software components, their owner/developer 
 <td>MIT</td>
 </tr>
 <tr>
-<th>firefox-pkcs11-loader</th>
+<th>firefox-pkcs11-loader (4)</th>
 <td>-</td>
 <td>-</td>
 <td>-</td>
@@ -220,6 +220,7 @@ Remarks:
 (1) - The functionality is provided via base components.  
 (2) - The component is used only once for setting the proper parameters for authentication in Firefox browser.  
 (3) - PADES handling is not supported.  
+(4) - Linux only.  
 
 
 
@@ -232,7 +233,7 @@ The main functions offered by ID-software are described in the following table:
 | Handling CDOC documents | Encrypting and decrypting documents in [ENCDOC-XML 1.0 (CDOC)](https://www.id.ee/wp-content/uploads/2020/02/SK-CDOC-1.0-20120625_EN.pdf) also [CDOC 1.1](https://www.ria.ee/sites/default/files/content-editors/EID/cdoc.pdf) format. |
 | Calculating RSA/ECDSA signature | Calculating the RSA or ECDSA signature value in browser or desktop/server environment. The operation involves connecting with the signature token’s driver, sending the data to be signed and receiving digital signature value calculated with the token owner’s RSA or ECDSA private key. The following cryptographic tokens are supported: hardware-based tokens (e.g. PKCS#11-based eID cards, USB cryptostick, Mobile-ID and Smart-ID); software-based tokens (e.g. PKCS#12 software token). |
 | Card management operations | PIN/PUK management, reading personal data file. |
-| Authentication | Authentication with ID-card. The operation is generally done via native operating system/browser components. In case of Estonian ID-cards and Firefox browser, a PKCS#11 module loader script is used for setting the proper parameters for authentication in Firefox browser. |
+| Authentication | Authentication with ID-card. The operation is generally done via native operating system/browser components. In case of Estonian ID-cards and Firefox browser, a PKCS#11 module loader script is used for setting the proper parameters for authentication in Firefox browser on Linux. |
 
 **Table: Functions offered by ID-software**
 
@@ -268,7 +269,6 @@ Note that not all of the external base libraries are included in the component m
 | Smart-ID (SID) REST service | REST service that is used by DigiDoc4 Client for signature creation with Smart-ID. See also [https://github.com/SK-EID/smart-id-documentation](https://github.com/SK-EID/smart-id-documentation). | SK |
 | LDAP directory | Directory of active certificates issued by SK (as the CA in Estonia). The directory is used by DigiDoc4 Client for finding authentication certificate (and the respective public key) of the recipient of the encrypted document. See also [https://www.skidsolutions.eu/en/repository/ldap/ldap-kataloogi-kasutamine/](https://www.skidsolutions.eu/en/repository/ldap/ldap-kataloogi-kasutamine/). | SK |
 | ID-card owner’s photo repository | Repository where the Estonian national ID-cards photos’ are kept. ID-card’s owner can download the photo after the user has been authenticated with PIN1 code. | RIA |
-| @eesti.ee e-mail checking service | Service that enables to set the properties of e-mail address (@eesti.ee) that is provided for Estonian national ID-card owners by the state. The user must be authenticated with PIN1 code. | RIA |
 | Central configuration repository | Described in chap. [Central configuration service](#_comp_central_conf). | RIA |
 | Central configuration client | Described in chap. [Central configuration service](#_comp_central_conf). | RIA |
 | Libdigidocpp | Described in chap. [Software libraries](#_comp_libraries). | RIA |
@@ -304,7 +304,6 @@ Required:
 *   [ID-updater interface](#windows-updating-mechanism) (Windows only)
 *   [Central configuration client interface](#_comp_central_conf_client_interfaces)
 *   [ID-card owners’ photo repository interface](#_ID-card_owners’_photo)
-*   [Eesti.ee e-mail checking service interface](#_Eesti.ee_e-mail_checking)
 *   [Mobile-ID (MID) REST service](#_MID_REST_service)
 *   [Smart-ID (MID) REST service](#_SID_REST_service)
 *   [LDAP directory interface](#_LDAP_directory_interface)
@@ -390,7 +389,7 @@ Required:
 | Libdigidocpp | C++ software library that enables handling documents in BDOC 2.1, ASiC and DIGIDOC-XML 1.3 formats (via CDigiDoc base library). Wiki: [https://github.com/open-eid/libdigidocpp/wiki](https://github.com/open-eid/libdigidocpp/wiki) Code repository: [https://github.com/open-eid/libdigidocpp](https://github.com/open-eid/libdigidocpp) Documentation: [http://open-eid.github.io/libdigidocpp](http://open-eid.github.io/libdigidocpp). | RIA |
 | digidoc-tool program | Small command line application (digidoc-tool.exe) that implements the main functionality of Libdigidocpp library. Used for testing purposes. Can also be used as a source for sample client code for using Libdigidocpp. See also [http://open-eid.github.io/libdigidocpp](http://open-eid.github.io/libdigidocpp). | RIA |
 | DigiDocCSharp | .NET C# wrapper classes for using Libidigidocpp library’s functionality in .NET environment. Created with Swig tool. See also [https://github.com/open-eid/libdigidocpp/blob/master/examples/DigiDocCSharp/README.md](https://github.com/open-eid/libdigidocpp/blob/master/examples/DigiDocCSharp/README.md). | RIA |
-| SiVa | *Si*gnature *Ve*rification Service is an online web service for validating digitally signed documents.<br/>SiVa is used by the DigiDoc4 Client (by libdigidocpp base library) to validate documents in formats that are not natively supported; currently the service is used to validate PDF (ETSI PAdES) documents.<br/>See also [Signature Verification Service interface](#_SiVa_verification_service). | RIA |
+| SiVa | *Si*gnature *Ve*rification Service is an online web service for validating digitally signed documents.<br/>SiVa is used by the DigiDoc4 Client and RIA DigiDoc (by libdigidocpp base library) to validate documents in formats that are not natively supported; currently the service is used to validate PDF (ETSI PAdES) documents.<br/>See also [Signature Verification Service interface](#_SiVa_verification_service). | RIA |
 | TSL repository | Repository for accessing the TSL ([Trust Service status List](http://www.etsi.org/deliver/etsi_ts/119600_119699/119612/02.02.01_60/ts_119612v020201p.pdf)) lists that can be used as a central source of trust anchor information during digital signature creation and validation processes. The European Commission’s TSL list ([https://ec.europa.eu/tools/lotl/eu-lotl.xml](https://ec.europa.eu/tools/lotl/eu-lotl.xml)) is used as the central TSL list (with references to national lists). | EU/ RIA |
 | Time-stamping proxy service interface | [RFC3161](https://tools.ietf.org/html/rfc3161) based time-stamping service. | RIA |
 | OCSP service | [RFC6960](https://tools.ietf.org/html/rfc6960) based OCSP service. Also offered by SK for Estonian and a number of foreign certificates (see [www.skidsolutions.eu/en](http://www.skidsolutions.eu/en/)). | SK |
@@ -569,7 +568,7 @@ Required:
 
 ### Web authentication components
 
-Authentication in web browsers is done with the browsers’ and operating systems’ native components. In case of authenticating in Firefox browser then Firefox-pkcs11-loader JavaScript component is used to load the One-Pin OpenSC PKCS#11 driver by the browser.
+Authentication in web browsers is done with the browsers’ and operating systems’ native components. In case of authenticating in Firefox browser then Firefox-pkcs11-loader JavaScript component is used to load the One-Pin OpenSC PKCS#11 driver by the browser on Linux.
 
 ![cmp Web components for authentication](index_files/web_auth.png "cmp Web components for authentication")  
 
@@ -577,7 +576,7 @@ Authentication in web browsers is done with the browsers’ and operating system
 
 | Component | Description | Owner |
 | - | - | - |
-| firefox-pkcs11-loader | A JavaScript component that is used to load the OpenSC PKCS#11 driver to the Firefox browser’s cryptographic devices list during each initialization of the browser. Needed during authentication process with eID-card in Firefox browser in all supported operating systems. Code repository: [https://github.com/open-eid/firefox-pkcs11-loader](https://github.com/open-eid/firefox-pkcs11-loader). Wiki: [https://github.com/open-eid/firefox-pkcs11-loader/wiki](https://github.com/open-eid/firefox-pkcs11-loader/wiki). | RIA |
+| firefox-pkcs11-loader | A JavaScript component that is used to load the OpenSC PKCS#11 driver to the Firefox browser’s cryptographic devices list during each initialization of the browser. Needed during authentication process with eID-card in Firefox browser in Linux operating systems. Code repository: [https://github.com/open-eid/firefox-pkcs11-loader](https://github.com/open-eid/firefox-pkcs11-loader). Wiki: [https://github.com/open-eid/firefox-pkcs11-loader/wiki](https://github.com/open-eid/firefox-pkcs11-loader/wiki). | RIA |
 | CTK Tokend | Described in chap. [Drivers](#_comp_drivers). | RIA |
 | Minidriver | Described in chap. [Drivers](#_comp_drivers). | RIA/ IDEMIA |
 
@@ -591,9 +590,9 @@ Authentication in web browsers is done with the browsers’ and operating system
 
 | Component | Description | Owner |
 | - | - | - |
-| OpenSC PKCS#11 driver | A driver for accessing eID-cards. Connects with the card via the operating system’s native PC/SC interface. Used as a default driver for authentication with eID card and signature creation in web browser environment in case of Linux platform. Wiki: [https://github.com/OpenSC/OpenSC/wiki](https://github.com/OpenSC/OpenSC/wiki). | OpenSC |
-| One-pin OpenSC PKCS#11 driver | Version of OpenSC PKCS#11 driver that only enables authentication functionality. Used as a default driver for authentication with eID card in browser environment in case of Windows platform. Wiki: [https://github.com/OpenSC/OpenSC/wiki](https://github.com/OpenSC/OpenSC/wiki). | OpenSC |
-| Minidriver | Used as a default driver for accessing Estonian eID-cards via CNG interface for signature creation in web browser environment in case of Windows platform. Used as a default driver for authentication with eID card in Chrome and Edge browsers in case of Windows platform. Code repository: [https://github.com/open-eid/minidriver](https://github.com/open-eid/minidriver). Wiki: [https://github.com/open-eid/minidriver/wiki](https://github.com/open-eid/minidriver/wiki). | RIA/ IDEMIA |
+| OpenSC PKCS#11 driver | A driver for accessing eID-cards. Connects with the card via the operating system’s native PC/SC interface. Used as a default driver for signature creation in web browser environment and DigiDoc4 Client in case of Linux and macOS platform. Wiki: [https://github.com/OpenSC/OpenSC/wiki](https://github.com/OpenSC/OpenSC/wiki). | OpenSC |
+| One-pin OpenSC PKCS#11 driver | Version of OpenSC PKCS#11 driver that only enables authentication functionality. Used as a default driver for authentication with eID card in Firefox browser environment in case of Linux platform. Wiki: [https://github.com/OpenSC/OpenSC/wiki](https://github.com/OpenSC/OpenSC/wiki). | OpenSC |
+| Minidriver | Used as a default driver for accessing Estonian eID-cards via CNG interface for signature creation in web browser environment in case of Windows platform. Used as a default driver for authentication with eID card in browser environment in case of Windows platform. Code repository: [https://github.com/open-eid/minidriver](https://github.com/open-eid/minidriver). Wiki: [https://github.com/open-eid/minidriver/wiki](https://github.com/open-eid/minidriver/wiki). | RIA/ IDEMIA |
 | ATR Filter | Base component for Minidriver (see [http://support.microsoft.com/kb/981665](http://support.microsoft.com/kb/981665) for more information). | - |
 | EstEID CTK Tokend | A driver for accessing eID-cards. Connects with the card via the operating system’s native PC/SC interface. Used as a default driver for authentication with eID card in browser environment in case macOS platform. Code repository: [https://github.com/open-eid/esteid-ctk-tokend](https://github.com/open-eid/esteid-ctk-tokend). | RIA |
 | PKCS#12 implementation via base library | An implementation of PKCS#12 interface by the component’s base libraries. | - |
@@ -825,7 +824,7 @@ The following chapter describes interfaces that different ID-software components
 
 *   User: DigiDoc4 Client, RIA DigiDoc
 *   Accessible with: REST over HTTPS
-*   Accessible from: [https://dd-sid.ria.ee/v1](https://dd-sid.ria.ee/v1), [https://rp-api.smart-id.com/v1](https://rp-api.smart-id.com/v1)
+*   Accessible from: [https://dd-sid.ria.ee/v2](https://dd-sid.ria.ee/v2), [https://rp-api.smart-id.com/v2](https://rp-api.smart-id.com/v2)
 *   Documentation: [https://github.com/SK-EID/smart-id-documentation](https://github.com/SK-EID/smart-id-documentation)
 
 <a name="_LDAP_directory_interface"></a>
@@ -879,13 +878,6 @@ The following chapter describes interfaces that different ID-software components
 *   User: DigiDoc4 Client
 *   Accessible with: HTTPS protocol
 *   Accessible from: [https://sisene.www.eesti.ee/idportaal/portaal.idpilt](https://sisene.www.eesti.ee/idportaal/portaal.idpilt)
-
-<a name="_Eesti.ee_e-mail_checking"></a>
-#### Eesti.ee e-mail checking service interface
-
-*   User: DigiDoc4 Client
-*   Accessible with: HTTPS
-*   Accessible from: [https://sisene.www.eesti.ee/idportaal/postisysteem.naita_suunamised](https://sisene.www.eesti.ee/idportaal/postisysteem.naita_suunamised)
 
 
 
