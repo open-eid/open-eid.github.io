@@ -1,8 +1,8 @@
 # ARCHITECTURE OF ID-SOFTWARE
 
-Document version: 2.5  
-Software version: 22.05  
-Last updated: 4.5.2022  
+Document version: 2.6  
+Software version: 23.03  
+Last updated: 8.2.2023  
 
 
 # Introduction
@@ -15,7 +15,7 @@ Main sources for information about ID-software are [www.id.ee](https://www.id.ee
 
 This document covers description of ID-software and its components, their deployment in different environments, provided and required interfaces. The document does not include components that have reached the end of their support nor the components that have not yet been released.
 
-The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is **version 22.05**. Latest version numbers of the various ID-software components are provided at [https://www.id.ee/en/article/information-on-the-latest-software-versions/](https://www.id.ee/en/article/information-on-the-latest-software-versions/).
+The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is **version 23.03**. Latest version numbers of the various ID-software components are provided at [https://www.id.ee/en/article/information-on-the-latest-software-versions/](https://www.id.ee/en/article/information-on-the-latest-software-versions/).
 
 The document is targeted for:
 
@@ -32,9 +32,9 @@ The document is targeted for:
 
 The software is being developed and tested by:  
 
-*   **RaulWalter** (RW, [https://www.raulwalter.com](https://www.raulwalter.com)) as the main contractor during 2019-2022;  
-*   **Nortal** ([https://nortal.com](https://nortal.com)) during 2019-2020;  
-*   **TTT** ([https://www.testijad.ee](https://www.testijad.ee)) during 2019-2022;  
+*   **RaulWalter** (RW, [https://www.raulwalter.com](https://www.raulwalter.com)) as the main contractor during 2019-2023;  
+*   **Nortal** ([https://nortal.com](https://nortal.com)) during 2019-2023;  
+*   **TTT** ([https://www.testijad.ee](https://www.testijad.ee)) during 2019-2023;  
 *   SK ID Solutions (SK, [https://www.skidsolutions.eu/en](https://www.skidsolutions.eu/en));  
 *   Aktors ([http://www.aktors.ee/wp/](http://www.aktors.ee/wp/));  
 *   CGI Estonia ([https://www.cgi.ee/et](https://www.cgi.ee/et)).
@@ -267,8 +267,7 @@ Note that not all of the external base libraries are included in the component m
 | DigiDoc4 Client base libraries | Libdigidocpp (and its base libraries), etc. See [DigiDoc4 Client interfaces](#_DigiDoc4_Client_interfaces). | - |
 | Mobile-ID (MID) REST service | REST service that is used by DigiDoc4 Client for signature creation with Mobile-ID. See also [https://github.com/sk-eid/mid](https://github.com/sk-eid/mid). | SK |
 | Smart-ID (SID) REST service | REST service that is used by DigiDoc4 Client for signature creation with Smart-ID. See also [https://github.com/SK-EID/smart-id-documentation](https://github.com/SK-EID/smart-id-documentation). | SK |
-| LDAP directory | Directory of active certificates issued by SK (as the CA in Estonia). The directory is used by DigiDoc4 Client for finding authentication certificate (and the respective public key) of the recipient of the encrypted document. See also [https://www.skidsolutions.eu/en/repository/ldap/ldap-kataloogi-kasutamine/](https://www.skidsolutions.eu/en/repository/ldap/ldap-kataloogi-kasutamine/). | SK |
-| ID-card owner’s photo repository | Repository where the Estonian national ID-cards photos’ are kept. ID-card’s owner can download the photo after the user has been authenticated with PIN1 code. | RIA |
+| LDAP directory | Directory of active certificates issued by SK (as the CA in Estonia). The directory is used by DigiDoc4 Client for finding authentication certificate (and the respective public key) of the recipient of the encrypted document. See also [https://www.skidsolutions.eu/en/repository/ldap/](https://www.skidsolutions.eu/en/repository/ldap/). | SK |
 | Central configuration repository | Described in chap. [Central configuration service](#_comp_central_conf). | RIA |
 | Central configuration client | Described in chap. [Central configuration service](#_comp_central_conf). | RIA |
 | Libdigidocpp | Described in chap. [Software libraries](#_comp_libraries). | RIA |
@@ -303,13 +302,12 @@ Required:
 
 *   [ID-updater interface](#windows-updating-mechanism) (Windows only)
 *   [Central configuration client interface](#_comp_central_conf_client_interfaces)
-*   [ID-card owners’ photo repository interface](#_ID-card_owners’_photo)
 *   [Mobile-ID (MID) REST service](#_MID_REST_service)
 *   [Smart-ID (MID) REST service](#_SID_REST_service)
 *   [LDAP directory interface](#_LDAP_directory_interface)
 *   Interfaces with base libraries:
     *   [Libdigidocpp library’s API](#_Libdigidocpp_library’s_interfaces) – for handling documents in supported digital signature formats (BDOC, DDOC and PDF)
-    *   External base libraries: Qt5, libldap, openssl
+    *   External base libraries: Qt6, libldap, openssl
 *   Interfaces with cryptographic token’s drivers (described in chap. [Drivers](#_comp_drivers))
     *   PKCS#11 interface
     *   CNG interface
@@ -700,7 +698,7 @@ The following chapter describes automatic updating mechanisms of different ID-so
 | ID-updater | Service that is periodically checks if newer versions of related ID-software components are available for download, initiates the download and installation if necessary. Uses [Central configuration service](#_comp_central_conf) for determining the latest available software versions. | RIA |
 | MS Update | Microsoft Update – see Microsoft’s documentation for more information. | Microsoft |
 | Windows Store | See [https://microsoftedge.microsoft.com/addons/detail/gnmckgbandlkacikdndelhfghdejfido](https://microsoftedge.microsoft.com/addons/detail/gnmckgbandlkacikdndelhfghdejfido). | Microsoft |
-| Chrome Web Store | See [https://chrome.google.com/webstore/detail/token-signing/ncibgoaomkmdpilpocfeponihegamlic](https://chrome.google.com/webstore/detail/token-signing/ncibgoaomkmdpilpocfeponihegamlic). | Google |
+| Chrome Web Store | See [https://chrome.google.com/webstore/detail/web-eid/ncibgoaomkmdpilpocfeponihegamlic](https://chrome.google.com/webstore/detail/web-eid/ncibgoaomkmdpilpocfeponihegamlic). | Google |
 | Firefox Web Store | See [https://addons.mozilla.org/en-US/firefox/addon/web-eid-webextension/](https://addons.mozilla.org/en-US/firefox/addon/web-eid-webextension/). | Firefox |
 
 **Table: Updating mechanisms in Windows**
@@ -714,7 +712,7 @@ The following chapter describes automatic updating mechanisms of different ID-so
 | - | - | - |
 | ID-updater | Described in chap. [Windows updating mechanism](#_Windows_updating_mechanism). | RIA |
 | Apple App Store | See Apple App Store documentation. | Apple |
-| Chrome Web Store** | See [https://chrome.google.com/webstore/detail/token-signing/ncibgoaomkmdpilpocfeponihegamlic](https://chrome.google.com/webstore/detail/token-signing/ncibgoaomkmdpilpocfeponihegamlic). | Google |
+| Chrome Web Store** | See [https://chrome.google.com/webstore/detail/web-eid/ncibgoaomkmdpilpocfeponihegamlic](https://chrome.google.com/webstore/detail/web-eid/ncibgoaomkmdpilpocfeponihegamlic). | Google |
 | Firefox Web Store | See [https://addons.mozilla.org/en-US/firefox/addon/web-eid-webextension/](https://addons.mozilla.org/en-US/firefox/addon/web-eid-webextension/). | Firefox |
 
 **Table: Updating mechanisms in macOS**
@@ -728,7 +726,7 @@ The following chapter describes automatic updating mechanisms of different ID-so
 | - | - | - |
 | Ubuntu package updates | Managed and maintained by RIA. The binary packages are released for installation and updating to [https://installer.id.ee/media/ubuntu/](https://installer.id.ee/media/ubuntu/) repository. | RIA |
 | Packages updates for other distros | Managed by the open-source community. Packages are built, added and updated in Estobuntu and Fedora distributions by the package maintainers. | - |
-| Chrome Web Store | See [https://chrome.google.com/webstore/detail/token-signing/ncibgoaomkmdpilpocfeponihegamlic](https://chrome.google.com/webstore/detail/token-signing/ncibgoaomkmdpilpocfeponihegamlic). | Google |
+| Chrome Web Store | See [https://chrome.google.com/webstore/detail/web-eid/ncibgoaomkmdpilpocfeponihegamlic](https://chrome.google.com/webstore/detail/web-eid/ncibgoaomkmdpilpocfeponihegamlic). | Google |
 | Firefox Web Store | See [https://addons.mozilla.org/en-US/firefox/addon/web-eid-webextension/](https://addons.mozilla.org/en-US/firefox/addon/web-eid-webextension/). | Firefox |
 
 **Table: Updating mechanisms in Linux**
@@ -871,13 +869,6 @@ The following chapter describes interfaces that different ID-software components
 *   Accessible with: HTTPS protocol
 *   Accessible from: [https://siva.eesti.ee/V3/validate](https://siva.eesti.ee/V3/validate)
 *   Documentation: [http://open-eid.github.io/SiVa/](http://open-eid.github.io/SiVa/)
-
-<a name="_ID-card_owners’_photo"></a>
-#### ID-card owners’ photo repository interface
-
-*   User: DigiDoc4 Client
-*   Accessible with: HTTPS protocol
-*   Accessible from: [https://sisene.www.eesti.ee/idportaal/portaal.idpilt](https://sisene.www.eesti.ee/idportaal/portaal.idpilt)
 
 
 
