@@ -7,11 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Check out code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Setup Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
-        python-version: '3.8'
+        python-version: '3.9'
     - name: Install dependencies
       run: python3 -m pip install mkdocs-bootswatch 
     - name: Build docs
@@ -19,7 +19,11 @@ jobs:
         GLOBIGNORE=ID_software_architecture_files:README.md:.git:.github
         rm -rf *
         cd ID_software_architecture_files
-        mkdocs build       
+        mkdocs build
+        sed -ie 's!jquery-1.10.2.min.js!jquery-3.5.0.min.js!' site/404.html
+        sed -ie 's!jquery-1.10.2.min.js!jquery-3.5.0.min.js!' site/index.html
+        rm site/js/jquery*
+        curl -o site/js/jquery-3.5.0.min.js https://code.jquery.com/jquery-3.5.0.min.js
         mv site/* ..
         rmdir site
     - name: Deploy
