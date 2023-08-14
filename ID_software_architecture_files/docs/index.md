@@ -1,8 +1,8 @@
 # ARCHITECTURE OF ID-SOFTWARE
 
-Document version: 2.6  
-Software version: 23.03  
-Last updated: 8.2.2023  
+Document version: 2.7  
+Software version: 23.07  
+Last updated: 11.8.2023  
 
 
 # Introduction
@@ -15,7 +15,7 @@ Main sources for information about ID-software are [www.id.ee](https://www.id.ee
 
 This document covers description of ID-software and its components, their deployment in different environments, provided and required interfaces. The document does not include components that have reached the end of their support nor the components that have not yet been released.
 
-The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is **version 23.03**. Latest version numbers of the various ID-software components are provided at [https://www.id.ee/en/article/information-on-the-latest-software-versions/](https://www.id.ee/en/article/information-on-the-latest-software-versions/).
+The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is **version 23.07**. Latest version numbers of the various ID-software components are provided at [https://www.id.ee/en/article/information-on-the-latest-software-versions/](https://www.id.ee/en/article/information-on-the-latest-software-versions/).
 
 The document is targeted for:
 
@@ -814,7 +814,7 @@ The following chapter describes interfaces that different ID-software components
 
 *   User: DigiDoc4 Client, RIA DigiDoc
 *   Accessible with: REST over HTTPS
-*   Accessible from: [https://dd-mid.ria.ee/mid-api](https://dd-mid.ria.ee/mid-api), [https://mid.sk.ee/mid-api](https://mid.sk.ee/mid-api)
+*   Accessible from: [https://eid-dd.ria.ee/mid](https://eid-dd.ria.ee/mid), [https://mid.sk.ee/mid-api](https://mid.sk.ee/mid-api)
 *   Documentation: [https://github.com/sk-eid/mid](https://github.com/sk-eid/mid)
 
 <a name="_SID_REST_service"></a>
@@ -822,7 +822,7 @@ The following chapter describes interfaces that different ID-software components
 
 *   User: DigiDoc4 Client, RIA DigiDoc
 *   Accessible with: REST over HTTPS
-*   Accessible from: [https://dd-sid.ria.ee/v2](https://dd-sid.ria.ee/v2), [https://rp-api.smart-id.com/v2](https://rp-api.smart-id.com/v2)
+*   Accessible from: [https://eid-dd.ria.ee/sid/v2](https://eid-dd.ria.ee/sid/v2), [https://rp-api.smart-id.com/v2](https://rp-api.smart-id.com/v2)
 *   Documentation: [https://github.com/SK-EID/smart-id-documentation](https://github.com/SK-EID/smart-id-documentation)
 
 <a name="_LDAP_directory_interface"></a>
@@ -848,7 +848,7 @@ The following chapter describes interfaces that different ID-software components
 
 *   User: DigiDoc4j, Libdigidocpp (DigiDoc4 Client, RIA DigiDoc)
 *   Accessible with: HTTP protocol
-*   Accessible from: [http://dd-at.ria.ee/tsa](http://dd-at.ria.ee/tsa)
+*   Accessible from: [https://eid-ts.ria.ee/ts](https://eid-ts.ria.ee/ts)
 *   Documentation: [RFC3161](https://tools.ietf.org/html/rfc3161)
 
 <a name="_OCSP_service_interface"></a>
