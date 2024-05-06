@@ -1,8 +1,8 @@
 # ARCHITECTURE OF ID-SOFTWARE
 
 Document version: 2.7  
-Software version: 23.07  
-Last updated: 11.8.2023  
+Software version: 24.04  
+Last updated: 16.4.2024  
 
 
 # Introduction
@@ -15,7 +15,7 @@ Main sources for information about ID-software are [www.id.ee](https://www.id.ee
 
 This document covers description of ID-software and its components, their deployment in different environments, provided and required interfaces. The document does not include components that have reached the end of their support nor the components that have not yet been released.
 
-The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is **version 23.07**. Latest version numbers of the various ID-software components are provided at [https://www.id.ee/en/article/information-on-the-latest-software-versions/](https://www.id.ee/en/article/information-on-the-latest-software-versions/).
+The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is **version 24.04**. Latest version numbers of the various ID-software components are provided at [https://www.id.ee/en/article/information-on-the-latest-software-versions/](https://www.id.ee/en/article/information-on-the-latest-software-versions/).
 
 The document is targeted for:
 
@@ -32,9 +32,9 @@ The document is targeted for:
 
 The software is being developed and tested by:  
 
-*   **RaulWalter** (RW, [https://www.raulwalter.com](https://www.raulwalter.com)) as the main contractor during 2019-2023;  
-*   **Nortal** ([https://nortal.com](https://nortal.com)) during 2019-2023;  
-*   **TTT** ([https://www.testijad.ee](https://www.testijad.ee)) during 2019-2023;  
+*   **RaulWalter** (RW, [https://www.raulwalter.com](https://www.raulwalter.com)) as the main contractor during 2019-2024;  
+*   **Nortal** ([https://nortal.com](https://nortal.com)) during 2019-2024;  
+*   **TTT** ([https://www.testijad.ee](https://www.testijad.ee)) during 2019-2024;  
 *   SK ID Solutions (SK, [https://www.skidsolutions.eu/en](https://www.skidsolutions.eu/en));  
 *   Aktors ([http://www.aktors.ee/wp/](http://www.aktors.ee/wp/));  
 *   CGI Estonia ([https://www.cgi.ee/et](https://www.cgi.ee/et)).
@@ -306,7 +306,7 @@ Required:
 *   [Smart-ID (MID) REST service](#_SID_REST_service)
 *   [LDAP directory interface](#_LDAP_directory_interface)
 *   Interfaces with base libraries:
-    *   [Libdigidocpp library’s API](#_Libdigidocpp_library’s_interfaces) – for handling documents in supported digital signature formats (BDOC, DDOC and PDF)
+    *   [Libdigidocpp library’s API](#_Libdigidocpp_library’s_interfaces) – for handling documents in supported digital signature formats (ASiC, BDOC, DDOC and PDF)
     *   External base libraries: Qt6, libldap, openssl
 *   Interfaces with cryptographic token’s drivers (described in chap. [Drivers](#_comp_drivers))
     *   PKCS#11 interface
@@ -365,7 +365,7 @@ Required:
 *   [Smart-ID (MID) REST service](#_SID_REST_service)
 *   [LDAP directory interface](#_LDAP_directory_interface)
 *   Interfaces with base libraries:
-    *   [Libdigidocpp library’s API](#_Libdigidocpp_library’s_interfaces) – for handling documents in supported digital signature formats (BDOC, DDOC and PDF)
+    *   [Libdigidocpp library’s API](#_Libdigidocpp_library’s_interfaces) – for handling documents in supported digital signature formats (ASiC, BDOC, DDOC and PDF)
     *   External base libraries: libldap, openssl
 
 
@@ -387,7 +387,7 @@ Required:
 | Libdigidocpp | C++ software library that enables handling documents in BDOC 2.1, ASiC and DIGIDOC-XML 1.3 formats (via CDigiDoc base library). Wiki: [https://github.com/open-eid/libdigidocpp/wiki](https://github.com/open-eid/libdigidocpp/wiki) Code repository: [https://github.com/open-eid/libdigidocpp](https://github.com/open-eid/libdigidocpp) Documentation: [http://open-eid.github.io/libdigidocpp](http://open-eid.github.io/libdigidocpp). | RIA |
 | digidoc-tool program | Small command line application (digidoc-tool.exe) that implements the main functionality of Libdigidocpp library. Used for testing purposes. Can also be used as a source for sample client code for using Libdigidocpp. See also [http://open-eid.github.io/libdigidocpp](http://open-eid.github.io/libdigidocpp). | RIA |
 | DigiDocCSharp | .NET C# wrapper classes for using Libidigidocpp library’s functionality in .NET environment. Created with Swig tool. See also [https://github.com/open-eid/libdigidocpp/blob/master/examples/DigiDocCSharp/README.md](https://github.com/open-eid/libdigidocpp/blob/master/examples/DigiDocCSharp/README.md). | RIA |
-| SiVa | *Si*gnature *Ve*rification Service is an online web service for validating digitally signed documents.<br/>SiVa is used by the DigiDoc4 Client and RIA DigiDoc (by libdigidocpp base library) to validate documents in formats that are not natively supported; currently the service is used to validate PDF (ETSI PAdES) documents.<br/>See also [Signature Verification Service interface](#_SiVa_verification_service). | RIA |
+| SiVa | *Si*gnature *Ve*rification Service is an online web service for validating digitally signed documents.<br/>SiVa is used by the DigiDoc4 Client and RIA DigiDoc (by libdigidocpp base library) to validate documents in formats that are not natively supported; currently the service is used to validate ASiC (CAdES), PDF (ETSI PAdES) and DDOC documents.<br/>See also [Signature Verification Service interface](#_SiVa_verification_service). | RIA |
 | TSL repository | Repository for accessing the TSL ([Trust Service status List](http://www.etsi.org/deliver/etsi_ts/119600_119699/119612/02.02.01_60/ts_119612v020201p.pdf)) lists that can be used as a central source of trust anchor information during digital signature creation and validation processes. The European Commission’s TSL list ([https://ec.europa.eu/tools/lotl/eu-lotl.xml](https://ec.europa.eu/tools/lotl/eu-lotl.xml)) is used as the central TSL list (with references to national lists). | EU/ RIA |
 | Time-stamping proxy service interface | [RFC3161](https://tools.ietf.org/html/rfc3161) based time-stamping service. | RIA |
 | OCSP service | [RFC6960](https://tools.ietf.org/html/rfc6960) based OCSP service. Also offered by SK for Estonian and a number of foreign certificates (see [www.skidsolutions.eu/en](http://www.skidsolutions.eu/en/)). | SK |
@@ -847,8 +847,8 @@ The following chapter describes interfaces that different ID-software components
 #### Time-stamping proxy service interface
 
 *   User: DigiDoc4j, Libdigidocpp (DigiDoc4 Client, RIA DigiDoc)
-*   Accessible with: HTTP protocol
-*   Accessible from: [https://eid-ts.ria.ee/ts](https://eid-ts.ria.ee/ts)
+*   Accessible with: HTTPS protocol
+*   Accessible from: [https://eid-dd.ria.ee/ts](https://eid-dd.ria.ee/ts)
 *   Documentation: [RFC3161](https://tools.ietf.org/html/rfc3161)
 
 <a name="_OCSP_service_interface"></a>
