@@ -1,0 +1,958 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<link href="../ch02_encryption_schemes/" rel="prev"/>
+<link href="../ch04_capsule_server/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.5.3, mkdocs-material-9.5.4" name="generator"/>
+<title>2. CDOC2 container format - CDOC2 System Documentation</title>
+<link href="../../assets/stylesheets/main.50c56a3b.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#cdoc2-container-format">5. 
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="CDOC2 System Documentation" class="md-header__button md-logo" data-md-component="logo" href="../.." title="CDOC2 System Documentation">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            CDOC2 System Documentation
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              2. CDOC2 container format
+            
+          </span>
+</div>
+</div>
+</div>
+<script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="CDOC2 System Documentation" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="CDOC2 System Documentation">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+    CDOC2 System Documentation
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+<span class="md-ellipsis">
+    Introduction
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    Use Case Model
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            Use Case Model
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../01_use_case_model/ch03_use_cases/">
+<span class="md-ellipsis">
+    Use Cases
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    Protocol and Cryptography Specification
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            Protocol and Cryptography Specification
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../ch02_encryption_schemes/">
+<span class="md-ellipsis">
+    Encryption Schemes
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    Container Format
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    Container Format
+  </span>
+</a>
+<nav aria-label="In this chapter:" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      In this chapter:
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#abstracted-format">
+<span class="md-ellipsis">
+      Abstracted format
+    </span>
+</a>
+<nav aria-label="Abstracted format" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#basic-principles">
+<span class="md-ellipsis">
+      Basic principles
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#header-structure">
+<span class="md-ellipsis">
+      Header structure
+    </span>
+</a>
+<nav aria-label="Header structure" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#keylabel-recommendations">
+<span class="md-ellipsis">
+      KeyLabel recommendations
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#capsule-types">
+<span class="md-ellipsis">
+      Capsule types
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#format-extension">
+<span class="md-ellipsis">
+      Format extension
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#serialized-format">
+<span class="md-ellipsis">
+      Serialized format
+    </span>
+</a>
+<nav aria-label="Serialized format" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#general-description-of-the-format">
+<span class="md-ellipsis">
+      General description of the format
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#envelope">
+<span class="md-ellipsis">
+      Envelope
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#header-and-hmac">
+<span class="md-ellipsis">
+      Header and HMAC
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#payload">
+<span class="md-ellipsis">
+      Payload
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#format-composition-procedure">
+<span class="md-ellipsis">
+      Format composition procedure
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#format-parsing-procedure">
+<span class="md-ellipsis">
+      Format parsing procedure
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#unencrypted-payload">
+<span class="md-ellipsis">
+      Unencrypted payload
+    </span>
+</a>
+<nav aria-label="Unencrypted payload" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#requirements-for-posix-tar-archive-assembly">
+<span class="md-ellipsis">
+      Requirements for POSIX tar archive assembly
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#requirements-for-payload-unpacking">
+<span class="md-ellipsis">
+      Requirements for payload unpacking
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../ch04_capsule_server/">
+<span class="md-ellipsis">
+    Capsule Server
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../ch05_cryptographic_details/">
+<span class="md-ellipsis">
+    Cryptographic Details
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../appendix_a_header_fbs/">
+<span class="md-ellipsis">
+    Appendix A: header.fbs
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../appendix_b_recipients_fbs/">
+<span class="md-ellipsis">
+    Appendix B: recipients.fbs
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../appendix_c_cdoc2-capsules/">
+<span class="md-ellipsis">
+    Appendix C: Capsules API
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../appendix_d_keylabel/">
+<span class="md-ellipsis">
+    Appendix D: KeyLabel field specification
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    System Architecture
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            System Architecture
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../03_system_architecture/ch01_system_context/">
+<span class="md-ellipsis">
+    System Context
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../03_system_architecture/ch02_system_components/">
+<span class="md-ellipsis">
+    System Components
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../03_system_architecture/ch03_external_interfaces/">
+<span class="md-ellipsis">
+    External Interfaces
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+<span class="md-ellipsis">
+    Test Plan
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            Test Plan
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../04_test_plan/test_plan/">
+<span class="md-ellipsis">
+    Capsule Server Test Plan
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<span class="md-ellipsis">
+    Appendixes
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            Appendixes
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../09_Appendixes/A1_Security_level/">
+<span class="md-ellipsis">
+    Appendix 1: Security level
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="In this chapter:" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      In this chapter:
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#abstracted-format">
+<span class="md-ellipsis">
+      Abstracted format
+    </span>
+</a>
+<nav aria-label="Abstracted format" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#basic-principles">
+<span class="md-ellipsis">
+      Basic principles
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#header-structure">
+<span class="md-ellipsis">
+      Header structure
+    </span>
+</a>
+<nav aria-label="Header structure" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#keylabel-recommendations">
+<span class="md-ellipsis">
+      KeyLabel recommendations
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#capsule-types">
+<span class="md-ellipsis">
+      Capsule types
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#format-extension">
+<span class="md-ellipsis">
+      Format extension
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#serialized-format">
+<span class="md-ellipsis">
+      Serialized format
+    </span>
+</a>
+<nav aria-label="Serialized format" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#general-description-of-the-format">
+<span class="md-ellipsis">
+      General description of the format
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#envelope">
+<span class="md-ellipsis">
+      Envelope
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#header-and-hmac">
+<span class="md-ellipsis">
+      Header and HMAC
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#payload">
+<span class="md-ellipsis">
+      Payload
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#format-composition-procedure">
+<span class="md-ellipsis">
+      Format composition procedure
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#format-parsing-procedure">
+<span class="md-ellipsis">
+      Format parsing procedure
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#unencrypted-payload">
+<span class="md-ellipsis">
+      Unencrypted payload
+    </span>
+</a>
+<nav aria-label="Unencrypted payload" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#requirements-for-posix-tar-archive-assembly">
+<span class="md-ellipsis">
+      Requirements for POSIX tar archive assembly
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#requirements-for-payload-unpacking">
+<span class="md-ellipsis">
+      Requirements for payload unpacking
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="cdoc2-container-format"><span class="enumerate-headings-plugin enumerate-heading-plugin">5.</span> CDOC2 container format<a class="headerlink" href="#cdoc2-container-format" title="Permanent link">¶</a></h1>
+<h2 id="abstracted-format"><span class="enumerate-headings-plugin enumerate-heading-plugin">5.1</span> Abstracted format<a class="headerlink" href="#abstracted-format" title="Permanent link">¶</a></h2>
+<p>This section describes the CDOC2 format from an abstract point of view, presenting the data contents and data models used therein without referencing the specifics of the serialized format.</p>
+<h3 id="basic-principles"><span class="enumerate-headings-plugin enumerate-heading-plugin">5.1.1</span> Basic principles<a class="headerlink" href="#basic-principles" title="Permanent link">¶</a></h3>
+<p>The basic principles outlined below will provide the user of this specification with points of reference for understanding the details of the specification.</p>
+<ul>
+<li>The abstracted format consists of a header and an encrypted payload.</li>
+<li>The abstracted format contains a single encrypted payload consisting of one or several encrypted files. File information, as well as the sizes and sequence of the files, in case there is more than one file, is also encrypted.</li>
+<li>The payload is encrypted using a single symmetric key (Content Encryption Key; <abbr title="Content Encryption Key. Symmetric key used to encrypt the payload of CDOC2 Container.">CEK</abbr>), using <abbr title="Authenticated Encryption with Additional Data">AEAD</abbr> (Authenticated Encryption with Additional Data) encryption.</li>
+<li>The <abbr title="Content Encryption Key. Symmetric key used to encrypt the payload of CDOC2 Container.">CEK</abbr> is derived from the <abbr title="Crypto Digidoc, encrypted file transmission format used in the Estonian eID ecosystem">CDOC</abbr> file master key (File Master Key; <abbr title="File Master Key. Cryptographic key material for deriving other encryption and HMAC keys.">FMK</abbr>). See section <a href="../ch05_cryptographic_details/#key-derivation">Key derivation</a>.</li>
+<li>The <abbr title="File Master Key. Cryptographic key material for deriving other encryption and HMAC keys.">FMK</abbr> can be encrypted in parallel using one or several key encryption keys (<abbr title="Key Encryption Key. Symmetric key used to encrypt (wrap) the FMK, so that FMK could be transmitted inside CDOC2 Container to Recipient.">KEK</abbr>), one per recipient. On <abbr title="Key Encryption Key. Symmetric key used to encrypt (wrap) the FMK, so that FMK could be transmitted inside CDOC2 Container to Recipient.">KEK</abbr> generation see section <a href="../ch05_cryptographic_details/#descriptions-of-header-elements-and-kek-computation">Descriptions of header elements and <abbr title="Key Encryption Key. Symmetric key used to encrypt (wrap) the FMK, so that FMK could be transmitted inside CDOC2 Container to Recipient.">KEK</abbr> computation</a>.</li>
+<li>The header describes the protection of the <abbr title="File Master Key. Cryptographic key material for deriving other encryption and HMAC keys.">FMK</abbr> (i.e. how the recipients can acquire the <abbr title="Key Encryption Key. Symmetric key used to encrypt (wrap) the FMK, so that FMK could be transmitted inside CDOC2 Container to Recipient.">KEK</abbr> required for decrypting the <abbr title="File Master Key. Cryptographic key material for deriving other encryption and HMAC keys.">FMK</abbr>).</li>
+<li>Header integrity is ensured using a message authentication code computed using the message authentication key derived from the <abbr title="File Master Key. Cryptographic key material for deriving other encryption and HMAC keys.">FMK</abbr> (Header <abbr title="Hash-Based Message Authentication Code. Protects integrity of CDOC Container.">HMAC</abbr> Key; <abbr title="Header HMAC Key">HHK</abbr>). See section <a href="../ch05_cryptographic_details/#header-authentication-code">Header authentication code</a>.</li>
+<li>To ensure format universality, no elements specific to the Estonian eID infrastructure have been used in the description. Thus, the recipient is described with reference to their public key rather than their certificate.</li>
+<li>Decryption always follows the same pattern: 1) the recipient acquires a <abbr title="Key Encryption Key. Symmetric key used to encrypt (wrap) the FMK, so that FMK could be transmitted inside CDOC2 Container to Recipient.">KEK</abbr>, 2) the recipient decrypts the <abbr title="File Master Key. Cryptographic key material for deriving other encryption and HMAC keys.">FMK</abbr>, 3) the recipient derives the <abbr title="Header HMAC Key">HHK</abbr> and validates the header, 4) the recipient derives the <abbr title="Content Encryption Key. Symmetric key used to encrypt the payload of CDOC2 Container.">CEK</abbr>, 5) the recipient decrypts the payload.</li>
+</ul>
+<h3 id="header-structure"><span class="enumerate-headings-plugin enumerate-heading-plugin">5.1.2</span> Header structure<a class="headerlink" href="#header-structure" title="Permanent link">¶</a></h3>
+<p>Header structure is described with the help of pseudocode that is based on no specific programming or schema language but should be intuitively understood.</p>
+<p>The header consists of one or several structures describing a recipient. Each recipient structure contains complete information on how the specific recipient can access the <abbr title="File Master Key. Cryptographic key material for deriving other encryption and HMAC keys.">FMK</abbr> (for identification, access to personal encrypted materials, etc.).</p>
+<p>A message authentication code is computed for the header using a key derived from the <abbr title="File Master Key. Cryptographic key material for deriving other encryption and HMAC keys.">FMK</abbr>. This is necessary for preventing the manipulation of the header by the senders, e.g. for the purpose of concealing some recipient. The header authentication code is computed for a header serialized in a specific manner (see section <a href="#serialized-format">Serialized format</a>).</p>
+<pre><code>Header = {
+    Recipients              = :Recipient[](1..k)
+    PayloadEncryptionMethod = :enum(CHACHA20-POLY1305)
+}
+</code></pre>
+<p>A message authentication code is computed for the header (see section <a href="../ch05_cryptographic_details/#header-authentication-code">Header authentication code</a>):</p>
+<pre><code>Checksum = {
+    value = HMAC(HHK, Serialize(Header))
+}
+</code></pre>
+<p>The recipient is described using the structure <code>Recipient</code>. The format of the structure allows for quick and unambiguous decisions on whether the reader can decrypt the payload using the specific instance of <code>Recipient</code>.</p>
+<pre><code>Recipient = {
+    Capsule = Union(:ECCPublicKeyCapsule | :KeyServerCapsule | 
+            :SymmetricKeyCapsule | :RSAPublicKeyCapsule )
+    KeyLabel = :string
+    EncryptedFMK = :byte[]
+    FMKEncryptionMethod = :enum(XOR)
+}
+</code></pre>
+<p>The <code>Recipient</code> structure consists of a capsule, a recipient key label, an encrypted <abbr title="File Master Key. Cryptographic key material for deriving other encryption and HMAC keys.">FMK</abbr>, and an <abbr title="File Master Key. Cryptographic key material for deriving other encryption and HMAC keys.">FMK</abbr> encryption method identifier.</p>
+<ul>
+<li><code>Capsule</code> – encryption method specific data that the recipient can use to decrypt the <abbr title="File Master Key. Cryptographic key material for deriving other encryption and HMAC keys.">FMK</abbr>.</li>
+<li><code>EncryptedFMK</code> – encrypted <abbr title="File Master Key. Cryptographic key material for deriving other encryption and HMAC keys.">FMK</abbr>.</li>
+<li><code>FMKEncryptionMethod</code> –<abbr title="File Master Key. Cryptographic key material for deriving other encryption and HMAC keys.">FMK</abbr> encryption method type.</li>
+<li><code>KeyLabel</code> – human-readable label of the private or secret key required for decrypting the <abbr title="File Master Key. Cryptographic key material for deriving other encryption and HMAC keys.">FMK</abbr>. This label is necessary for building a sensible user interface. The sender fills this field based on the key or the related certificate. No concrete method for achieving this is indicated in the specification as this is not relevant to cryptographic processing. <code>KeyLabel</code> is a UTF-8 string.</li>
+</ul>
+<p>Successful processing of the <abbr title="Data structure, which contains encryption scheme-specific information (encrypted symmetric keys, public keys, salt, server object references, ...)&lt;br/&gt;which Recipient can use to derive, establish or retrieve decryption keys for decrypting the CDOC2 Container. Capsule can either be a Server Capsule or a Container Capsule.">Capsule</abbr> structure returns a cryptographic key for decrypting the <abbr title="File Master Key. Cryptographic key material for deriving other encryption and HMAC keys.">FMK</abbr> using the method defined as <code>FMKEncryptionMethod</code>. See section 6.4 on the details of cryptographic operations.
+The following capsule types have been specified to ensure the support of a variety of encryption methods (<a href="../ch02_encryption_schemes/">CDOC2 encryption schemes</a>).</p>
+<ul>
+<li><code>ECCPublicKeyCapsule</code> – the recipient is identified by <abbr title="Elliptic-Curve Cryptography">ECC</abbr> public key <code>RecipientPublicKey</code> (e.g. the public key of the first ID-card key pair). The <abbr title="Key Encryption Key. Symmetric key used to encrypt (wrap) the FMK, so that FMK could be transmitted inside CDOC2 Container to Recipient.">KEK</abbr> is derived using <abbr title="Elliptic-curve Diffie–Hellman. Key-agreement protocol that allows two parties, each having an EC public–private key pair, to establish a shared secret over an insecure channel.">ECDH</abbr>. Used in the <a href="../ch02_encryption_schemes/#sc01-direct-encryption-scheme-for-recipient-with-ec-keys">SC.01 encryption method</a>.</li>
+<li><code>RSAPublicKeyCapsule</code> – the recipient is identified by RSA public key <code>RecipientPublicKey</code>. The <abbr title="Key Encryption Key. Symmetric key used to encrypt (wrap) the FMK, so that FMK could be transmitted inside CDOC2 Container to Recipient.">KEK</abbr> is derived by decrypting the capsule using the RSA private key. Used in the <a href="../ch02_encryption_schemes/#sc03-capsule-server-scheme-for-recipients-with-ec-keys">SC.03 encryption method</a>.</li>
+<li><code>KeyServerCapsule</code> – the recipient is identified by <abbr title="Elliptic-Curve Cryptography">ECC</abbr> or RSA public key <code>RecipientPublicKey</code>, used by the recipient for authentication on a <abbr title="Data structure, which contains encryption scheme-specific information (encrypted symmetric keys, public keys, salt, server object references, ...)&lt;br/&gt;which Recipient can use to derive, establish or retrieve decryption keys for decrypting the CDOC2 Container. Capsule can either be a Server Capsule or a Container Capsule.">Capsule</abbr> Server. The <abbr title="Data structure, which contains encryption scheme-specific information (encrypted symmetric keys, public keys, salt, server object references, ...)&lt;br/&gt;which Recipient can use to derive, establish or retrieve decryption keys for decrypting the CDOC2 Container. Capsule can either be a Server Capsule or a Container Capsule.">Capsule</abbr> Server returns an <code>ECCPublicKeyCapsule</code> or a <code>RSAPublicKeyCapsule</code> used as described above. Used in the  <a href="../ch02_encryption_schemes/#sc02-direct-encryption-scheme-for-recipient-with-rsa-keys">SC.02</a> and <a href="../ch02_encryption_schemes/#sc04-capsule-server-scheme-for-recipients-with-rsa-keys">SC.04</a> encryption methods.</li>
+<li><code>SymmetricKeyCapsule</code> – the recipient is identified by key label <code>KeyLabel</code>. The <abbr title="Key Encryption Key. Symmetric key used to encrypt (wrap) the FMK, so that FMK could be transmitted inside CDOC2 Container to Recipient.">KEK</abbr> is derived using HKDF from a symmetric key provided by the user. Used in the <a href="../ch02_encryption_schemes/#sc05-direct-encryption-scheme-for-recipient-with-pre-shared-symmetric-key">SC.05 encryption method</a>.</li>
+</ul>
+<p>This list may be expanded in future versions of the specification.</p>
+<h4 id="keylabel-recommendations"><span class="enumerate-headings-plugin enumerate-heading-plugin">5.1.2.1</span> KeyLabel recommendations<a class="headerlink" href="#keylabel-recommendations" title="Permanent link">¶</a></h4>
+<p>Although not required by the specification, <code>KeyLabel</code> should however follow consistent formating rules and be structured in a machine-readable format for Client Application to show the User what decryption method is allowed and, in case of password and symmetric key encryption, a reminder of what password or key to use.</p>
+<p>Dependent upon the encryption method the following formatting rules are used in the reference implementation:</p>
+<p><strong>1. For machine parsable text <a href="https://datatracker.ietf.org/doc/html/rfc2397">data url</a> format was chosen, that starts with <code>data:</code></strong></p>
+<pre><code>data:[&lt;mediatype&gt;][;base64],&lt;data&gt;
+</code></pre>
+<p>The <code>mediatype</code> can be omitted and is application/x-www-form-urlencoded if not specified and fields are encoded as url parameters. Parameter names are case-insensitive. <code>;base64</code> encoding is optional and means then that Base64 encoded has been applied to the <code>&lt;data&gt;</code> part.</p>
+<p><code>type</code> and <code>v</code> fields are required, rest of fields are <code>type</code> specific.</p>
+<p>Examples:</p>
+<ul>
+<li>Smart-ID/Mobile-ID - PNO=ETSI:{ETSI indentifier} e.g. "ETSI:PNOEE-48010010101", where PNO means personal number issued by a national authority and {ETSI identifier} is replaced by the Recipient's identifier.
+Example: type=Smart-ID&amp;PNO=ETSI%3APNOEE-48010010101</li>
+<li>Password, with an integrated password manager - KM=bitwarden&amp;VAULT=CDOC2&amp;KEY_ID=HELLO.CDOC2&amp;USER_DESC=hello, where KM means key manager and VAULT refers to the name of a secure vault, keyring or wallet inside the password manager. KEY_ID is the name given to the key in the vault.</li>
+<li>Symmetric key - KM=bitwarden&amp;VAULT=CDOC2&amp;KEY_ID=HELLO.CDOC2&amp;FILE=~/folder/secret.pem&amp;USER_DESC=hello, where KM means key manager and VAULT refers to the name of a secure vault, keyring or wallet inside the password manager. KEY_ID is the name given to the key in the vault. FILE is the path to the symmetric key.</li>
+<li>Certificate - FILE=~/folder/filename&amp;CERT_HASH=XXYYXXYY, where FILE is the path to the certificate and CERT_HASH is a result of applying a digest algorithm.</li>
+<li>ID-card and Digi-ID and Digi-ID E-RESIDENT - TYPE=ID-card&amp;cn={cn}, TYPE means eID type. The current known values are: 'ID-CARD', 'Digi-ID E-RESIDENT', 'Digi-ID'. For these types the following fields and requirements are defined</li>
+</ul>
+<p>Known fields are defined in Appendix: <a href="../appendix_d_keylabel/">KeyLabel field specification v1</a>.</p>
+<p>Machine-readable <code>KeyLabel</code> examples:</p>
+<ul>
+<li><code>data:v=1&amp;type=ID-card&amp;serial_number=PNOEE-38001085718&amp;cn=J%C3%95EORG%2CJAAK-KRISTJAN%2C38001085718</code></li>
+<li><code>data:application/x-www-form-urlencoded,v=1&amp;type=ID-card&amp;serial_number=PNOEE-38001085718&amp;cn=J%C3%95EORG%2CJAAK-KRISTJAN%2C38001085718</code></li>
+<li><code>data:application/x-www-form-urlencoded;base64,dj0xJnR5cGU9SUQtY2FyZCZzZXJpYWxfbnVtYmVyPVBOT0VFLTM4MDAxMDg1NzE4JmNuPUolQzMlOTVFT1JHJTJDSkFBSy1LUklTVEpBTiUyQzM4MDAxMDg1NzE4</code></li>
+<li><code>data:;base64,dj0xJnR5cGU9SUQtY2FyZCZzZXJpYWxfbnVtYmVyPVBOT0VFLTM4MDAxMDg1NzE4JmNuPUolQzMlOTVFT1JHJTJDSkFBSy1LUklTVEpBTiUyQzM4MDAxMDg1NzE4</code></li>
+</ul>
+<p><strong>2. The second format for <code>KeyLabel</code> is free text format and it doesn't start with <code>data:</code></strong></p>
+<p>This format is meant for password encryption and symmetric key encryption use cases when no integrated password manager is used.</p>
+<p>Free text <code>KeyLabel</code> examples:</p>
+<ul>
+<li>"131:40:16"</li>
+<li>"kevade"</li>
+<li>"poem"</li>
+<li>"password manager, key: hello.cdoc2"</li>
+</ul>
+<h3 id="capsule-types"><span class="enumerate-headings-plugin enumerate-heading-plugin">5.1.3</span> <abbr title="Data structure, which contains encryption scheme-specific information (encrypted symmetric keys, public keys, salt, server object references, ...)&lt;br/&gt;which Recipient can use to derive, establish or retrieve decryption keys for decrypting the CDOC2 Container. Capsule can either be a Server Capsule or a Container Capsule.">Capsule</abbr> types<a class="headerlink" href="#capsule-types" title="Permanent link">¶</a></h3>
+<p><abbr title="Elliptic-Curve Cryptography">ECC</abbr> public key capsule. The recipient is identified by <abbr title="Elliptic-Curve Cryptography">ECC</abbr> public key <code>RecipientPublicKey</code>.</p>
+<pre><code>ECCPublicKeyCapsule = {
+    Curve              = :enum(secp384r1)
+    RecipientPublicKey = :byte[]
+    SenderPublicKey    = :byte[]
+}
+</code></pre>
+<ul>
+<li><code>Curve</code> – identifier of the elliptic curve employed.</li>
+<li><code>RecipientPublicKey</code> – recipient’s <abbr title="Elliptic-Curve Cryptography">ECC</abbr> public key, used by the recipient to establish the corresponding recipient record.</li>
+<li><code>SenderPublicKey</code> – sender’s public key used by the recipient to derive the <abbr title="Key Encryption Key. Symmetric key used to encrypt (wrap) the FMK, so that FMK could be transmitted inside CDOC2 Container to Recipient.">KEK</abbr> using <abbr title="Elliptic-curve Diffie–Hellman. Key-agreement protocol that allows two parties, each having an EC public–private key pair, to establish a shared secret over an insecure channel.">ECDH</abbr>.</li>
+</ul>
+<p>RSA public key capsule. The recipient is identified by RSA public key <code>RecipientPublicKey</code>.</p>
+<pre><code>RSAPublicKeyCapsule = {
+    RecipientPublicKey = :byte[]
+    EncryptedKEK       = :byte[]
+}
+</code></pre>
+<ul>
+<li><code>RecipientPublicKey</code> - recipient’s RSA public key, used by the recipient to establish the corresponding recipient record.</li>
+<li><code>EncryptedKEK</code> -  key encryption key encrypted with the receipient's public key.</li>
+</ul>
+<p>Server capsule. The receipient is identified by <abbr title="Elliptic-Curve Cryptography">ECC</abbr> or RSA public key <code>RecipientPublicKey</code>.</p>
+<pre><code>KeyServerCapsule = {
+    RecipientKey = Union(:EccKeyDetails | :RsaKeyDetails)
+    KeyServerID         = :string
+    TransactionID       = :string
+}
+
+RsaKeyDetails = {
+    RecipientPublicKey  = :byte[]
+}
+
+EccKeyDetails = {
+        Curve              = :enum(secp384r1)
+        RecipientPublicKey = :byte[]
+}
+</code></pre>
+<ul>
+<li><code>RecipientKey</code> – information on the recipient key, used by the recipient for authentication on the <abbr title="Data structure, which contains encryption scheme-specific information (encrypted symmetric keys, public keys, salt, server object references, ...)&lt;br/&gt;which Recipient can use to derive, establish or retrieve decryption keys for decrypting the CDOC2 Container. Capsule can either be a Server Capsule or a Container Capsule.">Capsule</abbr> Server.</li>
+<li><code>KeyServerID</code> – <abbr title="Data structure, which contains encryption scheme-specific information (encrypted symmetric keys, public keys, salt, server object references, ...)&lt;br/&gt;which Recipient can use to derive, establish or retrieve decryption keys for decrypting the CDOC2 Container. Capsule can either be a Server Capsule or a Container Capsule.">Capsule</abbr> Server identifier. The recipient must be able to use this to establish the <abbr title="Data structure, which contains encryption scheme-specific information (encrypted symmetric keys, public keys, salt, server object references, ...)&lt;br/&gt;which Recipient can use to derive, establish or retrieve decryption keys for decrypting the CDOC2 Container. Capsule can either be a Server Capsule or a Container Capsule.">Capsule</abbr> Server’s network address and connect to the server.</li>
+<li><code>TransactionID</code> – identifier of the capsule sent to the key exchange server by the sender for transmission to the recipient.</li>
+</ul>
+<p>Symmetric key capsule. The recipient is identified by the label of the symmetric key held by the user, <code>KeyLabel</code>.</p>
+<pre><code>SymmetricKeyCapsule = {
+    Salt   = :byte[]
+}
+</code></pre>
+<ul>
+<li><code>Salt</code> – random number generated by the sender, used by the sender as input for the HKDF-Extract function.</li>
+</ul>
+<h3 id="format-extension"><span class="enumerate-headings-plugin enumerate-heading-plugin">5.1.4</span> Format extension<a class="headerlink" href="#format-extension" title="Permanent link">¶</a></h3>
+<p>To allow for format extension and ensure general forward compatibility, the union type field <abbr title="Data structure, which contains encryption scheme-specific information (encrypted symmetric keys, public keys, salt, server object references, ...)&lt;br/&gt;which Recipient can use to derive, establish or retrieve decryption keys for decrypting the CDOC2 Container. Capsule can either be a Server Capsule or a Container Capsule.">Capsule</abbr> is included in the header structure Recipient. Each type of the union describes a specific type of recipient along with corresponding cryptographic primitives and key management tools. Types can be added to the format as necessary both in abstracted and concrete forms.</p>
+<h2 id="serialized-format"><span class="enumerate-headings-plugin enumerate-heading-plugin">5.2</span> Serialized format<a class="headerlink" href="#serialized-format" title="Permanent link">¶</a></h2>
+<p>The specification describes the implementation of the abstracted format using the FlatBuffers format.</p>
+<h3 id="general-description-of-the-format"><span class="enumerate-headings-plugin enumerate-heading-plugin">5.2.1</span> General description of the format<a class="headerlink" href="#general-description-of-the-format" title="Permanent link">¶</a></h3>
+<p>The format consists of an envelope, which is essentially made up of a serialized and concatenated header, a message authentication code, and a payload.
+The message authentication code and payload are serialized using simple serialization.
+For the sake of extensibility and the necessity of transmitting messages identical to the header from the point of view of processing logic via the capsule server, the header is described here with reference to the FlatBuffers format.
+Aside from the header extension mechanism, the envelope used in this format also defines another point of extension.
+This point of extension is provided by the version identifier, set as 2 (byte value) in the specification. The identifier must be changed in the descriptions of new versions.</p>
+<h3 id="envelope"><span class="enumerate-headings-plugin enumerate-heading-plugin">5.2.2</span> Envelope<a class="headerlink" href="#envelope" title="Permanent link">¶</a></h3>
+<p>The envelope consists of the following data elements, presented sequentially as bytes. The designation of the start and end of the envelope is outside the scope of the specification, insofar as the main and natural use case of the format is one where a <abbr title="Crypto Digidoc, encrypted file transmission format used in the Estonian eID ecosystem">CDOC</abbr> file contains a single envelope.</p>
+<ul>
+<li>4 bytes: the string “<abbr title="Crypto Digidoc, encrypted file transmission format used in the Estonian eID ecosystem">CDOC</abbr>” – format designator (prelude), UTF-8 encoded.</li>
+<li>1 byte: version identifier, set as 2 in the specification.</li>
+<li>4 bytes: length of the following header, big-endian order. Header length is a 32-bit signed integer, i.e. the maximum header size is 2 GB. For the sake of the simplicity of implementation, header size is limited to 1 MB (2<sup>20</sup> bytes).</li>
+<li>x bytes, where x is as defined above: serialized FlatBuffers header.</li>
+<li>32 bytes: header message authentication code (see section 6.5).</li>
+<li>The rest of the bytes, until the end of the envelope: payload encrypted using the method and key specified in the header.</li>
+</ul>
+<p>Table 1 presents an overview of the envelope structure.
+Table 1. Envelope structure</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>“<abbr title="Crypto Digidoc, encrypted file transmission format used in the Estonian eID ecosystem">CDOC</abbr>”</th>
+<th>Version</th>
+<th>Header length</th>
+<th>Header</th>
+<th><abbr title="Hash-Based Message Authentication Code. Protects integrity of CDOC Container.">HMAC</abbr></th>
+<th>Payload</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Length</td>
+<td>4</td>
+<td>1</td>
+<td>4</td>
+<td>Header length</td>
+<td>32</td>
+<td>Until end of envelope</td>
+</tr>
+<tr>
+<td>Start</td>
+<td>1</td>
+<td>5</td>
+<td>6</td>
+<td>10</td>
+<td>10 + header length</td>
+<td>10 + header length + 32</td>
+</tr>
+</tbody>
+</table>
+<h3 id="header-and-hmac"><span class="enumerate-headings-plugin enumerate-heading-plugin">5.2.3</span> Header and <abbr title="Hash-Based Message Authentication Code. Protects integrity of CDOC Container.">HMAC</abbr><a class="headerlink" href="#header-and-hmac" title="Permanent link">¶</a></h3>
+<p>The technical description (schema) of the FlatBuffers format can be found in the reference implementation source code repository, under <code>cdoc2-schema/</code>.
+The schema is described in two files and reproduced as appendices to the specification.</p>
+<ul>
+<li>
+<p><code>src/main/fbs/header.fbs</code> Description of the FlatBuffers header.</p>
+</li>
+<li>
+<p><code>src/main/fbs/recipients.fbs</code> Descriptions of recipient types; can be shared with schemas presented in other files.</p>
+</li>
+</ul>
+<p>The header, serialized following the FlatBuffers rule set, is written to the envelope, preceded a 4-byte length field as per the envelope description.
+The Header Message Authentication Code (<abbr title="Hash-Based Message Authentication Code. Protects integrity of CDOC Container.">HMAC</abbr>) is computed as described in section <a href="../ch05_cryptographic_details/#header-authentication-code">Header authentication code</a> and written, bytewise, immediately after the header. The message authentication code algorithm and, consequently, <abbr title="Hash-Based Message Authentication Code. Protects integrity of CDOC Container.">HMAC</abbr> length are defined in this specification.</p>
+<h3 id="payload"><span class="enumerate-headings-plugin enumerate-heading-plugin">5.2.4</span> Payload<a class="headerlink" href="#payload" title="Permanent link">¶</a></h3>
+<p>Lastly, the payload is written to a container composed following the <abbr title="Crypto Digidoc, encrypted file transmission format used in the Estonian eID ecosystem">CDOC</abbr> format, immediately after the <abbr title="Hash-Based Message Authentication Code. Protects integrity of CDOC Container.">HMAC</abbr>. The format presumes that the end-of-payload indicator is defined outside the format, e.g. as end-of-file.</p>
+<p>Note that the end-of-payload indicator is purely optional: the true integrity of the payload is determined by whether the payload can be completely decrypted.</p>
+<p>The composition of the payload plaintext is described in section <a href="./#unencrypted-payload">Unencrypted payload</a>.</p>
+<p>The encryption of the payload is described in section <a href="../ch05_cryptographic_details/#payload-assembly-and-encryption">Payload assembly and encryption</a>.</p>
+<h3 id="format-composition-procedure"><span class="enumerate-headings-plugin enumerate-heading-plugin">5.2.5</span> Format composition procedure<a class="headerlink" href="#format-composition-procedure" title="Permanent link">¶</a></h3>
+<p>This section makes reference to the reference implementation source code, using Java package names and identifiers. References to source code are styled as monotype.
+The following steps are needed to compose a CDOC2 container.</p>
+<ul>
+<li>Compile the list of all recipients.</li>
+<li>Generate <abbr title="File Master Key. Cryptographic key material for deriving other encryption and HMAC keys.">FMK</abbr>, <abbr title="Header HMAC Key">HHK</abbr>, and <abbr title="Content Encryption Key. Symmetric key used to encrypt the payload of CDOC2 Container.">CEK</abbr>.</li>
+<li>Compose the header along with all corresponding cryptographic operations.</li>
+<li>Compute the <abbr title="Hash-Based Message Authentication Code. Protects integrity of CDOC Container.">HMAC</abbr>.</li>
+<li>Generate the payload plaintext.</li>
+<li>Encrypt the payload.</li>
+<li>Generate the serialized envelope.</li>
+<li>Securely delete the <abbr title="File Master Key. Cryptographic key material for deriving other encryption and HMAC keys.">FMK</abbr>, <abbr title="Header HMAC Key">HHK</abbr>, and <abbr title="Content Encryption Key. Symmetric key used to encrypt the payload of CDOC2 Container.">CEK</abbr> values used during the procedure.</li>
+</ul>
+<p>Generation of the payload plaintext is described in section <a href="./#unencrypted-payload">Unencrypted payload</a>, <code>container.Tar.archiveFiles()</code>.</p>
+<p>Next, the cryptographic material used for the protection of the header and payload must be prepared. Generation and derivation of the corresponding keys (<abbr title="File Master Key. Cryptographic key material for deriving other encryption and HMAC keys.">FMK</abbr>, <abbr title="Header HMAC Key">HHK</abbr>, <abbr title="Content Encryption Key. Symmetric key used to encrypt the payload of CDOC2 Container.">CEK</abbr>) is described in section <a href="../ch05_cryptographic_details/#key-derivation">Key derivation</a>, <code>container.Envelope.prepare()</code> and <code>container.Envelope()</code>.</p>
+<p>The list of all desired recipients must then be compiled and serialized, as the cryptographic methods used for ensuring the integrity of the container operate with an integral serialized header.</p>
+<p>The requisite cryptographic procedures described in sections <a href="../ch05_cryptographic_details/#descriptions-of-header-elements-and-kek-computation">Descriptions of header elements and <abbr title="Key Encryption Key. Symmetric key used to encrypt (wrap) the FMK, so that FMK could be transmitted inside CDOC2 Container to Recipient.">KEK</abbr> computation</a> and <a href="../ch05_cryptographic_details/#fmk-encryption-and-decryption"><abbr title="File Master Key. Cryptographic key material for deriving other encryption and HMAC keys.">FMK</abbr> encryption and decryption</a> must be executed for each recipient.</p>
+<p>The <abbr title="Hash-Based Message Authentication Code. Protects integrity of CDOC Container.">HMAC</abbr> is then computed as per section <a href="../ch05_cryptographic_details/#header-authentication-code">Header authentication code</a>.</p>
+<p>Payload encryption is described in section <a href="../ch05_cryptographic_details/#payload-assembly-and-encryption">Payload assembly and encryption</a>, <code>crypto.ChaChaCipher.encryptPayload()</code> and <code>crypto.ChaChaCipher.initChaChaOutputStream()</code>.</p>
+<p>The detailed serialized envelope format is presented in section <a href="#envelope">Envelope</a>.</p>
+<p>At the end of the encryption process, the employed cryptographic materials (symmetric keys, ephemeral private keys) must be securely deleted. Secure deletion significantly depends on the operational environment; in some cases (e.g. in JVM) it might not be possible. The developer must evaluate what options for secure deletion are provided by the employed programming language and operational environment.</p>
+<h3 id="format-parsing-procedure"><span class="enumerate-headings-plugin enumerate-heading-plugin">5.2.6</span> Format parsing procedure<a class="headerlink" href="#format-parsing-procedure" title="Permanent link">¶</a></h3>
+<p>This section makes reference to the reference implementation source code, using Java package names and identifiers. References to source code are styled as monotype.</p>
+<p>The container parsing reference implementation is found in the function <code>container.Envelope.decrypt()</code>. This functions serves as the primary entry point into the decryption logic and its main purpose is to take the encrypted container provided as input and write all the files contained therein to the selected folder.</p>
+<p>The function does the following and all its alternative implementations must do the same while employing all relevant security checks.</p>
+<ul>
+<li>Parsing the envelope and decoding the envelope header.</li>
+<li>Decrypting/deriving the <abbr title="Key Encryption Key. Symmetric key used to encrypt (wrap) the FMK, so that FMK could be transmitted inside CDOC2 Container to Recipient.">KEK</abbr>.</li>
+<li>Decrypting/deriving the container-specific keys, i.e. <abbr title="File Master Key. Cryptographic key material for deriving other encryption and HMAC keys.">FMK</abbr>, <abbr title="Header HMAC Key">HHK</abbr>, and <abbr title="Content Encryption Key. Symmetric key used to encrypt the payload of CDOC2 Container.">CEK</abbr>.</li>
+<li>Checking the <abbr title="Hash-Based Message Authentication Code. Protects integrity of CDOC Container.">HMAC</abbr>.</li>
+<li>Decrypting the archive.</li>
+<li>Extracting files from the encrypted archive and writes the files to the selected folder. In stream processing mode, decryption and extraction form a single operation.</li>
+</ul>
+<p>The envelope parsing and header decryption reference implementation is found in the function <code>container.Envelope.readFBSHeader()</code>.</p>
+<p>The header must be parsed using the FlatBuffers library, utilizing the root type fbs.header.Header (in the reference implementation, this is implemented as the function <code>fbs.header.Header.getRootAsHeader()</code> generated from the FlatBuffers schema).</p>
+<p>Parsing of the complete header is implemented as the reference implementation function <code>container.Envelope.deserializeFBSHeader()</code>.</p>
+<p>A recipient (Recipient) corresponding to the party processing the container must be found in the header and the <abbr title="Key Encryption Key. Symmetric key used to encrypt (wrap) the FMK, so that FMK could be transmitted inside CDOC2 Container to Recipient.">KEK</abbr>, <abbr title="File Master Key. Cryptographic key material for deriving other encryption and HMAC keys.">FMK</abbr>, and <abbr title="Header HMAC Key">HHK</abbr> must be derived or decrypted.</p>
+<p>Recipient identification methods corresponding to each encryption method are described in section <a href="../ch05_cryptographic_details/#descriptions-of-header-elements-and-kek-computation">Descriptions of header elements and <abbr title="Key Encryption Key. Symmetric key used to encrypt (wrap) the FMK, so that FMK could be transmitted inside CDOC2 Container to Recipient.">KEK</abbr> computation</a>. In case no recipient corresponding to the processing party is not found, the container cannot be decrypted. In this case, the algorithm must return a “container not meant for opening by the processor” error and terminate.</p>
+<p><abbr title="Key Encryption Key. Symmetric key used to encrypt (wrap) the FMK, so that FMK could be transmitted inside CDOC2 Container to Recipient.">KEK</abbr> computation is described in section <a href="../ch05_cryptographic_details/#descriptions-of-header-elements-and-kek-computation">Descriptions of header elements and <abbr title="Key Encryption Key. Symmetric key used to encrypt (wrap) the FMK, so that FMK could be transmitted inside CDOC2 Container to Recipient.">KEK</abbr> computation</a>. Should an error occur during <abbr title="Key Encryption Key. Symmetric key used to encrypt (wrap) the FMK, so that FMK could be transmitted inside CDOC2 Container to Recipient.">KEK</abbr> computation (e.g. the point is not located on the ellipse curve), the algorithm must return an error and terminate. <abbr title="Key Encryption Key. Symmetric key used to encrypt (wrap) the FMK, so that FMK could be transmitted inside CDOC2 Container to Recipient.">KEK</abbr> computation functions are found in the class <code>crypto.KekTools</code>.</p>
+<p><abbr title="File Master Key. Cryptographic key material for deriving other encryption and HMAC keys.">FMK</abbr> decryption is described in section <a href="../ch05_cryptographic_details/#fmk-encryption-and-decryption"><abbr title="File Master Key. Cryptographic key material for deriving other encryption and HMAC keys.">FMK</abbr> encryption and decryption</a>,  <code>crypto.Crypto.xor()</code>.</p>
+<p><abbr title="Header HMAC Key">HHK</abbr> derivation procedure is described in section <a href="../ch05_cryptographic_details/#key-derivation">Key derivation</a>, <code>crypto.Crypto.deriveHeaderHmacKey()</code>.</p>
+<p>The <abbr title="Header HMAC Key">HHK</abbr> and the original serialized form of the header must be used to check the <abbr title="Hash-Based Message Authentication Code. Protects integrity of CDOC Container.">HMAC</abbr> using <code>container.Envelope.checkHmac()</code>.</p>
+<p>After a successful message authentication code check, the payload may be decrypted. In case the <abbr title="Hash-Based Message Authentication Code. Protects integrity of CDOC Container.">HMAC</abbr> check was unsuccessful, the algorithm must return an error and terminate.</p>
+<p>Decryption requires deriving the <abbr title="Content Encryption Key. Symmetric key used to encrypt the payload of CDOC2 Container.">CEK</abbr>. The corresponding procedure is described in section <a href="../ch05_cryptographic_details/#key-derivation">Key derivation</a>, <code>Crypto.deriveContentEncryptionKey()</code>.</p>
+<p>Payload decryption is carried out in three stages: decryption, cryptogram authentication, and unpacking the decrypted archive.</p>
+<p>Decryption and cryptogram authentication are described in section <a href="../ch05_cryptographic_details/#payload-assembly-and-encryption">Payload assembly and encryption</a>.</p>
+<p>Archive unpacking is described in section <a href="#requirements-for-payload-unpacking">Requirements for payload unpacking</a>.</p>
+<h2 id="unencrypted-payload"><span class="enumerate-headings-plugin enumerate-heading-plugin">5.3</span> Unencrypted payload<a class="headerlink" href="#unencrypted-payload" title="Permanent link">¶</a></h2>
+<p>This section provides a more detailed description of the format and processing of the unencrypted payload.</p>
+<p>Main features of the format:</p>
+<ul>
+<li>The transmitted files are archived using the <a href="https://pubs.opengroup.org/onlinepubs/9699919799/utilities/pax.html">POSIX tar format</a>.</li>
+<li>The archived files are packed using ZLIB, standardized in <a href="https://pubs.opengroup.org/onlinepubs/9699919799/utilities/pax.html">IETF RFC 1950</a>.</li>
+</ul>
+<p>The container payload plaintext is formed as follows: the transmitted files (or file) are added to a POSIX tar archive which is then packed into the ZLIB format as a single bloc.</p>
+<pre><code>Implementation note: the DD4 client uses the relevant Qt wrapper functions to call the zlib library. Since these functions cannot be used in streaming mode, the specification recommends replacing the use of Qt wrappers with streaming mode zlib calls. This becomes especially crucial in storage cryptography where data volumes may be very high and encryption of the data in memory buffers in one piece may be unfeasible.
+</code></pre>
+<h3 id="requirements-for-posix-tar-archive-assembly"><span class="enumerate-headings-plugin enumerate-heading-plugin">5.3.1</span> Requirements for POSIX tar archive assembly<a class="headerlink" href="#requirements-for-posix-tar-archive-assembly" title="Permanent link">¶</a></h3>
+<p>Given the long history and large number of variations of the tar format, this subsection presents an overview of the requirements for archives created for CDOC2. The purpose of these requirements is to reduce compatibility issues between different client applications and/or operating systems and facilitate the save extraction of the files from the archive to the file system.</p>
+<ul>
+<li><a href="https://pubs.opengroup.org/onlinepubs/9699919799/utilities/pax.html">Standardized POSIX tar dialect</a> is used. This format is also known as ‘POSIX 1003.1-2001’ or ‘PAX’.</li>
+<li>All file names are UTF-8 encoded.</li>
+<li>
+<blockquote>
+<p>100B filenames supported by <a href="https://pubs.opengroup.org/onlinepubs/9699919799/utilities/pax.html">PAX extended header</a>.</p>
+</blockquote>
+</li>
+<li>
+<blockquote>
+<p>8 GiB files supported by <a href="https://pubs.opengroup.org/onlinepubs/9699919799/utilities/pax.html">PAX extended header</a>.</p>
+</blockquote>
+</li>
+<li>Filenames are added to the archive without basenames.</li>
+<li>Permission bits and other security attributes added to the archive are ignored (can be written but not read).</li>
+<li>Only normal files (type 0) are added to the archive.</li>
+<li>Files are processed as binary files.</li>
+</ul>
+<h3 id="requirements-for-payload-unpacking"><span class="enumerate-headings-plugin enumerate-heading-plugin">5.3.2</span> Requirements for payload unpacking<a class="headerlink" href="#requirements-for-payload-unpacking" title="Permanent link">¶</a></h3>
+<p>The payload format is chosen to enable unpacking in streaming mode. This means the encrypted payload does not have to be loaded to memory in one piece. The payload can be decrypted, unpacked, and files written to the disk in plaintext sequentially.</p>
+<p>When data is processed in streaming mode, the decrypted data will be used before encryption checksum verification. Unpacking must be done with account of the possibility that the payload could be faulty and not meet the rules set out in the specification or might have even been maliciously assembled by an attacker. As the sender of a CDOC2 container is unauthenticated, the possibility of the payload having been assembled by an attacker must always be accounted for, even if the encryption checksums match.</p>
+<p>When processing data in streaming mode, errors encountered in processing the plaintext (packing or archival errors) cannot be handled before the entire payload has been processed and the cryptogram authenticated. If cryptogram authentication fails, this must be reported as an error. Errors encountered in plaintext processing can only be reported if cryptogram authentication was successful. In case of an error, all created files must be deleted.</p>
+<pre><code>Below, we have described two types of attacks that software based on this specification must be able to deploy countermeasures against.
+The list of potential attacks is inconclusive. Thus, any file might contain a virus or malware and needs to be checked by antivirus software before use, but this type of attack is not specific to CDOC2 but is equally valid for the use of files received from any untrusted source and is hence not covered here in more detail.
+</code></pre>
+<p>Attack 1: The attacker may create a compressed payload that will unpack into a massive file. This may cause the application to crash when the recipient processes this payload in memory. It can cause disk space to run out when written to disk. The pragmatic solution is to set a maximum size limit for unpacked files and continuously monitor free memory or free disk space during unpacking. If the files being unpacked are larger than permitted or free memory or free disk space has decreased below the permitted limit, unpacking must be aborted, files written to the disk in the process deleted, and the error reported.</p>
+<p>Attack 2: The attacker may manipulate the attributes of the files in the tar archive – file names, permission bits, security attributes and types. In case such a tar file is unpacked without additional checks, the attacker may be able to overwrite existing system files, add new files, create files invisible to normal users but necessary for certain attacks, etc.</p>
+<p>Since the CDOC2 container is not meant to serve as a universal archive format but simply provide a means for the simultaneous encryption of multiple files while retaining original file names for the user’s convenience, a number of rules have been set out for the unpacking of tar files which will ensure protection from the forms of manipulation described above if enforced:</p>
+<ul>
+<li>File creation must ignore permission bits, file owner and group identifiers and other security attributes found in the archive – all files must be created non-executable, owned by the user running the application, and readable and writable by this    user.</li>
+<li>Only normal files (type 0) must be created. If the archive contains a file of some other type, abort unpacking, delete files written to the disk before this point, and return an error message. A correctly implemented CDOC2 client application should not create files containing files of other types.</li>
+<li>Validate file name safety before writing a file to the disk. If a file name containing unpermitted symbols is found, abort unpacking, delete files written to the disk before this point, and return an error message.</li>
+</ul>
+<p>File name safety verification serves the following purposes:</p>
+<ul>
+<li>Prevention of <a href="https://capec.mitre.org/data/definitions/126.html">path traversal attacks</a> and creation of files outside the folder selected by the user.</li>
+<li>Prevention of the creation of files with names containing special symbols, inaccessible or difficult to access for the user.</li>
+</ul>
+<p>Different operating systems have different requirements for file names. The pragmatic solution is to use a tried and tested method for validating file names received from untrusted sources. Using multiple validation mechanisms is advantageous.</p>
+<p><a href="https://github.com/thombashi/pathvalidate">Pathvalidate</a> is a comprehensive Python library for file name validation – similar checks must also be used in other programming languages.</p>
+<p>The <a href="https://wiki.sei.cmu.edu/confluence/display/java/IDS04-J.+Safely+extract+files+from+ZipInputStream">SEI CERT coding standard</a> describes an additional method for preventing path traversal.</p>
+<p>List of requirements for file names used in the reference implementation container.FileNameValidator:</p>
+<ul>
+<li>Cannot begin with a space or hyphen.</li>
+<li>Cannot end with a space or period.</li>
+<li>Cannot be any of the following: CON, PRN, AUX, NUL, COM[1-9], LPT[1-9].</li>
+<li>Cannot contain any of the following symbols: &lt;, &gt;, :, \, /, |, ?, *.</li>
+<li>Cannot contain <a href="https://en.wikipedia.org/wiki/Control_character">control characters</a>.</li>
+<li>Cannot contain the Unicode character Right-To-Left Override (U+202E).</li>
+</ul>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+</main>
+<footer class="md-footer">
+<nav aria-label="Footer" class="md-footer__inner md-grid">
+<a aria-label="Previous: Encryption Schemes" class="md-footer__link md-footer__link--prev" href="../ch02_encryption_schemes/">
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</div>
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                Previous
+              </span>
+<div class="md-ellipsis">
+                Encryption Schemes
+              </div>
+</div>
+</a>
+<a aria-label="Next: Capsule Server" class="md-footer__link md-footer__link--next" href="../ch04_capsule_server/">
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                Next
+              </span>
+<div class="md-ellipsis">
+                Capsule Server
+              </div>
+</div>
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"></path></svg>
+</div>
+</a>
+</nav>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.footer", "navigation.expand", "content.tooltips", "toc.follow"], "search": "../../assets/javascripts/workers/search.c011b7c0.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+<script src="../../assets/javascripts/bundle.7389ff0e.min.js"></script>
+<script src="../../javascripts/katex.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/contrib/auto-render.min.js"></script>
+</body>
+</html>
