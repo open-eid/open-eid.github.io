@@ -1,0 +1,521 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<link href="../../03_system_architecture/ch03_external_interfaces/" rel="prev"/>
+<link href="../../09_Appendixes/A1_Security_level/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.5.3, mkdocs-material-9.5.4" name="generator"/>
+<title>Capsule Server Test Plan - CDOC2 System Documentation</title>
+<link href="../../assets/stylesheets/main.50c56a3b.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#purpose-and-scope-of-testing">16. 
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="CDOC2 System Documentation" class="md-header__button md-logo" data-md-component="logo" href="../.." title="CDOC2 System Documentation">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            CDOC2 System Documentation
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Capsule Server Test Plan
+            
+          </span>
+</div>
+</div>
+</div>
+<script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="CDOC2 System Documentation" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="CDOC2 System Documentation">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+    CDOC2 System Documentation
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+<span class="md-ellipsis">
+    Introduction
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    Use Case Model
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            Use Case Model
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../01_use_case_model/ch03_use_cases/">
+<span class="md-ellipsis">
+    Use Cases
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    Protocol and Cryptography Specification
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            Protocol and Cryptography Specification
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02_protocol_and_cryptography_spec/ch02_encryption_schemes/">
+<span class="md-ellipsis">
+    Encryption Schemes
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02_protocol_and_cryptography_spec/ch03_container_format/">
+<span class="md-ellipsis">
+    Container Format
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02_protocol_and_cryptography_spec/ch04_capsule_server/">
+<span class="md-ellipsis">
+    Capsule Server
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02_protocol_and_cryptography_spec/ch05_cryptographic_details/">
+<span class="md-ellipsis">
+    Cryptographic Details
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02_protocol_and_cryptography_spec/appendix_a_header_fbs/">
+<span class="md-ellipsis">
+    Appendix A: header.fbs
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02_protocol_and_cryptography_spec/appendix_b_recipients_fbs/">
+<span class="md-ellipsis">
+    Appendix B: recipients.fbs
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02_protocol_and_cryptography_spec/appendix_c_cdoc2-capsules/">
+<span class="md-ellipsis">
+    Appendix C: Capsules API
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02_protocol_and_cryptography_spec/appendix_d_keylabel/">
+<span class="md-ellipsis">
+    Appendix D: KeyLabel field specification
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    System Architecture
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            System Architecture
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../03_system_architecture/ch01_system_context/">
+<span class="md-ellipsis">
+    System Context
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../03_system_architecture/ch02_system_components/">
+<span class="md-ellipsis">
+    System Components
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../03_system_architecture/ch03_external_interfaces/">
+<span class="md-ellipsis">
+    External Interfaces
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+<span class="md-ellipsis">
+    Test Plan
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            Test Plan
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    Capsule Server Test Plan
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    Capsule Server Test Plan
+  </span>
+</a>
+<nav aria-label="In this chapter:" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      In this chapter:
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#functional-testing">
+<span class="md-ellipsis">
+      Functional testing
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#load-testing">
+<span class="md-ellipsis">
+      Load testing
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<span class="md-ellipsis">
+    Appendixes
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            Appendixes
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../09_Appendixes/A1_Security_level/">
+<span class="md-ellipsis">
+    Appendix 1: Security level
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="In this chapter:" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      In this chapter:
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#functional-testing">
+<span class="md-ellipsis">
+      Functional testing
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#load-testing">
+<span class="md-ellipsis">
+      Load testing
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="purpose-and-scope-of-testing"><span class="enumerate-headings-plugin enumerate-heading-plugin">16.</span> Purpose and scope of testing<a class="headerlink" href="#purpose-and-scope-of-testing" title="Permanent link">¶</a></h1>
+<p>The test plan presented herein describes tasks related to testing the CDOC2 capsule server (hereinafter also simply ‘server’). The test plan does not cover the client-side components of CDOC2; it is solely focused on the server side of the system.</p>
+<p>Within the scope of the test plan presented here, server testing serves two main purposes:</p>
+<ul>
+<li>Functional testing, to verify that the implemented functionality of the server is in line with what is prescribed in the documentation and the server can fulfil the established goals.</li>
+<li>Load testing, to establish the operation and behaviour of the server under different usage loads and patterns.</li>
+</ul>
+<h2 id="functional-testing"><span class="enumerate-headings-plugin enumerate-heading-plugin">16.1</span> Functional testing<a class="headerlink" href="#functional-testing" title="Permanent link">¶</a></h2>
+<p>The purpose of functional testing is to verify that the implemented functionality of the server is in line with what is prescribed in the documentation and the server can fulfil the established goals.</p>
+<p>Functional testing uses unit tests and automated API tests written by the developers that cover all scenarios described in server use cases and potential API error situations.</p>
+<h2 id="load-testing"><span class="enumerate-headings-plugin enumerate-heading-plugin">16.2</span> Load testing<a class="headerlink" href="#load-testing" title="Permanent link">¶</a></h2>
+<p>Although no explicit requirements have been set out for server capability, it is important to be aware of the capacity limits of the developed software on a specific existing platform. This information is provided by load tests which seek answers to the following questions:</p>
+<ul>
+<li>What is the system’s response time to users under different system loads?</li>
+<li>How many users can the system serve simultaneously without exceeding the defined response time?</li>
+<li>How will the system perform under extreme load conditions (e.g. very large number of simultaneous users or key shares in the database)?</li>
+<li>How will the system recover after peak load?</li>
+<li>How will the system perform under conditions of long-term moderate or higher load?</li>
+</ul>
+<h1 id="test-procedure-and-results"><span class="enumerate-headings-plugin enumerate-heading-plugin">17.</span> Test procedure and results<a class="headerlink" href="#test-procedure-and-results" title="Permanent link">¶</a></h1>
+<p>Test planning is a continuous process, regularly repeated throughout the project after the addition of significant new information. The result of this process is the test plan (the present document).</p>
+<p>In the case of the capsule server, functional testing is covered by unit tests and API tests run against the server API.</p>
+<p>Unit tests are created by the developers and can be used by the development team, as well as in a continuous integration environment. The output of the tests is a human- and machine-readable test report. The source code for the unit tests is maintained along with the server’s source code, following the same principles as the application source code.</p>
+<p>Just as the unit tests, the capsule server API tests are designed to be implementable as automatic tests to ensure the simplicity of running the tests and facilitate their repeatability. A test report on the unit tests run will be generated by the tool used.</p>
+<p>Tools for the development of API tests are chosen to ensure the simple maintenance of the developed tests, and the maintainability of their source code along with and following the same principles as the application source code.</p>
+<p>Tests used for establishing server capability are also implemented as automatic tests, utilizing a suitable testing tool. The best tool for this purpose will be determined during test development, considering the following requirements:</p>
+<ul>
+<li>Test development should not be unreasonably complex for the developer.</li>
+<li>Adjusting the desired load should not require software development skills.</li>
+<li>The resulting test report should be easily available and understandable.</li>
+</ul>
+<p>Note that the scope of load test development only includes the capability of stressing the system and the load tests do not include solutions for monitoring the system during load testing. Tools created for system monitoring must be used for this purpose.</p>
+<p>The result of load testing is a test report containing information on the questions covered in the corresponding section of the test plan. The report provides information on the loads applied to the server, as well as the usage of system resources (memory usage, processor load, storage usage) required for servicing queries.</p>
+<h1 id="designed-test-scenarios"><span class="enumerate-headings-plugin enumerate-heading-plugin">18.</span> Designed test scenarios<a class="headerlink" href="#designed-test-scenarios" title="Permanent link">¶</a></h1>
+<p>Test ideas and scenarios are normally not explicitly covered in a test plan. However, as the capsule server is an application with limited functionality, there would be little need for a separate document for test scenario management. The present section also describes the scenarios designed to be used in load testing.</p>
+<h2 id="capsule-server-api-functionality-tests"><span class="enumerate-headings-plugin enumerate-heading-plugin">18.1</span> <abbr title="Data structure, which contains encryption scheme-specific information (encrypted symmetric keys, public keys, salt, server object references, ...)&lt;br/&gt;which Recipient can use to derive, establish or retrieve decryption keys for decrypting the CDOC2 Container. Capsule can either be a Server Capsule or a Container Capsule.">Capsule</abbr> server API functionality tests<a class="headerlink" href="#capsule-server-api-functionality-tests" title="Permanent link">¶</a></h2>
+<p>Server functionality is tested by emulating the end-user client application utilizing the server API interfaces. These tests are run for both <abbr title="Elliptic-Curve Cryptography">ECC</abbr> and RSA keys.
+Positive scenarios:</p>
+<ul>
+<li>Sender successfully transmits a capsule to the server (<code>[ECC|RSA]-PUT_CAPSULE-POS-01-ONCE</code>)</li>
+<li>Sender has already transmitted a capsule and is retransmitting the capsule to the server
+(<code>[ECC|RSA]-PUT_CAPSULE-POS-02-REPEATEDLY</code>)</li>
+<li>Sender transmits a random byte array not exceeding the defined length to the server as RSA key material
+(<code>RSA-PUT-CAPSULE-POS-03-RANDOM_CONTENT</code>)</li>
+<li>Recipients successfully requests a capsule
+(<code>[ECC|RSA]-GET_CAPSULE-POS-01-CORRECT_REQUEST</code>)</li>
+<li>Successful transmission of a capsule in a multi-arm system: the capsule is received by one arm and issued by another arm of the system.</li>
+</ul>
+<p>Negative scenarios:</p>
+<ul>
+<li>Sender transmits an RSA capsule containing overlength key material
+(<code>RSA-PUT_CAPSULE-NEG-01-CAPSULE_TOO_BIG</code>)</li>
+<li>Recipient requests a capsule with a random transaction ID
+(<code>GET_CAPSULE-NEG-02-RANDOM_UUID_TRANSACTION_ID</code>)</li>
+<li>Recipient requests a capsule with an underlength transaction ID
+(<code>GET_CAPSULE-NEG-03-TOO_SHORT_TRANSACTION_ID</code>)</li>
+<li>Recipient requests a capsule with an empty transaction ID
+(<code>GET_CAPSULE-NEG-04-EMPTY_STRING_TRANSACTION_ID</code>)</li>
+<li>Recipient requests a capsule with an overlength transaction ID
+(<code>GET_CAPSULE-NEG-05-TOO_LONG_RANDOM_STRING_TRANSACTION_ID</code>)</li>
+<li>Recipient requests a capsule with a valid transaction ID but the recipient’s public key does not match the ID
+(<code>[ECC|RSA]-GET_CAPSULE-NEG-06-PUBLIC_KEY_NOT_MATCHING</code>)</li>
+</ul>
+<h2 id="server-load-tests"><span class="enumerate-headings-plugin enumerate-heading-plugin">18.2</span> Server load tests<a class="headerlink" href="#server-load-tests" title="Permanent link">¶</a></h2>
+<p>To receive information about the server’s behaviour under stress, the server must be overloaded with queries designed to be as close as possible to the behavioural patterns of real-life users.</p>
+<p>Depending on the design and functionality of the capsule server, queries made to the server can be divided into two main groups: transmission of capsules to the server, and capsule requests via user authentication. As two different levels of authentication are used on the server, it can be said to essentially comprise two independent web servers with different configurations, sharing a common database for storing key shares.</p>
+<p>Putting a load on the server requires the use of queries for transmitting key shares to the server and requesting key shares from the server.</p>
+<ul>
+<li>In the case of capsule transmission queries, the queries must be functionally successful and result in capsules being saved to the server database.</li>
+<li>In the case of capsule request queries, the capsule to be used and the user to be authenticated are selected randomly and the reply returned by the server may be either positive (i.e. contain a capsule) or negative (i.e. contain an error code).</li>
+</ul>
+<p>The contents of the query are irrelevant for load testing, as the same internal queries and comparisons are required for both positive and negative results.</p>
+<h3 id="load-generation"><span class="enumerate-headings-plugin enumerate-heading-plugin">18.2.1</span> Load generation<a class="headerlink" href="#load-generation" title="Permanent link">¶</a></h3>
+<p>Both the functional tests and the load tests utilize the Gatling test framework where the desired load on the tested software can be adjusted using the following parameters:</p>
+<ul>
+<li>start-users-per-second: Number of active users (queries per second) immediately applied at the start of the test</li>
+<li>increment-users-per-second: Number of active users added per each following test cycle</li>
+<li>increment-cycles: Number of test cycles used</li>
+<li>cycle-duration-seconds: Duration of a single test cycle (in seconds)</li>
+</ul>
+<p>The duration of a load test depends on the number of test cycles and cycle duration. Number of queries being made to the tested software depends on the initial number of users and the number of users added per each following test cycle. For example, in order to generate a steadily increasing load, the initial number of users can be adjusted to be relatively small, and a larger number of users added per each test cycle.</p>
+<p>Using the settings below, the duration of the test will be 600 seconds (10 minutes), the initial query rate at the start of the test is 10 queries per second, and the query rate in the last test cycle is 110 queries per second:</p>
+<ul>
+<li>start-users-per-second = 10</li>
+<li>increment-users-per-second = 10</li>
+<li>increment-cycles = 10</li>
+<li>cycle-duration-seconds = 60</li>
+</ul>
+<p>To generate a steady load, the number of users applied at the start of the test must be adjusted to the desired query rate and the number of users added per test cycle kept minimal.</p>
+<p>Using the settings below, the duration of the test will be 600 seconds (10 minutes), the initial query rate at the start of the test is 75 queries per second, and the query rate in the last test cycle is 85 queries per second:</p>
+<ul>
+<li>start-users-per-second = 10</li>
+<li>increment-users-per-second = 1</li>
+<li>increment-cycles = 10</li>
+<li>cycle-duration-seconds = 60</li>
+</ul>
+<h2 id="implementation-of-scenarios-in-load-tests"><span class="enumerate-headings-plugin enumerate-heading-plugin">18.3</span> Implementation of scenarios in load tests<a class="headerlink" href="#implementation-of-scenarios-in-load-tests" title="Permanent link">¶</a></h2>
+<ul>
+<li>What is the system’s response time to users under different system loads?</li>
+<li>How many users can the system serve simultaneously without exceeding the defined response time?</li>
+</ul>
+<p>Since system operability is directly dependent on the system’s operational environment, answering these questions requires repeatedly running load tests using a variety of loads. To start off, gradually increasing loads can be used to determine potential capacity limits.</p>
+<ul>
+<li>How will the system perform under extreme load conditions (e.g. very large number of simultaneous users or key shares in the database)?</li>
+</ul>
+<p>The goal of this test is to take the system to or above maximum load and monitor the system’s performance under such conditions. Probing for extreme loads should be carried out using a steady load over a long period of time.</p>
+<ul>
+<li>How will the system recover after peak load?</li>
+</ul>
+<p>The goal of this test is to gather information on the ability to recover from peak load. Multiple simultaneous load generators can be used here, one performing a longer, steady-load test and the other a shorter, increasing-load test.</p>
+<ul>
+<li>How will the system perform under conditions of long-term moderate or higher load?</li>
+</ul>
+<p>The system is run for a long period of time under a steady moderate load to detect anomalies or errors that could occur in the long-term operation of the system (small memory leaks etc.). A test involving a steady load of a large number of longer test cycles can be used to seek an answer to this question.</p>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+</main>
+<footer class="md-footer">
+<nav aria-label="Footer" class="md-footer__inner md-grid">
+<a aria-label="Previous: External Interfaces" class="md-footer__link md-footer__link--prev" href="../../03_system_architecture/ch03_external_interfaces/">
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</div>
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                Previous
+              </span>
+<div class="md-ellipsis">
+                External Interfaces
+              </div>
+</div>
+</a>
+<a aria-label="Next: Appendix 1: Security level" class="md-footer__link md-footer__link--next" href="../../09_Appendixes/A1_Security_level/">
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                Next
+              </span>
+<div class="md-ellipsis">
+                Appendix 1: Security level
+              </div>
+</div>
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"></path></svg>
+</div>
+</a>
+</nav>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.footer", "navigation.expand", "content.tooltips", "toc.follow"], "search": "../../assets/javascripts/workers/search.c011b7c0.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+<script src="../../assets/javascripts/bundle.7389ff0e.min.js"></script>
+<script src="../../javascripts/katex.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/contrib/auto-render.min.js"></script>
+</body>
+</html>
