@@ -1,0 +1,511 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<link href="../../04_test_plan/test_plan/" rel="prev"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.5.3, mkdocs-material-9.5.4" name="generator"/>
+<title>Appendix 1 - CDOC2 security level - CDOC2 System Documentation</title>
+<link href="../../assets/stylesheets/main.50c56a3b.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#appendix-1-security-level-of-password-based-encryptiondecryption-in-cdoc2">19. 
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="CDOC2 System Documentation" class="md-header__button md-logo" data-md-component="logo" href="../.." title="CDOC2 System Documentation">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            CDOC2 System Documentation
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Appendix 1 - CDOC2 security level
+            
+          </span>
+</div>
+</div>
+</div>
+<script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="CDOC2 System Documentation" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="CDOC2 System Documentation">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+    CDOC2 System Documentation
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+<span class="md-ellipsis">
+    Introduction
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    Use Case Model
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            Use Case Model
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../01_use_case_model/ch03_use_cases/">
+<span class="md-ellipsis">
+    Use Cases
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    Protocol and Cryptography Specification
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            Protocol and Cryptography Specification
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02_protocol_and_cryptography_spec/ch02_encryption_schemes/">
+<span class="md-ellipsis">
+    Encryption Schemes
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02_protocol_and_cryptography_spec/ch03_container_format/">
+<span class="md-ellipsis">
+    Container Format
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02_protocol_and_cryptography_spec/ch04_capsule_server/">
+<span class="md-ellipsis">
+    Capsule Server
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02_protocol_and_cryptography_spec/ch05_cryptographic_details/">
+<span class="md-ellipsis">
+    Cryptographic Details
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02_protocol_and_cryptography_spec/appendix_a_header_fbs/">
+<span class="md-ellipsis">
+    Appendix A: header.fbs
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02_protocol_and_cryptography_spec/appendix_b_recipients_fbs/">
+<span class="md-ellipsis">
+    Appendix B: recipients.fbs
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02_protocol_and_cryptography_spec/appendix_c_cdoc2-capsules/">
+<span class="md-ellipsis">
+    Appendix C: Capsules API
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02_protocol_and_cryptography_spec/appendix_d_keylabel/">
+<span class="md-ellipsis">
+    Appendix D: KeyLabel field specification
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    System Architecture
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            System Architecture
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../03_system_architecture/ch01_system_context/">
+<span class="md-ellipsis">
+    System Context
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../03_system_architecture/ch02_system_components/">
+<span class="md-ellipsis">
+    System Components
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../03_system_architecture/ch03_external_interfaces/">
+<span class="md-ellipsis">
+    External Interfaces
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+<span class="md-ellipsis">
+    Test Plan
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            Test Plan
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../04_test_plan/test_plan/">
+<span class="md-ellipsis">
+    Capsule Server Test Plan
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<span class="md-ellipsis">
+    Appendixes
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            Appendixes
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    Appendix 1: Security level
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    Appendix 1: Security level
+  </span>
+</a>
+<nav aria-label="In this chapter:" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      In this chapter:
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#general-regulatory-requirements">
+<span class="md-ellipsis">
+      General regulatory requirements
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#pbkdf2-regulatory-requirements">
+<span class="md-ellipsis">
+      PBKDF2 regulatory requirements
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#modeling-attacker-capabilities">
+<span class="md-ellipsis">
+      Modeling attacker capabilities
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cdoc2-password-length-requirements">
+<span class="md-ellipsis">
+      CDOC2 password length requirements
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="In this chapter:" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      In this chapter:
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#general-regulatory-requirements">
+<span class="md-ellipsis">
+      General regulatory requirements
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#pbkdf2-regulatory-requirements">
+<span class="md-ellipsis">
+      PBKDF2 regulatory requirements
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#modeling-attacker-capabilities">
+<span class="md-ellipsis">
+      Modeling attacker capabilities
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cdoc2-password-length-requirements">
+<span class="md-ellipsis">
+      CDOC2 password length requirements
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="appendix-1-security-level-of-password-based-encryptiondecryption-in-cdoc2"><span class="enumerate-headings-plugin enumerate-heading-plugin">19.</span> Appendix 1 - Security level of password-based encryption/decryption in CDOC2<a class="headerlink" href="#appendix-1-security-level-of-password-based-encryptiondecryption-in-cdoc2" title="Permanent link">¶</a></h1>
+<h2 id="general-regulatory-requirements"><span class="enumerate-headings-plugin enumerate-heading-plugin">19.1</span> General regulatory requirements<a class="headerlink" href="#general-regulatory-requirements" title="Permanent link">¶</a></h2>
+<p>Government-issued documents contain some guidance about the required security level. For example, NIST SP 800-57 Part 1, Revision 5 recommends that systems should use at least 128-bit security level and this is adequate for 2030 and beyond (TODO: exact reference). This is applicable, when choosing encryption/decryption algorithms and protocols and in CDOC2 system, AES-128 and similar algorithms are in use.</p>
+<p>However, when it comes to password-based encryption/decryption, guidelines are not very good. For example, Section 8.1.5.3.8 of NIST SP 800-57 suggests that passwords should provide 128 bits of protection as well. If we would apply this, this would mean that users should use at least 21-character random passwords providing 128 bits of entropy. Also, NIST SP 800-57 doesn't take into account that trying out one password and trying out one AES key takes different amount of time.</p>
+<p>German BSI document TR-02102-1 (<a href="https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TG02102/BSI-TR-02102-1.pdf?__blob=publicationFile">https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TG02102/BSI-TR-02102-1.pdf?__blob=publicationFile</a>) also gives similar guidance:</p>
+<ol>
+<li>Section 6.3.1, Remark 6.4 (iii) - "In other situations where these conditions are not met (for example, when a cryptographic secret is directly derived from the password that provides access to sensitive information), it is recommended to choose passwords via a method that offers at least 120 bits of entropy"</li>
+</ol>
+<p>There's another document SP 800-131 Part 1 - "Recommendation for Password-Based Key Derivation Part 1: Storage Applications", which applies specifically to our situation, but the recommendations are not very conclusive:</p>
+<ol>
+<li>Annex A.1 - "For the security of electronically stored data, passwords should be strong enough so that it is infeasible for attackers to gain access by guessing the password"</li>
+<li>Annex A.1 - "Passwords shorter than 10 characters are usually considered to be weak"</li>
+<li>Annex A.1 - "Passphrases shorter than 20 characters are usually considered weak"</li>
+</ol>
+<h2 id="pbkdf2-regulatory-requirements"><span class="enumerate-headings-plugin enumerate-heading-plugin">19.2</span> PBKDF2 regulatory requirements<a class="headerlink" href="#pbkdf2-regulatory-requirements" title="Permanent link">¶</a></h2>
+<p>NIST SP 800-131 Part 1 gives following recommendation:</p>
+<ol>
+<li>Annex A.2.2 - "The number of iterations should be set as high as can be tolerated for the environment, while maintaining acceptable performance."</li>
+</ol>
+<p>German TR-02102-1 gives following recommendation (while suggesting to use Argon2id in place of PBKDF2)</p>
+<ol>
+<li>Section B.1.3 - "The security parameters of Argon2id and the requirements for the passwords depend on the application scenario and should be discussed with an expert"</li>
+</ol>
+<p>Taking into account the NIST recommendation and based on tests on general purpose CPU (Apple M2 3.49 GHz), it takes around 1-2 seconds to run PBKDF2 algorithm with 10,000,000 (<span class="arithmatex">\(1 \cdot 10^7\)</span>) iterations. This seems to be reasonable performance tradeoff.</p>
+<h2 id="modeling-attacker-capabilities"><span class="enumerate-headings-plugin enumerate-heading-plugin">19.3</span> Modeling attacker capabilities<a class="headerlink" href="#modeling-attacker-capabilities" title="Permanent link">¶</a></h2>
+<p>When we consider brute-force exhaustive password search attack against <abbr title="File format for transmitting the encrypted payload and metadata information, &lt;br/&gt;including the capsule from Sender to Recipient">CDOC2 Container</abbr>, we have to somehow model the capabilities of the attacker. It is especially difficult, because we have to consider a long crypto-period. Attacker may store the captured <abbr title="File format for transmitting the encrypted payload and metadata information, &lt;br/&gt;including the capsule from Sender to Recipient">CDOC2 Container</abbr> and launch the attack after powerful computers have emerged, or execute the attack for longer period of time, like multiple years.</p>
+<p>"Bovine RC5 effort" (<a href="https://www.distributed.net/RC5">https://www.distributed.net/RC5</a>) is one of the examples of highly parallel exhaustive key searches performed in 2002. They were able to find 64-bit encryption key for RC5 ciphertext within 1,757 days, by using computers of 331,252 individuals. Massive parallel exhaustive search is therefore certainly within capabilities of attackers.</p>
+<p>There are no guidelines for estimating, how many CPU cores an attacker might be able to use. We could use an estimate for the upper bound, by taking the number of CPU cores in the world. ARM company has estimated that all their partners combined, have shipped more than 25 billion (<span class="arithmatex">\(\approx 2.5 \cdot 10^{10}\)</span>) chips in year 2020 (<a href="https://newsroom.arm.com/news/arm-partners-are-shipping-more-than-900-arm-based-chips-per-second-based-on-latest-results">https://newsroom.arm.com/news/arm-partners-are-shipping-more-than-900-arm-based-chips-per-second-based-on-latest-results</a>). We could assume that all of those chips are controlled by single attacker and all of those chips are capable of doing a PBKDF2 operation with <span class="arithmatex">\(1 \cdot 10^7\)</span> iterations in one second. Then we could have our upper bound for a very powerful attacker, which is <span class="arithmatex">\(\approx 7.8 \cdot 10^{17}\)</span> password tries per year.</p>
+<p>TODO: Another way to validate this upper bound, is to compare this with bitcoin mining performance, because PBKDF2() operation is essentially doing SHA-256 hash computations. We could assume that attacker is controlling the whole bitcoin mining infrastructure and could arrive another upper bound.</p>
+<h2 id="cdoc2-password-length-requirements"><span class="enumerate-headings-plugin enumerate-heading-plugin">19.4</span> CDOC2 password length requirements<a class="headerlink" href="#cdoc2-password-length-requirements" title="Permanent link">¶</a></h2>
+<p>One example of practical passwords, which are considered secure, are Apple's "Automatic strong passwords" (<a href="https://support.apple.com/en-gb/guide/security/secc84c811c4/web">https://support.apple.com/en-gb/guide/security/secc84c811c4/web</a>). They are 20 characters long, contain one digit, one uppercase, two hyphens and 16 lowercase characters. Such generated passwords contain 71 bits of entropy.</p>
+<p>If CDOC2 system would enforce using similar passwords and would use PBKDF2 with <span class="arithmatex">\(1 \cdot 10^7\)</span> iterations, it would mean that our hypothetical attacker could try out all combinations ( <span class="arithmatex">\(2^{71} \approx 2.3 \cdot 10^{21}\)</span> ) within</p>
+<div class="arithmatex">\[ \frac{2.3 \cdot 10^{21}}{7.8 \cdot 10^{17}} \approx 3000 \]</div>
+<p>years. Taking into account that we modeled our upper bound for our attacker, these kinds of 71-bit entropy passwords should provide us multiple orders of magnitude for a security margin.</p>
+<hr/>
+<h1 id="notes-down-below"><span class="enumerate-headings-plugin enumerate-heading-plugin">20.</span> Notes down below<a class="headerlink" href="#notes-down-below" title="Permanent link">¶</a></h1>
+<h1 id="cdoc2-security-level"><span class="enumerate-headings-plugin enumerate-heading-plugin">21.</span> CDOC2 security level<a class="headerlink" href="#cdoc2-security-level" title="Permanent link">¶</a></h1>
+<p>Plan:</p>
+<ol>
+<li>There are no strict requirements for password length, when PBKDF2 is used for AES128 encryption keys.</li>
+<li>But there are some heuristics-based guidelines.</li>
+<li>"In 2023, OWASP recommended to use 600,000 iterations for PBKDF2-<abbr title="Hash-Based Message Authentication Code. Protects integrity of CDOC Container.">HMAC</abbr>-SHA256 and 210,000 for PBKDF2-<abbr title="Hash-Based Message Authentication Code. Protects integrity of CDOC Container.">HMAC</abbr>-SHA512.[6]"</li>
+<li>Also, when we use maximal reasonable iteration count, then we allow the attacker to have about 1 PBKDF2 try per second.</li>
+<li>Assuming that SHA-256 is safe</li>
+<li>Assuming in safety margin. 10 fold? million fold?</li>
+<li>Then we can let users use X-character passwords</li>
+</ol>
+<p>Safety margin:</p>
+<p><a href="https://crypto.stackexchange.com/questions/68672/origin-of-values-for-security-margin">https://crypto.stackexchange.com/questions/68672/origin-of-values-for-security-margin</a>
+<a href="https://eprint.iacr.org/2017/560.pdf">https://eprint.iacr.org/2017/560.pdf</a>
+<a href="https://www.cryptopp.com/wiki/Security_Level">https://www.cryptopp.com/wiki/Security_Level</a></p>
+<p>distributed.net was able to find RC5-64 key within 1,757 days. So, they broke 64-bit entropy password. They were able to do 2^64 = 18446744073709551616 = 10^19 tries.</p>
+<p>10^19/(1757<em>24</em>60*60) = 10^10 tries per second</p>
+<p>They used 331 000 individuals. Assuming that attackers nowadays are able to utilise every computer in the world. (<a href="https://newsroom.arm.com/news/arm-partners-are-shipping-more-than-900-arm-based-chips-per-second-based-on-latest-results">https://newsroom.arm.com/news/arm-partners-are-shipping-more-than-900-arm-based-chips-per-second-based-on-latest-results</a>)</p>
+<p>70 million chips a day -&gt; 2*10^10 chips per year.</p>
+<p>Assuming that attacker is able to use all of such chips and is able to parallelise PBKDF computations.</p>
+<h2 id="password-length"><span class="enumerate-headings-plugin enumerate-heading-plugin">21.1</span> Password length<a class="headerlink" href="#password-length" title="Permanent link">¶</a></h2>
+<p>CDOC2 system security model is based on 128-bit security level (<a href="https://en.wikipedia.org/wiki/Security_level">https://en.wikipedia.org/wiki/Security_level</a>). For example, AES encryption implemented inside CDOC2 system uses 128-bit keys, which translates to 128-bit security level. There are lot of assumptions and estimations and safety margins included here, but the general consensus is that 128-bit security level provides adequate protection beyond 2030.</p>
+<p><a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf">https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf</a></p>
+<p>"SP 800-57, Part 1 also provides guidance about protecting information past 2030. Section 5.6.4 of that document advises selecting algorithms and key sizes that are expected to be secure for the entire security life of the protected data. This is particularly important when nearing algorithm transition dates. For example, if the data to be encrypted has a security life of 15 years, then protection at a security strength of 112 bits will not be sufficient, since the 15-year period extends beyond 2030."</p>
+<p>Password length recommendations are based on the same assumption, that it shouldn't be easier to brute-force passwords used in the password-based encryption/decryption scheme (TODO: link to scheme).</p>
+<p>TODO: However, brute-forcing a 128-bit AES key would take more energy and more time than lifetime of multiple universes (TODO: link) So, does it make sense to have this high bar?</p>
+<p>Brute-forcing passwords is possible when attacker tries all possible password combinations.</p>
+<p>Example: We know that user have to use a 20 character password, from the set of case sensitive alphanumeric (a–z, A–Z, 0–9) characters. This translates to roughly 5.9 bits per character. Times 20, gives 118 bits of entropy.</p>
+<p>That means that attacker has to try out <span class="arithmatex">\(2^118\)</span> combinations. Which is too much anyway.</p>
+<p>Is it ok, if we lower the bar to 100 years?</p>
+<p><a href="https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-132.pdf">https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-132.pdf</a></p>
+<p>"Passphrases shorter than 20 characters are usually considered weak."
+"Passwords shorter than 10 characters are usually considered to be weak."</p>
+<p>"iteration count of 10,000,000 may be appropriate."
+"The number of iterations should be set as high as can be tolerated for the environment, while maintaining acceptable performance."</p>
+<p>1 second for generation?</p>
+<p>10 characters, capital, numbers, 5.9 bits of entropy per character.</p>
+<p><span class="arithmatex">\(10*5.9 = 59\)</span></p>
+<p><span class="arithmatex">\(2^59 = 576460752303423488 = 5*10^17\)</span></p>
+<p>Age of universe is 13 billion years = 13 * 10^9 years * 365<em>24</em>60<em>60 =  4</em>10^17 seconds</p>
+<p>$ (5<em>10^17) / (2</em>10^10) = 2.5*10^7 seconds</p>
+<p>3.1*10^7 seconds in a year</p>
+<p>So .. 10 character password with ~60 bits of entropy, with 1 second PBKDF iterations, could be found by utilising all ARM cores shipped within one year in a whole world, by running all of them for 1 year.</p>
+<p>Fine, let's do 20 characters, like Apple offers, and lets use 71 bits of entropy.</p>
+<p><span class="arithmatex">\(2^71 = 2361183241434822606848 = 2.3 * 10^21\)</span></p>
+<p>20 character password, with ~71 bits of entropy, could be found by utilising all ARM cores shipped within one year in a whole world, by running all of them for 3700 years.</p>
+<p>$ (2.3 * 10^21) / (2<em>10^10) / (3.1</em>10^7) = 3700$ years.</p>
+<p>This should be good, we have safety margin of 1000 times. Even if the attacker is able to do PBKDF thousand times quicker, it still takes them all the ARM cores and a year.</p>
+<p>BSI Technical Guideline – Cryptographic Algorithms and Key Lengths</p>
+<p>"In other situations where these conditions are not met (for example, when a cryptographic secret is directly derived from the password that provides access to sensitive information), it is recommended to choose passwords via a method that offers at least 120 bits of entropy."</p>
+<p><a href="https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TG02102/BSI-TR-02102-1.pdf?__blob=publicationFile">https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TG02102/BSI-TR-02102-1.pdf?__blob=publicationFile</a></p>
+<p>"9. SecretSharing"</p>
+<p><a href="https://www.theregister.com/2009/08/03/new_crypto_attack/">https://www.theregister.com/2009/08/03/new_crypto_attack/</a></p>
+<p><a href="https://www.cyber.gov.au/resources-business-and-government/essential-cyber-security/ism/cyber-security-guidelines/guidelines-cryptography">https://www.cyber.gov.au/resources-business-and-government/essential-cyber-security/ism/cyber-security-guidelines/guidelines-cryptography</a></p>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+</main>
+<footer class="md-footer">
+<nav aria-label="Footer" class="md-footer__inner md-grid">
+<a aria-label="Previous: Capsule Server Test Plan" class="md-footer__link md-footer__link--prev" href="../../04_test_plan/test_plan/">
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</div>
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                Previous
+              </span>
+<div class="md-ellipsis">
+                Capsule Server Test Plan
+              </div>
+</div>
+</a>
+</nav>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.footer", "navigation.expand", "content.tooltips", "toc.follow"], "search": "../../assets/javascripts/workers/search.c011b7c0.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+<script src="../../assets/javascripts/bundle.7389ff0e.min.js"></script>
+<script src="../../javascripts/katex.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/contrib/auto-render.min.js"></script>
+</body>
+</html>

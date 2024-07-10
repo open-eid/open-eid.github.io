@@ -1,0 +1,1156 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../A1_Security_level/">
+      
+      
+        <link rel="next" href="../A3_YubiKey_integration/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.4">
+    
+    
+      
+        <title>Appendix 2 - Integration with Password Managers - CDOC2 System Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.50c56a3b.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#appendix-2-integration-with-password-managers" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="CDOC2 System Documentation" class="md-header__button md-logo" aria-label="CDOC2 System Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CDOC2 System Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Appendix 2 - Integration with Password Managers
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="CDOC2 System Documentation" class="md-nav__button md-logo" aria-label="CDOC2 System Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    CDOC2 System Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Use Case Model
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Use Case Model
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01_use_case_model/ch03_use_cases/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Use Cases
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Protocol and Cryptography Specification
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Protocol and Cryptography Specification
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02_protocol_and_cryptography_spec/ch02_encryption_schemes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Encryption Schemes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02_protocol_and_cryptography_spec/ch03_container_format/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Container Format
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02_protocol_and_cryptography_spec/ch04_capsule_server/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Capsule Server
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02_protocol_and_cryptography_spec/ch05_cryptographic_details/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cryptographic Details
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02_protocol_and_cryptography_spec/appendix_a_header_fbs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Appendix A: header.fbs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02_protocol_and_cryptography_spec/appendix_b_recipients_fbs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Appendix B: recipients.fbs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02_protocol_and_cryptography_spec/appendix_c_cdoc2-capsules/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Appendix C: Capsules API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02_protocol_and_cryptography_spec/appendix_d_keylabel/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Appendix D: KeyLabel field specification
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    System Architecture
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            System Architecture
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03_system_architecture/ch01_system_context/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    System Context
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03_system_architecture/ch02_system_components/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    System Components
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03_system_architecture/ch03_external_interfaces/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    External Interfaces
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Test Plan
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Test Plan
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04_test_plan/test_plan/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Capsule Server Test Plan
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Appendixes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Appendixes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../A1_Security_level/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Appendix 1: Security level
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="In this chapter:">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      In this chapter:
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#intro" class="md-nav__link">
+    <span class="md-ellipsis">
+      Intro
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#password-managers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Password managers
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#no-security-assessment" class="md-nav__link">
+    <span class="md-ellipsis">
+      No security assessment
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#overview-of-integration-possibilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview of integration possibilities
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview of integration possibilities">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#manual-copy-paste" class="md-nav__link">
+    <span class="md-ellipsis">
+      Manual copy-paste
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hot-key-based-auto-fill" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hot-key-based auto-fill
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cli-based-programmatic-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      CLI-based programmatic integration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CLI-based programmatic integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#list-of-cli-applications" class="md-nav__link">
+    <span class="md-ellipsis">
+      List of CLI applications
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cli-api-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      CLI API methods
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#access-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      Access authentication
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fine-grained-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fine-grained authorization
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#programmatic-or-rest-api-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Programmatic or REST API integration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Programmatic or REST API integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#list-of-apis" class="md-nav__link">
+    <span class="md-ellipsis">
+      List of APIs
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="appendix-2-integration-with-password-managers">Appendix 2 - Integration with Password Managers<a class="headerlink" href="#appendix-2-integration-with-password-managers" title="Permanent link">&para;</a></h1>
+<h2 id="intro">Intro<a class="headerlink" href="#intro" title="Permanent link">&para;</a></h2>
+<p>Users regularly use passwords managers, either embedded into the browsers or separate applications, to manage and protect passwords that they need to enter into various web pages or applications. When <abbr title="IT system, which allows users to send encrypted files to each other with the help of CDOC2 Client Applications and CDOC2 Capsule Servers">CDOC2 System</abbr> implements password-based encryption schemes, it becomes interesting question, if and how passwords managers could be used to simplify some of tasks, such as password generation, storing, and password entering.</p>
+<h2 id="password-managers">Password managers<a class="headerlink" href="#password-managers" title="Permanent link">&para;</a></h2>
+<p>This analysis covers following types of password managers.</p>
+<p>Operating system integrated password managers:</p>
+<ol>
+<li>Windows Credential Manager (<a href="https://support.microsoft.com/en-us/windows/accessing-credential-manager-1b5c916a-6a16-889f-8581-fc16e8165ac0">https://support.microsoft.com/en-us/windows/accessing-credential-manager-1b5c916a-6a16-889f-8581-fc16e8165ac0</a>)</li>
+<li>MacOS/IOS KeyChain with iCloud KeyCloud syncing and backup service (<a href="https://support.apple.com/en-us/109016">https://support.apple.com/en-us/109016</a>)</li>
+</ol>
+<p>Browser integrated password managers:</p>
+<ol>
+<li>Google Password Manager for Chrome (<a href="https://passwords.google.com/">https://passwords.google.com/</a>)</li>
+<li>Mozilla Password Manager for Firefox (<a href="https://www.mozilla.org/en-US/firefox/features/password-manager/">https://www.mozilla.org/en-US/firefox/features/password-manager/</a>)</li>
+</ol>
+<p>Third party (commercial) applications and services:</p>
+<ol>
+<li>Bitwarden (<a href="https://bitwarden.com">https://bitwarden.com</a>)</li>
+<li>1Password (<a href="https://1password.com">https://1password.com</a>)</li>
+<li>LastPass (<a href="https://lastpass.com">https://lastpass.com</a>)</li>
+</ol>
+<p>Open-source password managers:</p>
+<ol>
+<li>KeePassXC (<a href="https://keepassxc.org">https://keepassxc.org</a>)</li>
+</ol>
+<h2 id="no-security-assessment">No security assessment<a class="headerlink" href="#no-security-assessment" title="Permanent link">&para;</a></h2>
+<p>Current analysis only looks at integration possibilities, from simply technical viewpoint, and doesn't assess the quality or trustworthiness of particular passwords managers in any other way. For example, there's no assessment, how specific password manager application stores passwords in a local database, whether they are encrypted with some sort of master password or not.</p>
+<p>Also, whether user should trust a commercial cloud-based password manager or synchronization services or any other software, depends on the attack model and risk tolerance of the particular user.</p>
+<h2 id="overview-of-integration-possibilities">Overview of integration possibilities<a class="headerlink" href="#overview-of-integration-possibilities" title="Permanent link">&para;</a></h2>
+<h3 id="manual-copy-paste">Manual copy-paste<a class="headerlink" href="#manual-copy-paste" title="Permanent link">&para;</a></h3>
+<p>The most basic level of integration possibility is that user does perform all tasks manually by using clipboard function for copy-pasting passwords between CDOC2 Client application and password manager. This has added benefit that password manager could be both native application or website. Downside is the additional work that user needs to do.</p>
+<h3 id="hot-key-based-auto-fill">Hot-key-based auto-fill<a class="headerlink" href="#hot-key-based-auto-fill" title="Permanent link">&para;</a></h3>
+<p>KeePassXC has interesting integration option called "Auto-Type" (<a href="https://keepassxc.org/docs/KeePassXC_UserGuide#_auto_type">https://keepassxc.org/docs/KeePassXC_UserGuide#_auto_type</a>). It works this way that KeePassXC application listens for a unique hot-key combination and then depending on the title of the application in focus ("Notepad", "DigiDoc4 Client"), KeePassXC searches for a matching password entry and sends a configurable sequence (for example, "username", TAB, "password", ENTER) to that application. Optionally, user can preview and confirm this action, before KeePassXC actually sends passwords to other windows.</p>
+<p>Actual usage of this feature is not so simple, because window titles tend to include the opened filename as well, and KeePassXC doesn't support regular expressions. However, this might be something to keep in mind.</p>
+<h3 id="cli-based-programmatic-integration">CLI-based programmatic integration<a class="headerlink" href="#cli-based-programmatic-integration" title="Permanent link">&para;</a></h3>
+<p>Some password managers also offer separate CLI application, which could be invoked from shell scripts and could be used to integrate password manager services into various places, for example, CI/CD actions.</p>
+<h4 id="list-of-cli-applications">List of CLI applications<a class="headerlink" href="#list-of-cli-applications" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Password Manager</th>
+<th>CLI application name</th>
+<th>References</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Windows Credential Manager</td>
+<td><code>cmdkey.exe</code><br><code>vaultcmd.exe</code></td>
+<td><a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/cmdkey">Windows Server manual page for <code>cmdkey</code></a> <br> <a href="https://www.thehacker.recipes/a-d/movement/credentials/dumping/windows-credential-manager">Hacker recipes - Windows Credential Manager</a></td>
+</tr>
+<tr>
+<td>MacOS/IOS KeyChain</td>
+<td><code>security</code></td>
+<td><a href="https://blog.koehntopp.info/2017/01/26/command-line-access-to-the-mac-keychain.html">Blog post with examples</a>, <br><a href="https://www.unix.com/man-page/osx/1/security/">man page for <code>security</code></a></td>
+</tr>
+<tr>
+<td>Google Password Manager</td>
+<td>no official options</td>
+<td></td>
+</tr>
+<tr>
+<td>Mozilla Password Manager</td>
+<td>no official options</td>
+<td></td>
+</tr>
+<tr>
+<td>Bitwarden</td>
+<td><code>bw</code></td>
+<td><a href="https://bitwarden.com/help/cli/">https://bitwarden.com/help/cli/</a></td>
+</tr>
+<tr>
+<td>1Password</td>
+<td><code>op</code></td>
+<td><a href="https://developer.1password.com/docs/cli">https://developer.1password.com/docs/cli</a></td>
+</tr>
+<tr>
+<td>LastPass</td>
+<td><code>lastpass-cli</code></td>
+<td><a href="https://github.com/lastpass/lastpass-cli">https://github.com/lastpass/lastpass-cli</a></td>
+</tr>
+<tr>
+<td>KeePassXC</td>
+<td><code>keepassxc-cli</code></td>
+<td><a href="https://keepassxc.org/docs/KeePassXC_UserGuide#_command_line_tool">Section in User Manual</a>, <br><a href="https://github.com/keepassxreboot/keepassxc/blob/develop/docs/man/keepassxc-cli.1.adoc">man page for <code>keepassxc-cli</code></a></td>
+</tr>
+</tbody>
+</table>
+<h4 id="cli-api-methods">CLI API methods<a class="headerlink" href="#cli-api-methods" title="Permanent link">&para;</a></h4>
+<p>All CLI application offer adequate collection of methods for shell script integration, such as adding new password entries, searching, reading password entries, and deleting password entries.</p>
+<h4 id="access-authentication">Access authentication<a class="headerlink" href="#access-authentication" title="Permanent link">&para;</a></h4>
+<p>When another application runs the CLI application and asks for an access to stored password entry inside password manager database, the access call must be somehow authenticated, to make sure that potentially malicious applications, which are running under the privileges of the same user, cannot have access to passwords.</p>
+<p>There are following authentication options:</p>
+<ol>
+<li>Password-based authentication, where you supply your username and password to CDOC2 Client application. Essentially, Client application gains the same privileges as the original user.</li>
+<li>"API key"-style authentication, where you create an independent software token and supply this to CDOC2 Client application.</li>
+<li>MacOS KeyChain supports application name-based authentication, where you specify the path to the application binary, which is requesting access.</li>
+</ol>
+<h4 id="fine-grained-authorization">Fine-grained authorization<a class="headerlink" href="#fine-grained-authorization" title="Permanent link">&para;</a></h4>
+<p>In case user has other passwords in the password manager database, in addition to passwords of various CDOC2 Containers, the question of allowing access to only a subset of password becomes important. It could be solved with following options:</p>
+<ol>
+<li>Only store passwords for CDOC2 Containers in that particular password manager, which is integrated with CDOC2 Client application.</li>
+<li>Create a separate "vault" or "collection of passwords", in case password manager supports this, and only allow CDOC2 Client application access to this particular "vault".</li>
+<li>Add fine-grained ACLs to each password entry.</li>
+</ol>
+<h3 id="programmatic-or-rest-api-integration">Programmatic or REST API integration<a class="headerlink" href="#programmatic-or-rest-api-integration" title="Permanent link">&para;</a></h3>
+<h4 id="list-of-apis">List of APIs<a class="headerlink" href="#list-of-apis" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Password Manager</th>
+<th>API references</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Windows Credential Manager</td>
+<td><a href="https://learn.microsoft.com/en-us/windows/win32/api/wincred/">Win32 API WinCred.h</a></td>
+</tr>
+<tr>
+<td>MacOS/IOS KeyChain</td>
+<td><a href="https://developer.apple.com/documentation/security/keychain_services">KeyChain Services</a>, <a href="https://developer.apple.com/documentation/security/keychain_services/keychain_items">Keychain items</a>, <a href="https://developer.apple.com/documentation/technotes/tn3137-on-mac-keychains">TN3137: On Mac keychain APIs and implementations</a></td>
+</tr>
+<tr>
+<td>Bitwarden</td>
+<td><a href="https://bitwarden.com/help/vault-management-api/">Vault Management REST API</a></td>
+</tr>
+<tr>
+<td>1Password</td>
+<td><a href="https://developer.1password.com/docs/connect">1Password Connect REST API</a></td>
+</tr>
+<tr>
+<td>KeePassXC</td>
+<td><a href="https://specifications.freedesktop.org/secret-service/latest/">Linux FreeDesktop Secret Service API</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<p>This analysis reviewed how popular password managers on MacOS and Microsoft Windows operating systems could be integrated with the CODC2 Client Application. There is not a clearly superior integration option suitable for all users. CLI-based integration options could be superior for organizations who integrate container encryption into their information systems or other workflows. However, access authorization and having the authorization be fine-grained become important decisions which probably each organization has to tackle individually as it depends on the choice of password managers and information security policies. The manual copy-paste solution is probably the most realistic option for individuals who use the Client Application less frequently and not as part of an information system workflow and should problably be the suggested method.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../A1_Security_level/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Appendix 1: Security level">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Appendix 1: Security level
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../A3_YubiKey_integration/" class="md-footer__link md-footer__link--next" aria-label="Next: A3 - Yubikey integration possibilities">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                A3 - Yubikey integration possibilities
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.footer", "navigation.expand", "content.tooltips", "toc.follow"], "search": "../../assets/javascripts/workers/search.c011b7c0.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.7389ff0e.min.js"></script>
+      
+        <script src="../../javascripts/katex.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/contrib/auto-render.min.js"></script>
+      
+    
+  </body>
+</html>
