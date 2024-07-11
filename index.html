@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,9 +10,13 @@
         <link rel="shortcut icon" href="img/favicon.ico">
         <title>Architecture of ID-software</title>
         <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/font-awesome.min.css" rel="stylesheet">
+        <link href="css/fontawesome.min.css" rel="stylesheet">
+        <link href="css/brands.min.css" rel="stylesheet">
+        <link href="css/solid.min.css" rel="stylesheet">
+        <link href="css/v4-font-face.min.css" rel="stylesheet">
         <link href="css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
         <script>hljs.highlightAll();</script> 
     </head>
@@ -25,9 +29,9 @@
                 <!-- Expanded navigation -->
                 <div id="navbar-collapse" class="navbar-collapse collapse">
 
-                    <ul class="nav navbar-nav ml-auto">
+                    <ul class="nav navbar-nav ms-md-auto">
                         <li class="nav-item">
-                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
@@ -38,80 +42,80 @@
 
         <div class="container">
             <div class="row">
-                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
             <span class="fa fa-angle-down"></span>
         </button>
     </div>
 
     
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-level="1"><a href="#architecture-of-id-software" class="nav-link">ARCHITECTURE OF ID-SOFTWARE</a>
+            <li class="nav-item" data-bs-level="1"><a href="#architecture-of-id-software" class="nav-link">ARCHITECTURE OF ID-SOFTWARE</a>
               <ul class="nav flex-column">
               </ul>
             </li>
             
-            <li class="nav-item" data-level="1"><a href="#introduction" class="nav-link">Introduction</a>
+            <li class="nav-item" data-bs-level="1"><a href="#introduction" class="nav-link">Introduction</a>
               <ul class="nav flex-column">
               </ul>
             </li>
             
-            <li class="nav-item" data-level="1"><a href="#background" class="nav-link">Background</a>
+            <li class="nav-item" data-bs-level="1"><a href="#background" class="nav-link">Background</a>
               <ul class="nav flex-column">
               </ul>
             </li>
             
-            <li class="nav-item" data-level="1"><a href="#component-model" class="nav-link">Component model</a>
+            <li class="nav-item" data-bs-level="1"><a href="#component-model" class="nav-link">Component model</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-level="2"><a href="#desktop-applications" class="nav-link">Desktop applications</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#mobile-applications" class="nav-link">Mobile applications</a>
+            <li class="nav-item" data-bs-level="2"><a href="#desktop-applications" class="nav-link">Desktop applications</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#software-libraries" class="nav-link">Software libraries</a>
+            <li class="nav-item" data-bs-level="2"><a href="#mobile-applications" class="nav-link">Mobile applications</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#web-components" class="nav-link">Web components</a>
+            <li class="nav-item" data-bs-level="2"><a href="#software-libraries" class="nav-link">Software libraries</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#drivers" class="nav-link">Drivers</a>
+            <li class="nav-item" data-bs-level="2"><a href="#web-components" class="nav-link">Web components</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#updating-mechanisms" class="nav-link">Updating mechanisms</a>
+            <li class="nav-item" data-bs-level="2"><a href="#drivers" class="nav-link">Drivers</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#central-configuration-service" class="nav-link">Central configuration service</a>
+            <li class="nav-item" data-bs-level="2"><a href="#updating-mechanisms" class="nav-link">Updating mechanisms</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#interfaces-with-external-services" class="nav-link">Interfaces with external services</a>
+            <li class="nav-item" data-bs-level="2"><a href="#central-configuration-service" class="nav-link">Central configuration service</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#interfaces-with-external-services" class="nav-link">Interfaces with external services</a>
               <ul class="nav flex-column">
               </ul>
             </li>
               </ul>
             </li>
             
-            <li class="nav-item" data-level="1"><a href="#deployment-model" class="nav-link">Deployment model</a>
+            <li class="nav-item" data-bs-level="1"><a href="#deployment-model" class="nav-link">Deployment model</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-level="2"><a href="#signing-in-web-browser" class="nav-link">Signing in web browser</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#signing-with-digidoc4-client" class="nav-link">Signing with DigiDoc4 Client</a>
+            <li class="nav-item" data-bs-level="2"><a href="#signing-in-web-browser" class="nav-link">Signing in web browser</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#signing-with-ria-digidoc" class="nav-link">Signing with RIA DigiDoc</a>
+            <li class="nav-item" data-bs-level="2"><a href="#signing-with-digidoc4-client" class="nav-link">Signing with DigiDoc4 Client</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#signing-with-ria-digidoc" class="nav-link">Signing with RIA DigiDoc</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -124,14 +128,14 @@
 
 <h1 id="architecture-of-id-software">ARCHITECTURE OF ID-SOFTWARE</h1>
 <p>Document version: 2.7<br />
-Software version: 23.07<br />
-Last updated: 11.8.2023  </p>
+Software version: 24.04<br />
+Last updated: 16.4.2024  </p>
 <h1 id="introduction">Introduction</h1>
 <p>The purpose of this document is to describe the architecture of ID-software.</p>
 <p><strong>ID-software</strong> is a collection of software components offering support for PKI-based functionality, i.e. operations with different cryptographic tokens (e.g. eID cards), handling digitally signed documents, file encryption/decryption and signing and authentication in web environment. The ID-software comprises end-user applications, software libraries, web components, drivers for communicating with the cryptographic tokens and other complementary components.</p>
 <p>Main sources for information about ID-software are <a href="https://www.id.ee/en/">www.id.ee</a>, <a href="https://github.com/open-eid">Open-EID GitHub repository</a> and <a href="https://github.com/web-eid">Web-eID GitHub repository</a>.</p>
 <p>This document covers description of ID-software and its components, their deployment in different environments, provided and required interfaces. The document does not include components that have reached the end of their support nor the components that have not yet been released.</p>
-<p>The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is <strong>version 23.07</strong>. Latest version numbers of the various ID-software components are provided at <a href="https://www.id.ee/en/article/information-on-the-latest-software-versions/">https://www.id.ee/en/article/information-on-the-latest-software-versions/</a>.</p>
+<p>The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is <strong>version 24.04</strong>. Latest version numbers of the various ID-software components are provided at <a href="https://www.id.ee/en/article/information-on-the-latest-software-versions/">https://www.id.ee/en/article/information-on-the-latest-software-versions/</a>.</p>
 <p>The document is targeted for:</p>
 <ul>
 <li>Owners/managers of the software;</li>
@@ -144,9 +148,9 @@ Last updated: 11.8.2023  </p>
 <p><strong>Estonian Information System Authority</strong> (RIA, <a href="https://www.ria.ee/en.html">https://www.ria.ee/en.html</a>) is the main owner/manager of the ID-software.  </p>
 <p>The software is being developed and tested by:  </p>
 <ul>
-<li><strong>RaulWalter</strong> (RW, <a href="https://www.raulwalter.com">https://www.raulwalter.com</a>) as the main contractor during 2019-2023;  </li>
-<li><strong>Nortal</strong> (<a href="https://nortal.com">https://nortal.com</a>) during 2019-2023;  </li>
-<li><strong>TTT</strong> (<a href="https://www.testijad.ee">https://www.testijad.ee</a>) during 2019-2023;  </li>
+<li><strong>RaulWalter</strong> (RW, <a href="https://www.raulwalter.com">https://www.raulwalter.com</a>) as the main contractor during 2019-2024;  </li>
+<li><strong>Nortal</strong> (<a href="https://nortal.com">https://nortal.com</a>) during 2019-2024;  </li>
+<li><strong>TTT</strong> (<a href="https://www.testijad.ee">https://www.testijad.ee</a>) during 2019-2024;  </li>
 <li>SK ID Solutions (SK, <a href="https://www.skidsolutions.eu/en">https://www.skidsolutions.eu/en</a>);  </li>
 <li>Aktors (<a href="http://www.aktors.ee/wp/">http://www.aktors.ee/wp/</a>);  </li>
 <li>CGI Estonia (<a href="https://www.cgi.ee/et">https://www.cgi.ee/et</a>).</li>
@@ -498,7 +502,7 @@ Note that not all of the external base libraries are included in the component m
 <li><a href="#_SID_REST_service">Smart-ID (MID) REST service</a></li>
 <li><a href="#_LDAP_directory_interface">LDAP directory interface</a></li>
 <li>Interfaces with base libraries:<ul>
-<li><a href="#_Libdigidocpp_library’s_interfaces">Libdigidocpp library’s API</a> – for handling documents in supported digital signature formats (BDOC, DDOC and PDF)</li>
+<li><a href="#_Libdigidocpp_library’s_interfaces">Libdigidocpp library’s API</a> – for handling documents in supported digital signature formats (ASiC, BDOC, DDOC and PDF)</li>
 <li>External base libraries: Qt6, libldap, openssl</li>
 </ul>
 </li>
@@ -613,7 +617,7 @@ Note that not all of the external base libraries are included in the component m
 <li><a href="#_SID_REST_service">Smart-ID (MID) REST service</a></li>
 <li><a href="#_LDAP_directory_interface">LDAP directory interface</a></li>
 <li>Interfaces with base libraries:<ul>
-<li><a href="#_Libdigidocpp_library’s_interfaces">Libdigidocpp library’s API</a> – for handling documents in supported digital signature formats (BDOC, DDOC and PDF)</li>
+<li><a href="#_Libdigidocpp_library’s_interfaces">Libdigidocpp library’s API</a> – for handling documents in supported digital signature formats (ASiC, BDOC, DDOC and PDF)</li>
 <li>External base libraries: libldap, openssl</li>
 </ul>
 </li>
@@ -670,7 +674,7 @@ Note that not all of the external base libraries are included in the component m
 </tr>
 <tr>
 <td>SiVa</td>
-<td><em>Si</em>gnature <em>Ve</em>rification Service is an online web service for validating digitally signed documents.<br/>SiVa is used by the DigiDoc4 Client and RIA DigiDoc (by libdigidocpp base library) to validate documents in formats that are not natively supported; currently the service is used to validate PDF (ETSI PAdES) documents.<br/>See also <a href="#_SiVa_verification_service">Signature Verification Service interface</a>.</td>
+<td><em>Si</em>gnature <em>Ve</em>rification Service is an online web service for validating digitally signed documents.<br/>SiVa is used by the DigiDoc4 Client and RIA DigiDoc (by libdigidocpp base library) to validate documents in formats that are not natively supported; currently the service is used to validate ASiC (CAdES), PDF (ETSI PAdES) and DDOC documents.<br/>See also <a href="#_SiVa_verification_service">Signature Verification Service interface</a>.</td>
 <td>RIA</td>
 </tr>
 <tr>
@@ -1381,8 +1385,8 @@ Note that not all of the external base libraries are included in the component m
 <h4 id="time-stamping-proxy-service-interface">Time-stamping proxy service interface</h4>
 <ul>
 <li>User: DigiDoc4j, Libdigidocpp (DigiDoc4 Client, RIA DigiDoc)</li>
-<li>Accessible with: HTTP protocol</li>
-<li>Accessible from: <a href="https://eid-ts.ria.ee/ts">https://eid-ts.ria.ee/ts</a></li>
+<li>Accessible with: HTTPS protocol</li>
+<li>Accessible from: <a href="https://eid-dd.ria.ee/ts">https://eid-dd.ria.ee/ts</a></li>
 <li>Documentation: <a href="https://tools.ietf.org/html/rfc3161">RFC3161</a></li>
 </ul>
 <p><a name="_OCSP_service_interface"></a></p>
@@ -1452,8 +1456,7 @@ Note that not all of the external base libraries are included in the component m
             <hr>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script src="js/jquery-3.6.0.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
+        <script src="js/bootstrap.bundle.min.js"></script>
         <script>
             var base_url = ".",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
@@ -1466,7 +1469,7 @@ Note that not all of the external base libraries are included in the component m
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>From here you can search these documents. Enter your search terms below.</p>
@@ -1486,7 +1489,7 @@ Note that not all of the external base libraries are included in the component m
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <table class="table">
@@ -1526,6 +1529,6 @@ Note that not all of the external base libraries are included in the component m
 </html>
 
 <!--
-MkDocs version : 1.5.2
-Build Date UTC : 2023-08-14 05:52:18.648916+00:00
+MkDocs version : 1.6.0
+Build Date UTC : 2024-07-11 07:12:46.801459+00:00
 -->
