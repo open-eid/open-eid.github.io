@@ -11,7 +11,7 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.10'
+        python-version: '3.12'
     - name: Install dependencies
       run: python3 -m pip install mkdocs-bootswatch 
     - name: Build docs
@@ -20,11 +20,6 @@ jobs:
         rm -rf *
         cd ID_software_architecture_files
         mkdocs build
-        sed -ie 's!jquery-1.10.2.min.js!jquery-3.5.0.min.js!' site/404.html
-        sed -ie 's!jquery-1.10.2.min.js!jquery-3.5.0.min.js!' site/index.html
-        rm site/*.htmle
-        rm site/js/jquery*
-        curl -o site/js/jquery-3.5.0.min.js https://code.jquery.com/jquery-3.5.0.min.js
         mv site/* ..
         rmdir site
     - name: Deploy
