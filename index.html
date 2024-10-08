@@ -111,7 +111,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#signing-with-digidoc4-client" class="nav-link">Signing with DigiDoc4 Client</a>
+            <li class="nav-item" data-bs-level="2"><a href="#signing-with-digidoc4" class="nav-link">Signing with DigiDoc4</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -127,15 +127,15 @@
                     <div class="col-md-9" role="main">
 
 <h1 id="architecture-of-id-software">ARCHITECTURE OF ID-SOFTWARE</h1>
-<p>Document version: 2.7<br />
-Software version: 24.04<br />
-Last updated: 16.4.2024  </p>
+<p>Document version: 2.8<br />
+Software version: 24.09<br />
+Last updated: 23.9.2024  </p>
 <h1 id="introduction">Introduction</h1>
 <p>The purpose of this document is to describe the architecture of ID-software.</p>
 <p><strong>ID-software</strong> is a collection of software components offering support for PKI-based functionality, i.e. operations with different cryptographic tokens (e.g. eID cards), handling digitally signed documents, file encryption/decryption and signing and authentication in web environment. The ID-software comprises end-user applications, software libraries, web components, drivers for communicating with the cryptographic tokens and other complementary components.</p>
 <p>Main sources for information about ID-software are <a href="https://www.id.ee/en/">www.id.ee</a>, <a href="https://github.com/open-eid">Open-EID GitHub repository</a> and <a href="https://github.com/web-eid">Web-eID GitHub repository</a>.</p>
 <p>This document covers description of ID-software and its components, their deployment in different environments, provided and required interfaces. The document does not include components that have reached the end of their support nor the components that have not yet been released.</p>
-<p>The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is <strong>version 24.04</strong>. Latest version numbers of the various ID-software components are provided at <a href="https://www.id.ee/en/article/information-on-the-latest-software-versions/">https://www.id.ee/en/article/information-on-the-latest-software-versions/</a>.</p>
+<p>The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is <strong>version 24.09</strong>. Latest version numbers of the various ID-software components are provided at <a href="https://www.id.ee/en/article/information-on-the-latest-software-versions/">https://www.id.ee/en/article/information-on-the-latest-software-versions/</a>.</p>
 <p>The document is targeted for:</p>
 <ul>
 <li>Owners/managers of the software;</li>
@@ -191,7 +191,7 @@ The software is distributed open-source (mainly under LGPL/BSD/MIT licence) and 
 <tbody>
 <tr>
 <th><a href="#desktop-applications">Desktop applications</a></td>
-<th>DigiDoc4 Client</th>
+<th>DigiDoc4</th>
 <td>yes (1)</td>
 <td>yes - validation only (1)</td>
 <td>yes</td>
@@ -227,7 +227,7 @@ The software is distributed open-source (mainly under LGPL/BSD/MIT licence) and 
 <tr>
 <th rowspan="3"><a href="#software-libraries">Software libraries</a></td>
 <th>DigiDoc4j (Java)</th>
-<td>yes (3)</td>
+<td>yes (2)</td>
 <td>yes (1)</td>
 <td>-</td>
 <td>yes (1)</td>
@@ -249,7 +249,7 @@ The software is distributed open-source (mainly under LGPL/BSD/MIT licence) and 
 </tr>
 <tr>
 <th>Libdigidocpp (C++, .NET)</th>
-<td>yes (3)</td>
+<td>yes (2)</td>
 <td>yes - validation only (1)</td>
 <td>-</td>
 <td>yes (1)</td>
@@ -259,7 +259,7 @@ The software is distributed open-source (mainly under LGPL/BSD/MIT licence) and 
 <td>LGPL</td>
 </tr>
 <tr>
-<th rowspan="3"><a href="#web-components">Web components</a></td>
+<th rowspan="2"><a href="#web-components">Web components</a></td>
 <th>Browser signing modules</th>
 <td>-</td>
 <td>-</td>
@@ -282,17 +282,6 @@ The software is distributed open-source (mainly under LGPL/BSD/MIT licence) and 
 <td>MIT</td>
 </tr>
 <tr>
-<th>firefox-pkcs11-loader (4)</th>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>yes (2)</td>
-<td>RIA</td>
-<td>LGPL</td>
-</tr>
-<tr>
 <th rowspan="3"><a href="#drivers">Driver components</a></td>
 <th>Minidriver</th>
 <td>-</td>
@@ -301,8 +290,8 @@ The software is distributed open-source (mainly under LGPL/BSD/MIT licence) and 
 <td>yes</td>
 <td>-</td>
 <td>yes</td>
-<td>RIA/ IDEMIA</td>
-<td>LGPL/ BSD3/ IDEMIA</td>
+<td>IDEMIA</td>
+<td>IDEMIA</td>
 </tr>
 <tr>
 <th>OpenSC-pkcs11</th>
@@ -331,9 +320,7 @@ The software is distributed open-source (mainly under LGPL/BSD/MIT licence) and 
 <p><strong>Table: Mapping of ID-software components and functions</strong></p>
 <p>Remarks:</p>
 <p>(1) - The functionality is provided via base components.<br />
-(2) - The component is used only once for setting the proper parameters for authentication in Firefox browser.<br />
-(3) - PADES handling is not supported.<br />
-(4) - Linux only.  </p>
+(2) - PADES handling is not supported.  </p>
 <p>The main functions offered by ID-software are described in the following table:</p>
 <table>
 <thead>
@@ -365,7 +352,7 @@ The software is distributed open-source (mainly under LGPL/BSD/MIT licence) and 
 </tr>
 <tr>
 <td>Authentication</td>
-<td>Authentication with ID-card. The operation is generally done via native operating system/browser components. In case of Estonian ID-cards and Firefox browser, a PKCS#11 module loader script is used for setting the proper parameters for authentication in Firefox browser on Linux.</td>
+<td>Authentication with ID-card. The operation is generally done via native operating system/browser components. In case of Estonian ID-cards and Firefox browser, a PKCS#11 module pkcs11-register is used for setting the proper parameters for authentication in Firefox browser on Linux.</td>
 </tr>
 </tbody>
 </table>
@@ -381,12 +368,12 @@ In the context of the component diagrams in this document, the ID-software compo
 Note that not all of the external base libraries are included in the component model to avoid duplicity with other documentation – the base libraries are listed and described in the documentation of the respective ID-software components and can be accessed via the references provided.</p>
 <p><a name="_comp_desktop"></a></p>
 <h2 id="desktop-applications">Desktop applications</h2>
-<p><a name="_DigiDoc4_Client"></a></p>
-<h3 id="digidoc4-client">DigiDoc4 Client</h3>
+<p><a name="_DigiDoc4"></a></p>
+<h3 id="digidoc4">DigiDoc4</h3>
 <p><img alt="cmp DigiDoc4 signing components" src="index_files/comp_digidoc4_signing.png" title="cmp DigiDoc4 signing components" /><br />
-<strong>Figure: DigiDoc4 Client signing and crypto-components</strong></p>
+<strong>Figure: DigiDoc4 signing and crypto-components</strong></p>
 <p><img alt="cmp DigiDoc4 management components" src="index_files/comp_digidoc4_eid.png" title="cmp DigiDoc4 management components" /><br />
-<strong>Figure: DigiDoc4 Client ID-card management components</strong></p>
+<strong>Figure: DigiDoc4 ID-card management components</strong></p>
 <table>
 <thead>
 <tr>
@@ -397,28 +384,28 @@ Note that not all of the external base libraries are included in the component m
 </thead>
 <tbody>
 <tr>
-<td>DigiDoc4 Client</td>
-<td>DigiDoc4 Client enables handling digitally signed documents, encryption/decryption for managing ID-card’s PIN/PUK codes replacement and other services.<br/>Code repository: <a href="https://github.com/open-eid/DigiDoc4-Client">https://github.com/open-eid/DigiDoc4-Client</a>.</td>
+<td>DigiDoc4</td>
+<td>DigiDoc4 enables handling digitally signed documents, encryption/decryption for managing ID-card’s PIN/PUK codes replacement and other services.<br/>Code repository: <a href="https://github.com/open-eid/DigiDoc4-Client">https://github.com/open-eid/DigiDoc4-Client</a>.</td>
 <td>RIA</td>
 </tr>
 <tr>
-<td>DigiDoc4 Client base libraries</td>
-<td>Libdigidocpp (and its base libraries), etc. See <a href="#_DigiDoc4_Client_interfaces">DigiDoc4 Client interfaces</a>.</td>
+<td>DigiDoc4 base libraries</td>
+<td>Libdigidocpp (and its base libraries), etc. See <a href="#_DigiDoc4_interfaces">DigiDoc4 interfaces</a>.</td>
 <td>-</td>
 </tr>
 <tr>
 <td>Mobile-ID (MID) REST service</td>
-<td>REST service that is used by DigiDoc4 Client for signature creation with Mobile-ID. See also <a href="https://github.com/sk-eid/mid">https://github.com/sk-eid/mid</a>.</td>
+<td>REST service that is used by DigiDoc4 for signature creation with Mobile-ID. See also <a href="https://github.com/sk-eid/mid">https://github.com/sk-eid/mid</a>.</td>
 <td>SK</td>
 </tr>
 <tr>
 <td>Smart-ID (SID) REST service</td>
-<td>REST service that is used by DigiDoc4 Client for signature creation with Smart-ID. See also <a href="https://github.com/SK-EID/smart-id-documentation">https://github.com/SK-EID/smart-id-documentation</a>.</td>
+<td>REST service that is used by DigiDoc4 for signature creation with Smart-ID. See also <a href="https://github.com/SK-EID/smart-id-documentation">https://github.com/SK-EID/smart-id-documentation</a>.</td>
 <td>SK</td>
 </tr>
 <tr>
 <td>LDAP directory</td>
-<td>Directory of active certificates issued by SK (as the CA in Estonia). The directory is used by DigiDoc4 Client for finding authentication certificate (and the respective public key) of the recipient of the encrypted document. See also <a href="https://www.skidsolutions.eu/en/repository/ldap/">https://www.skidsolutions.eu/en/repository/ldap/</a>.</td>
+<td>Directory of active certificates issued by SK (as the CA in Estonia). The directory is used by DigiDoc4 for finding authentication certificate (and the respective public key) of the recipient of the encrypted document. See also <a href="https://www.skidsolutions.eu/en/repository/ldap/">https://www.skidsolutions.eu/en/repository/ldap/</a>.</td>
 <td>SK</td>
 </tr>
 <tr>
@@ -438,7 +425,7 @@ Note that not all of the external base libraries are included in the component m
 </tr>
 <tr>
 <td>SiVa</td>
-<td>Described in chap. <a href="#_DigiDoc4_Client">Software libraries</a>.</td>
+<td>Described in chap. <a href="#_DigiDoc4">Software libraries</a>.</td>
 <td>RIA</td>
 </tr>
 <tr>
@@ -459,18 +446,18 @@ Note that not all of the external base libraries are included in the component m
 <tr>
 <td>Minidriver</td>
 <td>Used via CNG interface in Windows environment only. Described in chap. <a href="#_comp_drivers">Drivers</a>.</td>
-<td>RIA/ IDEMIA</td>
+<td>IDEMIA</td>
 </tr>
 <tr>
 <td>ID-Updater</td>
-<td>Used in Windows and macOS only, described in chap. <a href="#_comp_update">Updating mechanisms</a>. In case of Windows platform, the ID-Updater can be executed from DigiDoc4 Client program.</td>
+<td>Used in Windows and macOS only, described in chap. <a href="#_comp_update">Updating mechanisms</a>. In case of Windows platform, the ID-Updater can be executed from DigiDoc4 program.</td>
 <td>RIA</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Table: DigiDoc4 Client</strong></p>
-<p><a name="_DigiDoc4_Client_interfaces"></a></p>
-<h4 id="digidoc4-client-interfaces">DigiDoc4 Client interfaces</h4>
+<p><strong>Table: DigiDoc4</strong></p>
+<p><a name="_DigiDoc4_interfaces"></a></p>
+<h4 id="digidoc4-interfaces">DigiDoc4 interfaces</h4>
 <p>Provided:</p>
 <ul>
 <li>Graphical user interface - interface for handling ASiC, BDOC, DDOC, CDOC documents, setting configuration parameters.<ul>
@@ -549,7 +536,7 @@ Note that not all of the external base libraries are included in the component m
 </tr>
 <tr>
 <td>LDAP directory</td>
-<td>Described in chap. <a href="#_DigiDoc4_Client">DigiDoc4 Client</a>.</td>
+<td>Described in chap. <a href="#_DigiDoc4">DigiDoc4</a>.</td>
 <td>SK</td>
 </tr>
 <tr>
@@ -659,7 +646,7 @@ Note that not all of the external base libraries are included in the component m
 </tr>
 <tr>
 <td>Libdigidocpp</td>
-<td>C++ software library that enables handling documents in BDOC 2.1, ASiC and DIGIDOC-XML 1.3 formats (via CDigiDoc base library). Wiki: <a href="https://github.com/open-eid/libdigidocpp/wiki">https://github.com/open-eid/libdigidocpp/wiki</a> Code repository: <a href="https://github.com/open-eid/libdigidocpp">https://github.com/open-eid/libdigidocpp</a> Documentation: <a href="http://open-eid.github.io/libdigidocpp">http://open-eid.github.io/libdigidocpp</a>.</td>
+<td>C++ software library that enables handling documents in BDOC 2.1, ASiC and DIGIDOC-XML 1.3 formats (via SiVa service). Wiki: <a href="https://github.com/open-eid/libdigidocpp/wiki">https://github.com/open-eid/libdigidocpp/wiki</a> Code repository: <a href="https://github.com/open-eid/libdigidocpp">https://github.com/open-eid/libdigidocpp</a> Documentation: <a href="http://open-eid.github.io/libdigidocpp">http://open-eid.github.io/libdigidocpp</a>.</td>
 <td>RIA</td>
 </tr>
 <tr>
@@ -674,7 +661,7 @@ Note that not all of the external base libraries are included in the component m
 </tr>
 <tr>
 <td>SiVa</td>
-<td><em>Si</em>gnature <em>Ve</em>rification Service is an online web service for validating digitally signed documents.<br/>SiVa is used by the DigiDoc4 Client and RIA DigiDoc (by libdigidocpp base library) to validate documents in formats that are not natively supported; currently the service is used to validate ASiC (CAdES), PDF (ETSI PAdES) and DDOC documents.<br/>See also <a href="#_SiVa_verification_service">Signature Verification Service interface</a>.</td>
+<td><em>Si</em>gnature <em>Ve</em>rification Service is an online web service for validating digitally signed documents.<br/>SiVa is used by the DigiDoc4 and RIA DigiDoc (by libdigidocpp base library) to validate documents in formats that are not natively supported; currently the service is used to validate ASiC (CAdES), PDF (ETSI PAdES) and DDOC documents.<br/>See also <a href="#_SiVa_verification_service">Signature Verification Service interface</a>.</td>
 <td>RIA</td>
 </tr>
 <tr>
@@ -773,7 +760,7 @@ Note that not all of the external base libraries are included in the component m
 <p>Provided:</p>
 <ul>
 <li><a href="http://open-eid.github.io/libdigidocpp">Libdigidocpp API</a><ul>
-<li>User: DigiDoc4 Client, RIA DigiDoc, Libdigidocpp utility program, DigiDocCSharp .NET wrapper classes</li>
+<li>User: DigiDoc4, RIA DigiDoc, Libdigidocpp utility program, DigiDocCSharp .NET wrapper classes</li>
 <li>Accessible with: C++</li>
 </ul>
 </li>
@@ -785,7 +772,7 @@ Note that not all of the external base libraries are included in the component m
 <li><a href="#_OCSP_service_interface">OCSP service interface</a></li>
 <li><a href="#_SiVa_verification_service">Signature Verification Service interface</a></li>
 <li>Interfaces with base libraries:<ul>
-<li>CDigiDoc, OpenSSL, xerces-c, xalan-c, codesynthesis-xsd, libxml-security-c. See also <a href="http://open-eid.github.io/libdigidocpp">http://open-eid.github.io/libdigidocpp</a></li>
+<li>OpenSSL, libxml2, xmlsec1. See also <a href="http://open-eid.github.io/libdigidocpp">http://open-eid.github.io/libdigidocpp</a></li>
 </ul>
 </li>
 <li>Interfaces with cryptographic token’s drivers (described in chap. <a href="#_comp_drivers">Drivers</a>)<ul>
@@ -919,7 +906,7 @@ Note that not all of the external base libraries are included in the component m
 </li>
 </ul>
 <h3 id="web-authentication-components">Web authentication components</h3>
-<p>Authentication in web browsers is done with the browsers’ and operating systems’ native components. In case of authenticating in Firefox browser then Firefox-pkcs11-loader JavaScript component is used to load the One-Pin OpenSC PKCS#11 driver by the browser on Linux.</p>
+<p>Authentication in web browsers is done with the browsers’ and operating systems’ native components. In case of authenticating in Firefox browser then pkcs11-register is used to load the OpenSC PKCS#11 driver by the browser on Linux.</p>
 <p><img alt="cmp Web components for authentication" src="index_files/web_auth.png" title="cmp Web components for authentication" />  </p>
 <p><strong>Figure: Web authentication components</strong></p>
 <table>
@@ -932,11 +919,6 @@ Note that not all of the external base libraries are included in the component m
 </thead>
 <tbody>
 <tr>
-<td>firefox-pkcs11-loader</td>
-<td>A JavaScript component that is used to load the OpenSC PKCS#11 driver to the Firefox browser’s cryptographic devices list during each initialization of the browser. Needed during authentication process with eID-card in Firefox browser in Linux operating systems. Code repository: <a href="https://github.com/open-eid/firefox-pkcs11-loader">https://github.com/open-eid/firefox-pkcs11-loader</a>. Wiki: <a href="https://github.com/open-eid/firefox-pkcs11-loader/wiki">https://github.com/open-eid/firefox-pkcs11-loader/wiki</a>.</td>
-<td>RIA</td>
-</tr>
-<tr>
 <td>CTK Tokend</td>
 <td>Described in chap. <a href="#_comp_drivers">Drivers</a>.</td>
 <td>RIA</td>
@@ -944,7 +926,7 @@ Note that not all of the external base libraries are included in the component m
 <tr>
 <td>Minidriver</td>
 <td>Described in chap. <a href="#_comp_drivers">Drivers</a>.</td>
-<td>RIA/ IDEMIA</td>
+<td>IDEMIA</td>
 </tr>
 </tbody>
 </table>
@@ -964,7 +946,7 @@ Note that not all of the external base libraries are included in the component m
 <tbody>
 <tr>
 <td>OpenSC PKCS#11 driver</td>
-<td>A driver for accessing eID-cards. Connects with the card via the operating system’s native PC/SC interface. Used as a default driver for signature creation in web browser environment and DigiDoc4 Client in case of Linux and macOS platform. Wiki: <a href="https://github.com/OpenSC/OpenSC/wiki">https://github.com/OpenSC/OpenSC/wiki</a>.</td>
+<td>A driver for accessing eID-cards. Connects with the card via the operating system’s native PC/SC interface. Used as a default driver for signature creation in web browser environment and DigiDoc4 in case of Linux and macOS platform. Wiki: <a href="https://github.com/OpenSC/OpenSC/wiki">https://github.com/OpenSC/OpenSC/wiki</a>.</td>
 <td>OpenSC</td>
 </tr>
 <tr>
@@ -974,13 +956,8 @@ Note that not all of the external base libraries are included in the component m
 </tr>
 <tr>
 <td>Minidriver</td>
-<td>Used as a default driver for accessing Estonian eID-cards via CNG interface for signature creation in web browser environment in case of Windows platform. Used as a default driver for authentication with eID card in browser environment in case of Windows platform. Code repository: <a href="https://github.com/open-eid/minidriver">https://github.com/open-eid/minidriver</a>. Wiki: <a href="https://github.com/open-eid/minidriver/wiki">https://github.com/open-eid/minidriver/wiki</a>.</td>
-<td>RIA/ IDEMIA</td>
-</tr>
-<tr>
-<td>ATR Filter</td>
-<td>Base component for Minidriver (see <a href="http://support.microsoft.com/kb/981665">http://support.microsoft.com/kb/981665</a> for more information).</td>
-<td>-</td>
+<td>Used as a default driver for accessing Estonian eID-cards via CNG interface for signature creation in web browser environment in case of Windows platform. Used as a default driver for authentication with eID card in browser environment in case of Windows platform.</td>
+<td>IDEMIA</td>
 </tr>
 <tr>
 <td>EstEID CTK Tokend</td>
@@ -1254,13 +1231,13 @@ Note that not all of the external base libraries are included in the component m
 <td>RIA</td>
 </tr>
 <tr>
-<td>DigiDoc4 Client</td>
-<td>DigiDoc4 Client requests configuration data from the central configuration client component. Described in chap. <a href="#_DigiDoc4_Client">DigiDoc4 Client</a>.</td>
+<td>DigiDoc4</td>
+<td>DigiDoc4 requests configuration data from the central configuration client component. Described in chap. <a href="#_DigiDoc4">DigiDoc4</a>.</td>
 <td>RIA</td>
 </tr>
 <tr>
 <td>Central configuration client</td>
-<td>Central Configuration Client component manages the configuration file validation and updating processes, returns the validated configuration data to the Requesting Application (DigiDoc4 Client) and if necessary, updates the data from Central Configuration Server.</td>
+<td>Central Configuration Client component manages the configuration file validation and updating processes, returns the validated configuration data to the Requesting Application (DigiDoc4) and if necessary, updates the data from Central Configuration Server.</td>
 <td>RIA</td>
 </tr>
 <tr>
@@ -1285,7 +1262,7 @@ Note that not all of the external base libraries are included in the component m
 </tr>
 <tr>
 <td>Libdigidocpp</td>
-<td>DigiDoc4 Client's base library, also uses the central configuration file's settings. Described in chap. <a href="#_comp_libraries">Software libraries</a>.</td>
+<td>DigiDoc4's base library, also uses the central configuration file's settings. Described in chap. <a href="#_comp_libraries">Software libraries</a>.</td>
 <td>RIA</td>
 </tr>
 </tbody>
@@ -1296,7 +1273,7 @@ Note that not all of the external base libraries are included in the component m
 <p>Provided:</p>
 <ul>
 <li>Central Configuration Client API<ul>
-<li>User: DigiDoc4 Client, ID-Updater</li>
+<li>User: DigiDoc4, ID-Updater</li>
 <li>Accessible with: C++</li>
 </ul>
 </li>
@@ -1348,7 +1325,7 @@ Note that not all of the external base libraries are included in the component m
 <p><a name="_MID_REST_service"></a></p>
 <h4 id="mobile-id-rest-service">Mobile-ID REST service</h4>
 <ul>
-<li>User: DigiDoc4 Client, RIA DigiDoc</li>
+<li>User: DigiDoc4, RIA DigiDoc</li>
 <li>Accessible with: REST over HTTPS</li>
 <li>Accessible from: <a href="https://eid-dd.ria.ee/mid">https://eid-dd.ria.ee/mid</a>, <a href="https://mid.sk.ee/mid-api">https://mid.sk.ee/mid-api</a></li>
 <li>Documentation: <a href="https://github.com/sk-eid/mid">https://github.com/sk-eid/mid</a></li>
@@ -1356,7 +1333,7 @@ Note that not all of the external base libraries are included in the component m
 <p><a name="_SID_REST_service"></a></p>
 <h4 id="smart-id-rest-service">Smart-ID REST service</h4>
 <ul>
-<li>User: DigiDoc4 Client, RIA DigiDoc</li>
+<li>User: DigiDoc4, RIA DigiDoc</li>
 <li>Accessible with: REST over HTTPS</li>
 <li>Accessible from: <a href="https://eid-dd.ria.ee/sid/v2">https://eid-dd.ria.ee/sid/v2</a>, <a href="https://rp-api.smart-id.com/v2">https://rp-api.smart-id.com/v2</a></li>
 <li>Documentation: <a href="https://github.com/SK-EID/smart-id-documentation">https://github.com/SK-EID/smart-id-documentation</a></li>
@@ -1364,7 +1341,7 @@ Note that not all of the external base libraries are included in the component m
 <p><a name="_LDAP_directory_interface"></a></p>
 <h4 id="ldap-directory-interface">LDAP directory interface</h4>
 <ul>
-<li>User: DigiDoc4 Client, RIA DigiDoc</li>
+<li>User: DigiDoc4, RIA DigiDoc</li>
 <li>Accessible with: LDAP protocol</li>
 <li>Accessible from: ldaps://esteid.ldap.sk.ee, ldaps://k3.ldap.sk.ee</li>
 <li>Documentation: <a href="https://www.skidsolutions.eu/en/repository/ldap/">https://www.skidsolutions.eu/en/repository/ldap/</a></li>
@@ -1384,7 +1361,7 @@ Note that not all of the external base libraries are included in the component m
 <p><a name="_Time_stamping_proxy"></a></p>
 <h4 id="time-stamping-proxy-service-interface">Time-stamping proxy service interface</h4>
 <ul>
-<li>User: DigiDoc4j, Libdigidocpp (DigiDoc4 Client, RIA DigiDoc)</li>
+<li>User: DigiDoc4j, Libdigidocpp (DigiDoc4, RIA DigiDoc)</li>
 <li>Accessible with: HTTPS protocol</li>
 <li>Accessible from: <a href="https://eid-dd.ria.ee/ts">https://eid-dd.ria.ee/ts</a></li>
 <li>Documentation: <a href="https://tools.ietf.org/html/rfc3161">RFC3161</a></li>
@@ -1405,7 +1382,7 @@ Note that not all of the external base libraries are included in the component m
 <p><a name="_SiVa_verification_service"></a></p>
 <h4 id="signature-verification-service-interface">Signature Verification Service interface</h4>
 <ul>
-<li>User: Libdigidocpp (DigiDoc4 Client, RIA DigiDoc)</li>
+<li>User: Libdigidocpp (DigiDoc4, RIA DigiDoc)</li>
 <li>Accessible with: HTTPS protocol</li>
 <li>Accessible from: <a href="https://siva.eesti.ee/V3/validate">https://siva.eesti.ee/V3/validate</a></li>
 <li>Documentation: <a href="http://open-eid.github.io/SiVa/">http://open-eid.github.io/SiVa/</a></li>
@@ -1425,12 +1402,12 @@ Note that not all of the external base libraries are included in the component m
 <li>When signing with eID smartcard then the browser signing module is necessary for enabling communication with the smart card connected to the user’s system. Hwcrypto.js library offers a single API for supporting signing modules of all the supported browsers.</li>
 <li>Optionally, trust anchor data is retrieved from TSL lists – the European Commission’s central TSL and national TSL’s of the EU member states.</li>
 </ul>
-<h2 id="signing-with-digidoc4-client">Signing with DigiDoc4 Client</h2>
-<p><img alt="cmp Signing with DigiDoc4 Client" src="index_files/depl_client.png" title="cmp Signing with DigiDoc4 Client" /><br />
-<strong>Figure: Deployment of components during signature creation with DigiDoc4 Client</strong></p>
+<h2 id="signing-with-digidoc4">Signing with DigiDoc4</h2>
+<p><img alt="cmp Signing with DigiDoc4" src="index_files/depl_client.png" title="cmp Signing with DigiDoc4" /><br />
+<strong>Figure: Deployment of components during signature creation with DigiDoc4</strong></p>
 <p>Additional notes:</p>
 <ul>
-<li>DigiDoc4 Client is used for creating the ASiC container and adding the signature value to the container.</li>
+<li>DigiDoc4 is used for creating the ASiC container and adding the signature value to the container.</li>
 <li>Long term validation data is added to the ASiC signature by obtaining OCSP confirmation and a time-stamp.</li>
 <li>Mobile-ID REST services is required in order to sign with Mobile-ID.</li>
 <li>Smart-ID REST services is required in order to sign with Smart-ID.</li>
@@ -1529,6 +1506,6 @@ Note that not all of the external base libraries are included in the component m
 </html>
 
 <!--
-MkDocs version : 1.6.0
-Build Date UTC : 2024-07-11 07:12:46.801459+00:00
+MkDocs version : 1.6.1
+Build Date UTC : 2024-10-08 04:23:03.826864+00:00
 -->
