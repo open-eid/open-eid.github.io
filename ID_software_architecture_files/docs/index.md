@@ -1,8 +1,8 @@
 # ARCHITECTURE OF ID-SOFTWARE
 
-Document version: 2.8  
-Software version: 24.09  
-Last updated: 23.9.2024  
+Document version: 2.9  
+Software version: 25.08  
+Last updated: 9.10.2025  
 
 
 # Introduction
@@ -15,7 +15,7 @@ Main sources for information about ID-software are [www.id.ee](https://www.id.ee
 
 This document covers description of ID-software and its components, their deployment in different environments, provided and required interfaces. The document does not include components that have reached the end of their support nor the components that have not yet been released.
 
-The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is **version 24.09**. Latest version numbers of the various ID-software components are provided at [https://www.id.ee/en/article/information-on-the-latest-software-versions/](https://www.id.ee/en/article/information-on-the-latest-software-versions/).
+The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is **version 25.08**. Latest version numbers of the various ID-software components are provided at [https://www.id.ee/en/article/information-on-the-latest-software-versions/](https://www.id.ee/en/article/information-on-the-latest-software-versions/).
 
 The document is targeted for:
 
@@ -32,9 +32,9 @@ The document is targeted for:
 
 The software is being developed and tested by:  
 
-*   **RaulWalter** (RW, [https://www.raulwalter.com](https://www.raulwalter.com)) as the main contractor during 2019-2024;  
-*   **Nortal** ([https://nortal.com](https://nortal.com)) during 2019-2024;  
-*   **TTT** ([https://www.testijad.ee](https://www.testijad.ee)) during 2019-2024;  
+*   **RaulWalter** (RW, [https://www.raulwalter.com](https://www.raulwalter.com)) as the main contractor during 2019-2025;  
+*   **Nortal** ([https://nortal.com](https://nortal.com)) during 2019-2025;  
+*   **TTT** ([https://www.testijad.ee](https://www.testijad.ee)) during 2019-2025;  
 *   SK ID Solutions (SK, [https://www.skidsolutions.eu/en](https://www.skidsolutions.eu/en));  
 *   Aktors ([http://www.aktors.ee/wp/](http://www.aktors.ee/wp/));  
 *   CGI Estonia ([https://www.cgi.ee/et](https://www.cgi.ee/et)).
@@ -110,7 +110,7 @@ The following table maps the main ID-software components, their owner/developer 
 <td>LGPL</td>
 </tr>
 <tr>
-<th rowspan="3"><a href="#software-libraries">Software libraries</a></td>
+<th rowspan="4"><a href="#software-libraries">Software libraries</a></td>
 <th>DigiDoc4j (Java)</th>
 <td>yes (2)</td>
 <td>yes (1)</td>
@@ -137,6 +137,17 @@ The following table maps the main ID-software components, their owner/developer 
 <td>yes (2)</td>
 <td>yes - validation only (1)</td>
 <td>-</td>
+<td>yes (1)</td>
+<td>-</td>
+<td>-</td>
+<td>RIA</td>
+<td>LGPL</td>
+</tr>
+<tr>
+<th>Libcdoc (C++, .NET)</th>
+<td>-</td>
+<td>-</td>
+<td>yes</td>
 <td>yes (1)</td>
 <td>-</td>
 <td>-</td>
@@ -217,7 +228,7 @@ The main functions offered by ID-software are described in the following table:
 | - | - |
 | Handling ASiC/BDOC/PADES documents | Handling documents in [BDOC 2.1](https://www.id.ee/wp-content/uploads/2020/06/bdoc-spec212-eng.pdf) digital signature format that is a profile of [ETSI XAdES](http://www.etsi.org/deliver/etsi_ts/101900_101999/101903/01.04.02_60/ts_101903v010402p.pdf) (XML Advanced Electronic Signature) and [ETSI ASiC](http://www.etsi.org/deliver/etsi_ts/102900_102999/102918/01.02.01_60/ts_102918v010201p.pdf) formats. Validating timestamp and signatures of enclosed DDOC document in the Time Stamp Token (TST) based [ETSI ASIC-S](http://www.etsi.org/deliver/etsi_ts/102900_102999/102918/01.02.01_60/ts_102918v010201p.pdf) containers. Validating the signatures of PDF documents in [PAdES](http://www.etsi.org/deliver/etsi_en/319100_319199/31914201/01.01.01_60/en_31914201v010101p.pdf) digital signature format that is a profile of [ETSI PAdES](http://www.etsi.org/deliver/etsi_en/319100_319199/31914201/01.01.01_60/en_31914201v010101p.pdf). More information on the formats’ life cycle can be found from [https://www.id.ee/en/article/digidoc-container-format-life-cycle-2/](https://www.id.ee/en/article/digidoc-container-format-life-cycle-2/). See [Libdigidocpp](http://open-eid.github.io/libdigidocpp/manual.html#format) and [Digidoc4j](https://github.com/open-eid/digidoc4j#features) documentation for supported formats. |
 | Handling DDOC documents | Handling documents in [DIGIDOC-XML 1.3 (DDOC)](https://www.id.ee/wp-content/uploads/2020/08/digidoc_format_1.3.pdf) digital signature format that is a profile of [ETSI XAdES](http://www.etsi.org/deliver/etsi_ts/101900_101999/101903/01.04.02_60/ts_101903v010402p.pdf) (XML Advanced Electronic Signature) format. More information on the formats’ life cycle can be found from [https://www.id.ee/en/article/digidoc-container-format-life-cycle-2/](https://www.id.ee/en/article/digidoc-container-format-life-cycle-2/). |
-| Handling CDOC documents | Encrypting and decrypting documents in [ENCDOC-XML 1.0 (CDOC)](https://www.id.ee/wp-content/uploads/2020/02/SK-CDOC-1.0-20120625_EN.pdf) also [CDOC 1.1](https://www.ria.ee/sites/default/files/content-editors/EID/cdoc.pdf) format. |
+| Handling CDOC documents | Encrypting and decrypting documents in [ENCDOC-XML 1.0 (CDOC)](https://www.id.ee/wp-content/uploads/2020/02/SK-CDOC-1.0-20120625_EN.pdf), [CDOC 1.1](https://www.ria.ee/sites/default/files/content-editors/EID/cdoc.pdf) and [CDOC 2.0](https://open-eid.github.io/CDOC2/) format. |
 | Calculating RSA/ECDSA signature | Calculating the RSA or ECDSA signature value in browser or desktop/server environment. The operation involves connecting with the signature token’s driver, sending the data to be signed and receiving digital signature value calculated with the token owner’s RSA or ECDSA private key. The following cryptographic tokens are supported: hardware-based tokens (e.g. PKCS#11-based eID cards, USB cryptostick, Mobile-ID and Smart-ID); software-based tokens (e.g. PKCS#12 software token). |
 | Card management operations | PIN/PUK management, reading personal data file. |
 | Authentication | Authentication with ID-card. The operation is generally done via native operating system/browser components. In case of Estonian ID-cards and Firefox browser, a PKCS#11 module pkcs11-register is used for setting the proper parameters for authentication in Firefox browser on Linux. |
@@ -262,6 +273,7 @@ Note that not all of the external base libraries are included in the component m
 | TSL repository | Described in chap. [Software libraries](#_comp_libraries). | EU/RIA |
 | Time-stamping proxy service interface | Described in chap. [Software libraries](#_comp_libraries). | RIA |
 | OCSP service | Described in chap. [Software libraries](#_comp_libraries). | SK |
+| Decryption service | Used to fetch Capsules for decrypting CDoc 2.0 document | RIA |
 | Minidriver | Used via CNG interface in Windows environment only. Described in chap. [Drivers](#_comp_drivers). | IDEMIA |
 | ID-Updater | Used in Windows and macOS only, described in chap. [Updating mechanisms](#_comp_update). In case of Windows platform, the ID-Updater can be executed from DigiDoc4 program. | RIA |
 
@@ -292,6 +304,7 @@ Required:
 *   [Mobile-ID (MID) REST service](#_MID_REST_service)
 *   [Smart-ID (MID) REST service](#_SID_REST_service)
 *   [LDAP directory interface](#_LDAP_directory_interface)
+*   [CDoc 2.0 Decryption Service interface](#_CDoc_decryption_service)
 *   Interfaces with base libraries:
     *   [Libdigidocpp library’s API](#_Libdigidocpp_library’s_interfaces) – for handling documents in supported digital signature formats (ASiC, BDOC, DDOC and PDF)
     *   External base libraries: Qt6, libldap, openssl
@@ -319,10 +332,12 @@ Required:
 | LDAP directory | Described in chap. [DigiDoc4](#_DigiDoc4). | SK |
 | Central configuration repository | Described in chap. [Central configuration service](#_comp_central_conf). | RIA |
 | Libdigidocpp | Described in chap. [Software libraries](#_comp_libraries). | RIA |
+| Libcdoc | Described in chap. [Software libraries](#_comp_libraries). | RIA |
 | SiVa | Described in chap. [Software libraries](#_comp_libraries). | RIA |
 | TSL repository | Described in chap. [Software libraries](#_comp_libraries). | EU/RIA |
 | Time-stamping proxy service interface | Described in chap. [Software libraries](#_comp_libraries). | RIA |
 | OCSP service | Described in chap. [Software libraries](#_comp_libraries). | SK |
+| Decryption service | Used to fetch Capsules for decrypting CDoc 2.0 document | RIA |
 
 
 **Table: RIA DigiDoc**
@@ -353,6 +368,7 @@ Required:
 *   [LDAP directory interface](#_LDAP_directory_interface)
 *   Interfaces with base libraries:
     *   [Libdigidocpp library’s API](#_Libdigidocpp_library’s_interfaces) – for handling documents in supported digital signature formats (ASiC, BDOC, DDOC and PDF)
+    *   [Libcdoc library’s API](#_Libcdoc_library’s_interfaces) – for handling documents in supported encryption formats (CDoc 1.0/1.1/2.0)
     *   External base libraries: libldap, openssl
 
 
@@ -371,7 +387,8 @@ Required:
 | DigiDoc4j-util program | Small command line application that implements the main functionality of DigiDoc4j library. Used for testing purposes. Can also be used as a source for sample client code for using DigiDoc4j. See also [http://open-eid.github.io/digidoc4j](http://open-eid.github.io/digidoc4j). | RIA |
 | CDoc4j | Java software library that enables handling documents in CDoc 1.1 format. Documentation: [https://github.com/open-eid/cdoc4j/wiki/Examples-of-how-to-use-it](https://github.com/open-eid/cdoc4j/wiki/Examples-of-how-to-use-it) . Code repository: [https://github.com/open-eid/cdoc4j](https://github.com/open-eid/cdoc4j). | RIA |
 | CDoc4j-util program | Small command line application that implements the main functionality of CDoc4j library. Used for testing purposes. Can also be used as a source for sample client code for using CDoc4j. See also [https://github.com/open-eid/cdoc4j/tree/master/util](https://github.com/open-eid/cdoc4j/tree/master/util). | RIA |
-| Libdigidocpp | C++ software library that enables handling documents in BDOC 2.1, ASiC and DIGIDOC-XML 1.3 formats (via SiVa service). Wiki: [https://github.com/open-eid/libdigidocpp/wiki](https://github.com/open-eid/libdigidocpp/wiki) Code repository: [https://github.com/open-eid/libdigidocpp](https://github.com/open-eid/libdigidocpp) Documentation: [http://open-eid.github.io/libdigidocpp](http://open-eid.github.io/libdigidocpp). | RIA |
+| Libcdoc | C/C++ library that enables handling documents in CDOC and CDOC2 formats (encrypting/decrypting). Code repository: [https://github.com/open-eid/libcdoc](https://github.com/open-eid/libcdoc) Documentation: [https://open-eid.github.io/libcdoc/](https://open-eid.github.io/libcdoc/). | RIA |
+| Libdigidocpp | C++ library that enables handling documents in BDOC 2.1, ASiC and DIGIDOC-XML 1.3 formats (via SiVa service). Wiki: [https://github.com/open-eid/libdigidocpp/wiki](https://github.com/open-eid/libdigidocpp/wiki) Code repository: [https://github.com/open-eid/libdigidocpp](https://github.com/open-eid/libdigidocpp) Documentation: [http://open-eid.github.io/libdigidocpp](http://open-eid.github.io/libdigidocpp). | RIA |
 | digidoc-tool program | Small command line application (digidoc-tool.exe) that implements the main functionality of Libdigidocpp library. Used for testing purposes. Can also be used as a source for sample client code for using Libdigidocpp. See also [http://open-eid.github.io/libdigidocpp](http://open-eid.github.io/libdigidocpp). | RIA |
 | DigiDocCSharp | .NET C# wrapper classes for using Libidigidocpp library’s functionality in .NET environment. Created with Swig tool. See also [https://github.com/open-eid/libdigidocpp/blob/master/examples/DigiDocCSharp/README.md](https://github.com/open-eid/libdigidocpp/blob/master/examples/DigiDocCSharp/README.md). | RIA |
 | SiVa | *Si*gnature *Ve*rification Service is an online web service for validating digitally signed documents.<br/>SiVa is used by the DigiDoc4 and RIA DigiDoc (by libdigidocpp base library) to validate documents in formats that are not natively supported; currently the service is used to validate ASiC (CAdES), PDF (ETSI PAdES) and DDOC documents.<br/>See also [Signature Verification Service interface](#_SiVa_verification_service). | RIA |
@@ -441,6 +458,36 @@ Provided:
 Required:
 
 *   CDoc4j API: see chap. [CDoc4j library’s interfaces](#_CDoc4j_library’s_interfaces)
+
+<a name="_Libcdoc_library’s_interfaces"></a>
+### Libcdoc library’s interfaces
+
+Provided:
+
+*   Libcdoc API
+    *   User: DigiDoc4, RIA DigiDoc, Libcdoc utility program
+    *   Accessible with: C/C++
+
+Required:
+
+*   Interfaces with base libraries:
+    *   OpenSSL, libxml2
+*   Interfaces with cryptographic token’s drivers (described in chap. [Drivers](#_comp_drivers))
+    *   CNG interface
+    *   PKCS#11 interface
+    *   PKCS#12 interface
+
+### libcdoc utility program’s interfaces
+
+Provided:
+
+*   [libcdoc utility program’s interface](https://github.com/open-eid/libcdoc)
+    *   User: server application, end-user application, end-user
+    *   Accessible with: command line
+
+Required:
+
+*   Libcdoc API: see chap. [Libcdoc library’s interfaces](#_Libcdoc_library’s_interfaces)
 
 <a name="_Libdigidocpp_library’s_interfaces"></a>
 ### Libdigidocpp library’s interfaces
@@ -854,6 +901,14 @@ The following chapter describes interfaces that different ID-software components
 *   Accessible with: HTTPS protocol
 *   Accessible from: [https://siva.eesti.ee/V3/validate](https://siva.eesti.ee/V3/validate)
 *   Documentation: [http://open-eid.github.io/SiVa/](http://open-eid.github.io/SiVa/)
+
+<a name="_CDoc_decryption_service"></a>
+#### CDoc 2.0 Decryption Service interface
+
+*   User: DigiDoc4, Libcdoc (RIA DigiDoc)
+*   Accessible with: HTTPS protocol
+*   Accessible from: [https://cdoc2.id.ee](https://cdoc2.id.ee)
+*   Documentation: [https://open-eid.github.io/CDOC2/](https://open-eid.github.io/CDOC2/)
 
 
 
