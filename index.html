@@ -127,15 +127,15 @@
                     <div class="col-md-9" role="main">
 
 <h1 id="architecture-of-id-software">ARCHITECTURE OF ID-SOFTWARE</h1>
-<p>Document version: 2.8<br />
-Software version: 24.09<br />
-Last updated: 23.9.2024  </p>
+<p>Document version: 2.9<br />
+Software version: 25.08<br />
+Last updated: 9.10.2025  </p>
 <h1 id="introduction">Introduction</h1>
 <p>The purpose of this document is to describe the architecture of ID-software.</p>
 <p><strong>ID-software</strong> is a collection of software components offering support for PKI-based functionality, i.e. operations with different cryptographic tokens (e.g. eID cards), handling digitally signed documents, file encryption/decryption and signing and authentication in web environment. The ID-software comprises end-user applications, software libraries, web components, drivers for communicating with the cryptographic tokens and other complementary components.</p>
 <p>Main sources for information about ID-software are <a href="https://www.id.ee/en/">www.id.ee</a>, <a href="https://github.com/open-eid">Open-EID GitHub repository</a> and <a href="https://github.com/web-eid">Web-eID GitHub repository</a>.</p>
 <p>This document covers description of ID-software and its components, their deployment in different environments, provided and required interfaces. The document does not include components that have reached the end of their support nor the components that have not yet been released.</p>
-<p>The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is <strong>version 24.09</strong>. Latest version numbers of the various ID-software components are provided at <a href="https://www.id.ee/en/article/information-on-the-latest-software-versions/">https://www.id.ee/en/article/information-on-the-latest-software-versions/</a>.</p>
+<p>The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is <strong>version 25.08</strong>. Latest version numbers of the various ID-software components are provided at <a href="https://www.id.ee/en/article/information-on-the-latest-software-versions/">https://www.id.ee/en/article/information-on-the-latest-software-versions/</a>.</p>
 <p>The document is targeted for:</p>
 <ul>
 <li>Owners/managers of the software;</li>
@@ -148,9 +148,9 @@ Last updated: 23.9.2024  </p>
 <p><strong>Estonian Information System Authority</strong> (RIA, <a href="https://www.ria.ee/en.html">https://www.ria.ee/en.html</a>) is the main owner/manager of the ID-software.  </p>
 <p>The software is being developed and tested by:  </p>
 <ul>
-<li><strong>RaulWalter</strong> (RW, <a href="https://www.raulwalter.com">https://www.raulwalter.com</a>) as the main contractor during 2019-2024;  </li>
-<li><strong>Nortal</strong> (<a href="https://nortal.com">https://nortal.com</a>) during 2019-2024;  </li>
-<li><strong>TTT</strong> (<a href="https://www.testijad.ee">https://www.testijad.ee</a>) during 2019-2024;  </li>
+<li><strong>RaulWalter</strong> (RW, <a href="https://www.raulwalter.com">https://www.raulwalter.com</a>) as the main contractor during 2019-2025;  </li>
+<li><strong>Nortal</strong> (<a href="https://nortal.com">https://nortal.com</a>) during 2019-2025;  </li>
+<li><strong>TTT</strong> (<a href="https://www.testijad.ee">https://www.testijad.ee</a>) during 2019-2025;  </li>
 <li>SK ID Solutions (SK, <a href="https://www.skidsolutions.eu/en">https://www.skidsolutions.eu/en</a>);  </li>
 <li>Aktors (<a href="http://www.aktors.ee/wp/">http://www.aktors.ee/wp/</a>);  </li>
 <li>CGI Estonia (<a href="https://www.cgi.ee/et">https://www.cgi.ee/et</a>).</li>
@@ -225,7 +225,7 @@ The software is distributed open-source (mainly under LGPL/BSD/MIT licence) and 
 <td>LGPL</td>
 </tr>
 <tr>
-<th rowspan="3"><a href="#software-libraries">Software libraries</a></td>
+<th rowspan="4"><a href="#software-libraries">Software libraries</a></td>
 <th>DigiDoc4j (Java)</th>
 <td>yes (2)</td>
 <td>yes (1)</td>
@@ -252,6 +252,17 @@ The software is distributed open-source (mainly under LGPL/BSD/MIT licence) and 
 <td>yes (2)</td>
 <td>yes - validation only (1)</td>
 <td>-</td>
+<td>yes (1)</td>
+<td>-</td>
+<td>-</td>
+<td>RIA</td>
+<td>LGPL</td>
+</tr>
+<tr>
+<th>Libcdoc (C++, .NET)</th>
+<td>-</td>
+<td>-</td>
+<td>yes</td>
 <td>yes (1)</td>
 <td>-</td>
 <td>-</td>
@@ -340,7 +351,7 @@ The software is distributed open-source (mainly under LGPL/BSD/MIT licence) and 
 </tr>
 <tr>
 <td>Handling CDOC documents</td>
-<td>Encrypting and decrypting documents in <a href="https://www.id.ee/wp-content/uploads/2020/02/SK-CDOC-1.0-20120625_EN.pdf">ENCDOC-XML 1.0 (CDOC)</a> also <a href="https://www.ria.ee/sites/default/files/content-editors/EID/cdoc.pdf">CDOC 1.1</a> format.</td>
+<td>Encrypting and decrypting documents in <a href="https://www.id.ee/wp-content/uploads/2020/02/SK-CDOC-1.0-20120625_EN.pdf">ENCDOC-XML 1.0 (CDOC)</a>, <a href="https://www.ria.ee/sites/default/files/content-editors/EID/cdoc.pdf">CDOC 1.1</a> and <a href="https://open-eid.github.io/CDOC2/">CDOC 2.0</a> format.</td>
 </tr>
 <tr>
 <td>Calculating RSA/ECDSA signature</td>
@@ -444,6 +455,11 @@ Note that not all of the external base libraries are included in the component m
 <td>SK</td>
 </tr>
 <tr>
+<td>Decryption service</td>
+<td>Used to fetch Capsules for decrypting CDoc 2.0 document</td>
+<td>RIA</td>
+</tr>
+<tr>
 <td>Minidriver</td>
 <td>Used via CNG interface in Windows environment only. Described in chap. <a href="#_comp_drivers">Drivers</a>.</td>
 <td>IDEMIA</td>
@@ -488,6 +504,7 @@ Note that not all of the external base libraries are included in the component m
 <li><a href="#_MID_REST_service">Mobile-ID (MID) REST service</a></li>
 <li><a href="#_SID_REST_service">Smart-ID (MID) REST service</a></li>
 <li><a href="#_LDAP_directory_interface">LDAP directory interface</a></li>
+<li><a href="#_CDoc_decryption_service">CDoc 2.0 Decryption Service interface</a></li>
 <li>Interfaces with base libraries:<ul>
 <li><a href="#_Libdigidocpp_library’s_interfaces">Libdigidocpp library’s API</a> – for handling documents in supported digital signature formats (ASiC, BDOC, DDOC and PDF)</li>
 <li>External base libraries: Qt6, libldap, openssl</li>
@@ -550,6 +567,11 @@ Note that not all of the external base libraries are included in the component m
 <td>RIA</td>
 </tr>
 <tr>
+<td>Libcdoc</td>
+<td>Described in chap. <a href="#_comp_libraries">Software libraries</a>.</td>
+<td>RIA</td>
+</tr>
+<tr>
 <td>SiVa</td>
 <td>Described in chap. <a href="#_comp_libraries">Software libraries</a>.</td>
 <td>RIA</td>
@@ -568,6 +590,11 @@ Note that not all of the external base libraries are included in the component m
 <td>OCSP service</td>
 <td>Described in chap. <a href="#_comp_libraries">Software libraries</a>.</td>
 <td>SK</td>
+</tr>
+<tr>
+<td>Decryption service</td>
+<td>Used to fetch Capsules for decrypting CDoc 2.0 document</td>
+<td>RIA</td>
 </tr>
 </tbody>
 </table>
@@ -605,6 +632,7 @@ Note that not all of the external base libraries are included in the component m
 <li><a href="#_LDAP_directory_interface">LDAP directory interface</a></li>
 <li>Interfaces with base libraries:<ul>
 <li><a href="#_Libdigidocpp_library’s_interfaces">Libdigidocpp library’s API</a> – for handling documents in supported digital signature formats (ASiC, BDOC, DDOC and PDF)</li>
+<li><a href="#_Libcdoc_library’s_interfaces">Libcdoc library’s API</a> – for handling documents in supported encryption formats (CDoc 1.0/1.1/2.0)</li>
 <li>External base libraries: libldap, openssl</li>
 </ul>
 </li>
@@ -645,8 +673,13 @@ Note that not all of the external base libraries are included in the component m
 <td>RIA</td>
 </tr>
 <tr>
+<td>Libcdoc</td>
+<td>C/C++ library that enables handling documents in CDOC and CDOC2 formats (encrypting/decrypting). Code repository: <a href="https://github.com/open-eid/libcdoc">https://github.com/open-eid/libcdoc</a> Documentation: <a href="https://open-eid.github.io/libcdoc/">https://open-eid.github.io/libcdoc/</a>.</td>
+<td>RIA</td>
+</tr>
+<tr>
 <td>Libdigidocpp</td>
-<td>C++ software library that enables handling documents in BDOC 2.1, ASiC and DIGIDOC-XML 1.3 formats (via SiVa service). Wiki: <a href="https://github.com/open-eid/libdigidocpp/wiki">https://github.com/open-eid/libdigidocpp/wiki</a> Code repository: <a href="https://github.com/open-eid/libdigidocpp">https://github.com/open-eid/libdigidocpp</a> Documentation: <a href="http://open-eid.github.io/libdigidocpp">http://open-eid.github.io/libdigidocpp</a>.</td>
+<td>C++ library that enables handling documents in BDOC 2.1, ASiC and DIGIDOC-XML 1.3 formats (via SiVa service). Wiki: <a href="https://github.com/open-eid/libdigidocpp/wiki">https://github.com/open-eid/libdigidocpp/wiki</a> Code repository: <a href="https://github.com/open-eid/libdigidocpp">https://github.com/open-eid/libdigidocpp</a> Documentation: <a href="http://open-eid.github.io/libdigidocpp">http://open-eid.github.io/libdigidocpp</a>.</td>
 <td>RIA</td>
 </tr>
 <tr>
@@ -754,6 +787,42 @@ Note that not all of the external base libraries are included in the component m
 <p>Required:</p>
 <ul>
 <li>CDoc4j API: see chap. <a href="#_CDoc4j_library’s_interfaces">CDoc4j library’s interfaces</a></li>
+</ul>
+<p><a name="_Libcdoc_library’s_interfaces"></a></p>
+<h3 id="libcdoc-librarys-interfaces">Libcdoc library’s interfaces</h3>
+<p>Provided:</p>
+<ul>
+<li>Libcdoc API<ul>
+<li>User: DigiDoc4, RIA DigiDoc, Libcdoc utility program</li>
+<li>Accessible with: C/C++</li>
+</ul>
+</li>
+</ul>
+<p>Required:</p>
+<ul>
+<li>Interfaces with base libraries:<ul>
+<li>OpenSSL, libxml2</li>
+</ul>
+</li>
+<li>Interfaces with cryptographic token’s drivers (described in chap. <a href="#_comp_drivers">Drivers</a>)<ul>
+<li>CNG interface</li>
+<li>PKCS#11 interface</li>
+<li>PKCS#12 interface</li>
+</ul>
+</li>
+</ul>
+<h3 id="libcdoc-utility-programs-interfaces">libcdoc utility program’s interfaces</h3>
+<p>Provided:</p>
+<ul>
+<li><a href="https://github.com/open-eid/libcdoc">libcdoc utility program’s interface</a><ul>
+<li>User: server application, end-user application, end-user</li>
+<li>Accessible with: command line</li>
+</ul>
+</li>
+</ul>
+<p>Required:</p>
+<ul>
+<li>Libcdoc API: see chap. <a href="#_Libcdoc_library’s_interfaces">Libcdoc library’s interfaces</a></li>
 </ul>
 <p><a name="_Libdigidocpp_library’s_interfaces"></a></p>
 <h3 id="libdigidocpp-librarys-interfaces">Libdigidocpp library’s interfaces</h3>
@@ -1387,6 +1456,14 @@ Note that not all of the external base libraries are included in the component m
 <li>Accessible from: <a href="https://siva.eesti.ee/V3/validate">https://siva.eesti.ee/V3/validate</a></li>
 <li>Documentation: <a href="http://open-eid.github.io/SiVa/">http://open-eid.github.io/SiVa/</a></li>
 </ul>
+<p><a name="_CDoc_decryption_service"></a></p>
+<h4 id="cdoc-20-decryption-service-interface">CDoc 2.0 Decryption Service interface</h4>
+<ul>
+<li>User: DigiDoc4, Libcdoc (RIA DigiDoc)</li>
+<li>Accessible with: HTTPS protocol</li>
+<li>Accessible from: <a href="https://cdoc2.id.ee">https://cdoc2.id.ee</a></li>
+<li>Documentation: <a href="https://open-eid.github.io/CDOC2/">https://open-eid.github.io/CDOC2/</a></li>
+</ul>
 <h1 id="deployment-model">Deployment model</h1>
 <p>The following subchapters describe physical deployment of ID-software components in collaboration with external components that were depicted in chap. <a href="#component-model">Component model</a> in case of the most common use cases.</p>
 <h2 id="signing-in-web-browser">Signing in web browser</h2>
@@ -1507,5 +1584,5 @@ Note that not all of the external base libraries are included in the component m
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2024-10-08 04:23:03.826864+00:00
+Build Date UTC : 2025-10-10 07:47:12.132632+00:00
 -->
