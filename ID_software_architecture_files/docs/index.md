@@ -1,8 +1,8 @@
 # ARCHITECTURE OF ID-SOFTWARE
 
-Document version: 2.9  
-Software version: 25.08  
-Last updated: 9.10.2025  
+Document version: 30  
+Software version: 25.11  
+Last updated: 27.10.2025  
 
 
 # Introduction
@@ -15,7 +15,7 @@ Main sources for information about ID-software are [www.id.ee](https://www.id.ee
 
 This document covers description of ID-software and its components, their deployment in different environments, provided and required interfaces. The document does not include components that have reached the end of their support nor the components that have not yet been released.
 
-The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is **version 25.08**. Latest version numbers of the various ID-software components are provided at [https://www.id.ee/en/article/information-on-the-latest-software-versions/](https://www.id.ee/en/article/information-on-the-latest-software-versions/).
+The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is **version 25.11**. Latest version numbers of the various ID-software components are provided at [https://www.id.ee/en/article/information-on-the-latest-software-versions/](https://www.id.ee/en/article/information-on-the-latest-software-versions/).
 
 The document is targeted for:
 
@@ -45,6 +45,13 @@ The software is distributed open-source (mainly under LGPL/BSD/MIT licence) and 
 *   GitHub repository for the source code, wiki documentation, beta and (optionally) production versions of binary packages: [https://github.com/open-eid](https://github.com/open-eid) and [https://github.com/web-eid](https://github.com/web-eid).
 *   Release repository for production versions of binaries: [https://www.id.ee/en/article/install-id-software/](https://www.id.ee/en/article/install-id-software/)
 
+Third party actors:
+
+*   IDEMIA;  
+*   Thales;  
+*   SK ID Solutions (SK, [https://www.skidsolutions.eu/en](https://www.skidsolutions.eu/en));  
+*   Zetes Estonia (Zetes, [https://repository.eidpki.ee/](https://repository.eidpki.ee/));  
+
 ID-software components can be logically divided in the following groups:
 
 *   **Desktop applications** for end-users;
@@ -59,23 +66,23 @@ The following table maps the main ID-software components, their owner/developer 
 <table border="1" cellspacing="0" cellpadding="0">
 <thead>
 <tr>
-<th rowspan="2" colspan="2">Component</td>
-<th colspan="6">Function</td>
-<th rowspan="2">Owner</td>
-<th rowspan="2">Licence</td>
+<th rowspan="2" colspan="2">Component</th>
+<th colspan="6">Function</th>
+<th rowspan="2">Owner</th>
+<th rowspan="2">Licence</th>
 </tr>
 <tr>
-<th>Handling ASiC/BDOC/PADES documents</td>
-<th>Handling DDOC documents</td>
-<th>Handling CDOC documents</td>
-<th>Calculating RSA/ECDSA signature</td>
-<th>Card management operations</td>
-<th>Authentication</td>
+<th>Handling ASiC/BDOC/PADES documents</th>
+<th>Handling DDOC documents</th>
+<th>Handling CDOC documents</th>
+<th>Calculating RSA/ECDSA signature</th>
+<th>Card management operations</th>
+<th>Authentication</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<th><a href="#desktop-applications">Desktop applications</a></td>
+<th><a href="#desktop-applications">Desktop applications</a></th>
 <th>DigiDoc4</th>
 <td>yes (1)</td>
 <td>yes - validation only (1)</td>
@@ -87,7 +94,7 @@ The following table maps the main ID-software components, their owner/developer 
 <td>LGPL</td>
 </tr>
 <tr>
-<th rowspan="2"><a href="#mobile-applications">Mobile applications</a></td>
+<th rowspan="2"><a href="#mobile-applications">Mobile applications</a></th>
 <th>RIA DigiDoc (iOS)</th>
 <td>yes (1)</td>
 <td>yes - validation only (1)</td>
@@ -110,7 +117,7 @@ The following table maps the main ID-software components, their owner/developer 
 <td>LGPL</td>
 </tr>
 <tr>
-<th rowspan="4"><a href="#software-libraries">Software libraries</a></td>
+<th rowspan="4"><a href="#software-libraries">Software libraries</a></th>
 <th>DigiDoc4j (Java)</th>
 <td>yes (2)</td>
 <td>yes (1)</td>
@@ -155,7 +162,7 @@ The following table maps the main ID-software components, their owner/developer 
 <td>LGPL</td>
 </tr>
 <tr>
-<th rowspan="2"><a href="#web-components">Web components</a></td>
+<th rowspan="2"><a href="#web-components">Web components</a></th>
 <th>Browser signing modules</th>
 <td>-</td>
 <td>-</td>
@@ -178,7 +185,7 @@ The following table maps the main ID-software components, their owner/developer 
 <td>MIT</td>
 </tr>
 <tr>
-<th rowspan="3"><a href="#drivers">Driver components</a></td>
+<th rowspan="3"><a href="#drivers">Driver components</a></th>
 <th>Minidriver</th>
 <td>-</td>
 <td>-</td>
@@ -186,8 +193,8 @@ The following table maps the main ID-software components, their owner/developer 
 <td>yes</td>
 <td>-</td>
 <td>yes</td>
-<td>IDEMIA</td>
-<td>IDEMIA</td>
+<td>IDEMIA/Thales</td>
+<td>IDEMIA/Thales</td>
 </tr>
 <tr>
 <th>OpenSC-pkcs11</th>
@@ -242,6 +249,9 @@ In the context of the component diagrams in this document, the ID-software compo
 
 *   Components of ID-software that are owned and operated by RIA: <u>placed in "RIA" package</u>.
 *   Components of ID-software that are owned and operated by SK: <u>placed in "SK" package</u>.
+*   Components of ID-software that are owned and operated by Zetes: <u>placed in "Zetes" package</u>.
+*   Components of ID-software that are owned and operated by IDEMIA: <u>placed in "IDEMIA" package</u>.
+*   Components of ID-software that are owned and operated by Thales: <u>placed in "Thales" package</u>.
 
 Other components are regarded as external to ID-software.  
 Note that not all of the external base libraries are included in the component model to avoid duplicity with other documentation – the base libraries are listed and described in the documentation of the respective ID-software components and can be accessed via the references provided.
@@ -265,16 +275,16 @@ Note that not all of the external base libraries are included in the component m
 | DigiDoc4 base libraries | Libdigidocpp (and its base libraries), etc. See [DigiDoc4 interfaces](#_DigiDoc4_interfaces). | - |
 | Mobile-ID (MID) REST service | REST service that is used by DigiDoc4 for signature creation with Mobile-ID. See also [https://github.com/sk-eid/mid](https://github.com/sk-eid/mid). | SK |
 | Smart-ID (SID) REST service | REST service that is used by DigiDoc4 for signature creation with Smart-ID. See also [https://github.com/SK-EID/smart-id-documentation](https://github.com/SK-EID/smart-id-documentation). | SK |
-| LDAP directory | Directory of active certificates issued by SK (as the CA in Estonia). The directory is used by DigiDoc4 for finding authentication certificate (and the respective public key) of the recipient of the encrypted document. See also [https://www.skidsolutions.eu/en/repository/ldap/](https://www.skidsolutions.eu/en/repository/ldap/). | SK |
+| LDAP directory | Directory of active certificates issued by SK and Zetes (as the CA in Estonia). The directory is used by DigiDoc4 for finding authentication certificate (and the respective public key) of the recipient of the encrypted document. See also [https://www.skidsolutions.eu/en/repository/ldap/](https://www.skidsolutions.eu/en/repository/ldap/). | SK/Zetes |
 | Central configuration repository | Described in chap. [Central configuration service](#_comp_central_conf). | RIA |
 | Central configuration client | Described in chap. [Central configuration service](#_comp_central_conf). | RIA |
 | Libdigidocpp | Described in chap. [Software libraries](#_comp_libraries). | RIA |
 | SiVa | Described in chap. [Software libraries](#_DigiDoc4). | RIA |
 | TSL repository | Described in chap. [Software libraries](#_comp_libraries). | EU/RIA |
 | Time-stamping proxy service interface | Described in chap. [Software libraries](#_comp_libraries). | RIA |
-| OCSP service | Described in chap. [Software libraries](#_comp_libraries). | SK |
+| OCSP service | Described in chap. [Software libraries](#_comp_libraries). | SK/Zetes |
 | Decryption service | Used to fetch Capsules for decrypting CDoc 2.0 document | RIA |
-| Minidriver | Used via CNG interface in Windows environment only. Described in chap. [Drivers](#_comp_drivers). | IDEMIA |
+| Minidriver | Used via CNG interface in Windows environment only. Described in chap. [Drivers](#_comp_drivers). | IDEMIA/Thales |
 | ID-Updater | Used in Windows and macOS only, described in chap. [Updating mechanisms](#_comp_update). In case of Windows platform, the ID-Updater can be executed from DigiDoc4 program. | RIA |
 
 **Table: DigiDoc4**
@@ -329,14 +339,14 @@ Required:
 | RIA DigiDoc base libraries | Libdigidocpp (and its base libraries), etc. See [RIA DigiDoc interfaces](#_RIA_DigiDoc_interfaces). | - |
 | Mobile-ID (MID) REST service | REST service that is used by RIA DigiDoc for signature creation with Mobile-ID. See also [https://github.com/sk-eid/mid](https://github.com/sk-eid/mid). | SK |
 | Smart-ID (SID) REST service | REST service that is used by RIA DigiDoc for signature creation with Smart-ID. See also [https://github.com/SK-EID/smart-id-documentation](https://github.com/SK-EID/smart-id-documentation). | SK |
-| LDAP directory | Described in chap. [DigiDoc4](#_DigiDoc4). | SK |
+| LDAP directory | Described in chap. [DigiDoc4](#_DigiDoc4). | SK/Zetes |
 | Central configuration repository | Described in chap. [Central configuration service](#_comp_central_conf). | RIA |
 | Libdigidocpp | Described in chap. [Software libraries](#_comp_libraries). | RIA |
 | Libcdoc | Described in chap. [Software libraries](#_comp_libraries). | RIA |
 | SiVa | Described in chap. [Software libraries](#_comp_libraries). | RIA |
 | TSL repository | Described in chap. [Software libraries](#_comp_libraries). | EU/RIA |
 | Time-stamping proxy service interface | Described in chap. [Software libraries](#_comp_libraries). | RIA |
-| OCSP service | Described in chap. [Software libraries](#_comp_libraries). | SK |
+| OCSP service | Described in chap. [Software libraries](#_comp_libraries). | SK/Zetes |
 | Decryption service | Used to fetch Capsules for decrypting CDoc 2.0 document | RIA |
 
 
@@ -394,7 +404,7 @@ Required:
 | SiVa | *Si*gnature *Ve*rification Service is an online web service for validating digitally signed documents.<br/>SiVa is used by the DigiDoc4 and RIA DigiDoc (by libdigidocpp base library) to validate documents in formats that are not natively supported; currently the service is used to validate ASiC (CAdES), PDF (ETSI PAdES) and DDOC documents.<br/>See also [Signature Verification Service interface](#_SiVa_verification_service). | RIA |
 | TSL repository | Repository for accessing the TSL ([Trust Service status List](http://www.etsi.org/deliver/etsi_ts/119600_119699/119612/02.02.01_60/ts_119612v020201p.pdf)) lists that can be used as a central source of trust anchor information during digital signature creation and validation processes. The European Commission’s TSL list ([https://ec.europa.eu/tools/lotl/eu-lotl.xml](https://ec.europa.eu/tools/lotl/eu-lotl.xml)) is used as the central TSL list (with references to national lists). | EU/ RIA |
 | Time-stamping proxy service interface | [RFC3161](https://tools.ietf.org/html/rfc3161) based time-stamping service. | RIA |
-| OCSP service | [RFC6960](https://tools.ietf.org/html/rfc6960) based OCSP service. Also offered by SK for Estonian and a number of foreign certificates (see [www.skidsolutions.eu/en](http://www.skidsolutions.eu/en/)). | SK |
+| OCSP service | [RFC6960](https://tools.ietf.org/html/rfc6960) based OCSP service. Also offered by SK and Zetes for Estonian and a number of foreign certificates (see [www.skidsolutions.eu/en](http://www.skidsolutions.eu/en/)). | SK/Zetes |
 
 **Table: Software libraries and their components**
 
@@ -609,7 +619,7 @@ Authentication in web browsers is done with the browsers’ and operating system
 | Component | Description | Owner |
 | - | - | - |
 | CTK Tokend | Described in chap. [Drivers](#_comp_drivers). | RIA |
-| Minidriver | Described in chap. [Drivers](#_comp_drivers). | IDEMIA |
+| Minidriver | Described in chap. [Drivers](#_comp_drivers). | IDEMIA/Thales |
 
 **Table: Web authentication components**
 
@@ -623,7 +633,7 @@ Authentication in web browsers is done with the browsers’ and operating system
 | - | - | - |
 | OpenSC PKCS#11 driver | A driver for accessing eID-cards. Connects with the card via the operating system’s native PC/SC interface. Used as a default driver for signature creation in web browser environment and DigiDoc4 in case of Linux and macOS platform. Wiki: [https://github.com/OpenSC/OpenSC/wiki](https://github.com/OpenSC/OpenSC/wiki). | OpenSC |
 | One-pin OpenSC PKCS#11 driver | Version of OpenSC PKCS#11 driver that only enables authentication functionality. Used as a default driver for authentication with eID card in Firefox browser environment in case of Linux platform. Wiki: [https://github.com/OpenSC/OpenSC/wiki](https://github.com/OpenSC/OpenSC/wiki). | OpenSC |
-| Minidriver | Used as a default driver for accessing Estonian eID-cards via CNG interface for signature creation in web browser environment in case of Windows platform. Used as a default driver for authentication with eID card in browser environment in case of Windows platform. | IDEMIA |
+| Minidriver | Used as a default driver for accessing Estonian eID-cards via CNG interface for signature creation in web browser environment in case of Windows platform. Used as a default driver for authentication with eID card in browser environment in case of Windows platform. | IDEMIA/Thales |
 | EstEID CTK Tokend | A driver for accessing eID-cards. Connects with the card via the operating system’s native PC/SC interface. Used as a default driver for authentication with eID card in browser environment in case macOS platform. Code repository: [https://github.com/open-eid/esteid-ctk-tokend](https://github.com/open-eid/esteid-ctk-tokend). | RIA |
 | PKCS#12 implementation via base library | An implementation of PKCS#12 interface by the component’s base libraries. | - |
 
@@ -729,7 +739,7 @@ The following chapter describes automatic updating mechanisms of different ID-so
 | - | - | - |
 | ID-updater | Service that is periodically checks if newer versions of related ID-software components are available for download, initiates the download and installation if necessary. Uses [Central configuration service](#_comp_central_conf) for determining the latest available software versions. | RIA |
 | MS Update | Microsoft Update – see Microsoft’s documentation for more information. | Microsoft |
-| Windows Store | See [https://microsoftedge.microsoft.com/addons/detail/gnmckgbandlkacikdndelhfghdejfido](https://microsoftedge.microsoft.com/addons/detail/gnmckgbandlkacikdndelhfghdejfido). | Microsoft |
+| Windows Store | See [https://microsoftedge.microsoft.com/addons/detail/gnmckgbandlkacikdndelhfghdejfido](https://microsoftedge.microsoft.com/addons/detail/gnmckgbandlkacikdndelhfghdejfido), [https://apps.microsoft.com/detail/9pfpfk4dj1s6](https://apps.microsoft.com/detail/9pfpfk4dj1s6). | Microsoft |
 | Chrome Web Store | See [https://chrome.google.com/webstore/detail/web-eid/ncibgoaomkmdpilpocfeponihegamlic](https://chrome.google.com/webstore/detail/web-eid/ncibgoaomkmdpilpocfeponihegamlic). | Google |
 | Firefox Web Store | See [https://addons.mozilla.org/en-US/firefox/addon/web-eid-webextension/](https://addons.mozilla.org/en-US/firefox/addon/web-eid-webextension/). | Firefox |
 
@@ -823,7 +833,7 @@ See [Central configuration repository's interfaces](#_comp_central_conf_server_i
 
 <a name="_comp_external"></a>
 ## Interfaces with external services
-The following chapter describes interfaces that different ID-software components may have with external services. Relatsionships with the external services are depicted in different ID-software component models above.
+The following chapter describes interfaces that different ID-software components may have with external services. Relationships with the external services are depicted in different ID-software component models above.
 
 <a name="_comp_central_conf_server_interfaces"></a>
 #### Central configuration repository's interfaces
@@ -838,7 +848,7 @@ The following chapter describes interfaces that different ID-software components
     *   Accessible with: HTTPS protocol
 *   Central configuration file's public key file config.pub
     *   User: central configuration client component
-    *   Accessible from: <a hreef="https://id.eesti.ee/config.pub">https://id.eesti.ee/config.pub</a> 
+    *   Accessible from: <a href="https://id.eesti.ee/config.pub">https://id.eesti.ee/config.pub</a> 
     *   Accessible with: HTTPS protocol
 
 <a name="_MID_REST_service"></a>
@@ -862,7 +872,7 @@ The following chapter describes interfaces that different ID-software components
 
 *   User: DigiDoc4, RIA DigiDoc
 *   Accessible with: LDAP protocol
-*   Accessible from: ldaps://esteid.ldap.sk.ee, ldaps://k3.ldap.sk.ee
+*   Accessible from: ldaps://esteid.ldap.sk.ee, ldaps://k3.ldap.sk.ee, ldaps://ldap.eidpki.ee
 *   Documentation: [https://www.skidsolutions.eu/en/repository/ldap/](https://www.skidsolutions.eu/en/repository/ldap/)
 
 <a name="_TSL_repositories’_interfaces"></a>
@@ -892,6 +902,7 @@ The following chapter describes interfaces that different ID-software components
     *   OCSP URL from signer certificate Authority Information Access extension.
     *   SK’s OCSP service for SK issued certificates: [http://ocsp.sk.ee/](http://ocsp.sk.ee/)
     *   SK’s test OCSP service: [http://demo.sk.ee/ocsp](http://demo.sk.ee/ocsp)
+    *   Zetes’s test OCSP service: [https://ocsp-test.eidpki.ee/ui/](https://ocsp-test.eidpki.ee/ui/)
 *   Documentation: [RFC6960](https://tools.ietf.org/html/rfc6960)
 
 <a name="_SiVa_verification_service"></a>
