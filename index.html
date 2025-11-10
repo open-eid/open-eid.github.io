@@ -127,15 +127,15 @@
                     <div class="col-md-9" role="main">
 
 <h1 id="architecture-of-id-software">ARCHITECTURE OF ID-SOFTWARE</h1>
-<p>Document version: 2.9<br />
-Software version: 25.08<br />
-Last updated: 9.10.2025  </p>
+<p>Document version: 30<br />
+Software version: 25.11<br />
+Last updated: 27.10.2025  </p>
 <h1 id="introduction">Introduction</h1>
 <p>The purpose of this document is to describe the architecture of ID-software.</p>
 <p><strong>ID-software</strong> is a collection of software components offering support for PKI-based functionality, i.e. operations with different cryptographic tokens (e.g. eID cards), handling digitally signed documents, file encryption/decryption and signing and authentication in web environment. The ID-software comprises end-user applications, software libraries, web components, drivers for communicating with the cryptographic tokens and other complementary components.</p>
 <p>Main sources for information about ID-software are <a href="https://www.id.ee/en/">www.id.ee</a>, <a href="https://github.com/open-eid">Open-EID GitHub repository</a> and <a href="https://github.com/web-eid">Web-eID GitHub repository</a>.</p>
 <p>This document covers description of ID-software and its components, their deployment in different environments, provided and required interfaces. The document does not include components that have reached the end of their support nor the components that have not yet been released.</p>
-<p>The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is <strong>version 25.08</strong>. Latest version numbers of the various ID-software components are provided at <a href="https://www.id.ee/en/article/information-on-the-latest-software-versions/">https://www.id.ee/en/article/information-on-the-latest-software-versions/</a>.</p>
+<p>The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is <strong>version 25.11</strong>. Latest version numbers of the various ID-software components are provided at <a href="https://www.id.ee/en/article/information-on-the-latest-software-versions/">https://www.id.ee/en/article/information-on-the-latest-software-versions/</a>.</p>
 <p>The document is targeted for:</p>
 <ul>
 <li>Owners/managers of the software;</li>
@@ -161,6 +161,13 @@ The software is distributed open-source (mainly under LGPL/BSD/MIT licence) and 
 <li>GitHub repository for the source code, wiki documentation, beta and (optionally) production versions of binary packages: <a href="https://github.com/open-eid">https://github.com/open-eid</a> and <a href="https://github.com/web-eid">https://github.com/web-eid</a>.</li>
 <li>Release repository for production versions of binaries: <a href="https://www.id.ee/en/article/install-id-software/">https://www.id.ee/en/article/install-id-software/</a></li>
 </ul>
+<p>Third party actors:</p>
+<ul>
+<li>IDEMIA;  </li>
+<li>Thales;  </li>
+<li>SK ID Solutions (SK, <a href="https://www.skidsolutions.eu/en">https://www.skidsolutions.eu/en</a>);  </li>
+<li>Zetes Estonia (Zetes, <a href="https://repository.eidpki.ee/">https://repository.eidpki.ee/</a>);  </li>
+</ul>
 <p>ID-software components can be logically divided in the following groups:</p>
 <ul>
 <li><strong>Desktop applications</strong> for end-users;</li>
@@ -174,23 +181,23 @@ The software is distributed open-source (mainly under LGPL/BSD/MIT licence) and 
 <table border="1" cellspacing="0" cellpadding="0">
 <thead>
 <tr>
-<th rowspan="2" colspan="2">Component</td>
-<th colspan="6">Function</td>
-<th rowspan="2">Owner</td>
-<th rowspan="2">Licence</td>
+<th rowspan="2" colspan="2">Component</th>
+<th colspan="6">Function</th>
+<th rowspan="2">Owner</th>
+<th rowspan="2">Licence</th>
 </tr>
 <tr>
-<th>Handling ASiC/BDOC/PADES documents</td>
-<th>Handling DDOC documents</td>
-<th>Handling CDOC documents</td>
-<th>Calculating RSA/ECDSA signature</td>
-<th>Card management operations</td>
-<th>Authentication</td>
+<th>Handling ASiC/BDOC/PADES documents</th>
+<th>Handling DDOC documents</th>
+<th>Handling CDOC documents</th>
+<th>Calculating RSA/ECDSA signature</th>
+<th>Card management operations</th>
+<th>Authentication</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<th><a href="#desktop-applications">Desktop applications</a></td>
+<th><a href="#desktop-applications">Desktop applications</a></th>
 <th>DigiDoc4</th>
 <td>yes (1)</td>
 <td>yes - validation only (1)</td>
@@ -202,7 +209,7 @@ The software is distributed open-source (mainly under LGPL/BSD/MIT licence) and 
 <td>LGPL</td>
 </tr>
 <tr>
-<th rowspan="2"><a href="#mobile-applications">Mobile applications</a></td>
+<th rowspan="2"><a href="#mobile-applications">Mobile applications</a></th>
 <th>RIA DigiDoc (iOS)</th>
 <td>yes (1)</td>
 <td>yes - validation only (1)</td>
@@ -225,7 +232,7 @@ The software is distributed open-source (mainly under LGPL/BSD/MIT licence) and 
 <td>LGPL</td>
 </tr>
 <tr>
-<th rowspan="4"><a href="#software-libraries">Software libraries</a></td>
+<th rowspan="4"><a href="#software-libraries">Software libraries</a></th>
 <th>DigiDoc4j (Java)</th>
 <td>yes (2)</td>
 <td>yes (1)</td>
@@ -270,7 +277,7 @@ The software is distributed open-source (mainly under LGPL/BSD/MIT licence) and 
 <td>LGPL</td>
 </tr>
 <tr>
-<th rowspan="2"><a href="#web-components">Web components</a></td>
+<th rowspan="2"><a href="#web-components">Web components</a></th>
 <th>Browser signing modules</th>
 <td>-</td>
 <td>-</td>
@@ -293,7 +300,7 @@ The software is distributed open-source (mainly under LGPL/BSD/MIT licence) and 
 <td>MIT</td>
 </tr>
 <tr>
-<th rowspan="3"><a href="#drivers">Driver components</a></td>
+<th rowspan="3"><a href="#drivers">Driver components</a></th>
 <th>Minidriver</th>
 <td>-</td>
 <td>-</td>
@@ -301,8 +308,8 @@ The software is distributed open-source (mainly under LGPL/BSD/MIT licence) and 
 <td>yes</td>
 <td>-</td>
 <td>yes</td>
-<td>IDEMIA</td>
-<td>IDEMIA</td>
+<td>IDEMIA/Thales</td>
+<td>IDEMIA/Thales</td>
 </tr>
 <tr>
 <th>OpenSC-pkcs11</th>
@@ -374,6 +381,9 @@ In the context of the component diagrams in this document, the ID-software compo
 <ul>
 <li>Components of ID-software that are owned and operated by RIA: <u>placed in "RIA" package</u>.</li>
 <li>Components of ID-software that are owned and operated by SK: <u>placed in "SK" package</u>.</li>
+<li>Components of ID-software that are owned and operated by Zetes: <u>placed in "Zetes" package</u>.</li>
+<li>Components of ID-software that are owned and operated by IDEMIA: <u>placed in "IDEMIA" package</u>.</li>
+<li>Components of ID-software that are owned and operated by Thales: <u>placed in "Thales" package</u>.</li>
 </ul>
 <p>Other components are regarded as external to ID-software.<br />
 Note that not all of the external base libraries are included in the component model to avoid duplicity with other documentation – the base libraries are listed and described in the documentation of the respective ID-software components and can be accessed via the references provided.</p>
@@ -416,8 +426,8 @@ Note that not all of the external base libraries are included in the component m
 </tr>
 <tr>
 <td>LDAP directory</td>
-<td>Directory of active certificates issued by SK (as the CA in Estonia). The directory is used by DigiDoc4 for finding authentication certificate (and the respective public key) of the recipient of the encrypted document. See also <a href="https://www.skidsolutions.eu/en/repository/ldap/">https://www.skidsolutions.eu/en/repository/ldap/</a>.</td>
-<td>SK</td>
+<td>Directory of active certificates issued by SK and Zetes (as the CA in Estonia). The directory is used by DigiDoc4 for finding authentication certificate (and the respective public key) of the recipient of the encrypted document. See also <a href="https://www.skidsolutions.eu/en/repository/ldap/">https://www.skidsolutions.eu/en/repository/ldap/</a>.</td>
+<td>SK/Zetes</td>
 </tr>
 <tr>
 <td>Central configuration repository</td>
@@ -452,7 +462,7 @@ Note that not all of the external base libraries are included in the component m
 <tr>
 <td>OCSP service</td>
 <td>Described in chap. <a href="#_comp_libraries">Software libraries</a>.</td>
-<td>SK</td>
+<td>SK/Zetes</td>
 </tr>
 <tr>
 <td>Decryption service</td>
@@ -462,7 +472,7 @@ Note that not all of the external base libraries are included in the component m
 <tr>
 <td>Minidriver</td>
 <td>Used via CNG interface in Windows environment only. Described in chap. <a href="#_comp_drivers">Drivers</a>.</td>
-<td>IDEMIA</td>
+<td>IDEMIA/Thales</td>
 </tr>
 <tr>
 <td>ID-Updater</td>
@@ -554,7 +564,7 @@ Note that not all of the external base libraries are included in the component m
 <tr>
 <td>LDAP directory</td>
 <td>Described in chap. <a href="#_DigiDoc4">DigiDoc4</a>.</td>
-<td>SK</td>
+<td>SK/Zetes</td>
 </tr>
 <tr>
 <td>Central configuration repository</td>
@@ -589,7 +599,7 @@ Note that not all of the external base libraries are included in the component m
 <tr>
 <td>OCSP service</td>
 <td>Described in chap. <a href="#_comp_libraries">Software libraries</a>.</td>
-<td>SK</td>
+<td>SK/Zetes</td>
 </tr>
 <tr>
 <td>Decryption service</td>
@@ -709,8 +719,8 @@ Note that not all of the external base libraries are included in the component m
 </tr>
 <tr>
 <td>OCSP service</td>
-<td><a href="https://tools.ietf.org/html/rfc6960">RFC6960</a> based OCSP service. Also offered by SK for Estonian and a number of foreign certificates (see <a href="http://www.skidsolutions.eu/en/">www.skidsolutions.eu/en</a>).</td>
-<td>SK</td>
+<td><a href="https://tools.ietf.org/html/rfc6960">RFC6960</a> based OCSP service. Also offered by SK and Zetes for Estonian and a number of foreign certificates (see <a href="http://www.skidsolutions.eu/en/">www.skidsolutions.eu/en</a>).</td>
+<td>SK/Zetes</td>
 </tr>
 </tbody>
 </table>
@@ -995,7 +1005,7 @@ Note that not all of the external base libraries are included in the component m
 <tr>
 <td>Minidriver</td>
 <td>Described in chap. <a href="#_comp_drivers">Drivers</a>.</td>
-<td>IDEMIA</td>
+<td>IDEMIA/Thales</td>
 </tr>
 </tbody>
 </table>
@@ -1026,7 +1036,7 @@ Note that not all of the external base libraries are included in the component m
 <tr>
 <td>Minidriver</td>
 <td>Used as a default driver for accessing Estonian eID-cards via CNG interface for signature creation in web browser environment in case of Windows platform. Used as a default driver for authentication with eID card in browser environment in case of Windows platform.</td>
-<td>IDEMIA</td>
+<td>IDEMIA/Thales</td>
 </tr>
 <tr>
 <td>EstEID CTK Tokend</td>
@@ -1169,7 +1179,7 @@ Note that not all of the external base libraries are included in the component m
 </tr>
 <tr>
 <td>Windows Store</td>
-<td>See <a href="https://microsoftedge.microsoft.com/addons/detail/gnmckgbandlkacikdndelhfghdejfido">https://microsoftedge.microsoft.com/addons/detail/gnmckgbandlkacikdndelhfghdejfido</a>.</td>
+<td>See <a href="https://microsoftedge.microsoft.com/addons/detail/gnmckgbandlkacikdndelhfghdejfido">https://microsoftedge.microsoft.com/addons/detail/gnmckgbandlkacikdndelhfghdejfido</a>, <a href="https://apps.microsoft.com/detail/9pfpfk4dj1s6">https://apps.microsoft.com/detail/9pfpfk4dj1s6</a>.</td>
 <td>Microsoft</td>
 </tr>
 <tr>
@@ -1368,7 +1378,7 @@ Note that not all of the external base libraries are included in the component m
 <p>See <a href="#_comp_central_conf_server_interfaces">Central configuration repository's interfaces</a>.</p>
 <p><a name="_comp_external"></a></p>
 <h2 id="interfaces-with-external-services">Interfaces with external services</h2>
-<p>The following chapter describes interfaces that different ID-software components may have with external services. Relatsionships with the external services are depicted in different ID-software component models above.</p>
+<p>The following chapter describes interfaces that different ID-software components may have with external services. Relationships with the external services are depicted in different ID-software component models above.</p>
 <p><a name="_comp_central_conf_server_interfaces"></a></p>
 <h4 id="central-configuration-repositorys-interfaces_1">Central configuration repository's interfaces</h4>
 <ul>
@@ -1386,7 +1396,7 @@ Note that not all of the external base libraries are included in the component m
 </li>
 <li>Central configuration file's public key file config.pub<ul>
 <li>User: central configuration client component</li>
-<li>Accessible from: <a hreef="https://id.eesti.ee/config.pub">https://id.eesti.ee/config.pub</a> </li>
+<li>Accessible from: <a href="https://id.eesti.ee/config.pub">https://id.eesti.ee/config.pub</a> </li>
 <li>Accessible with: HTTPS protocol</li>
 </ul>
 </li>
@@ -1412,7 +1422,7 @@ Note that not all of the external base libraries are included in the component m
 <ul>
 <li>User: DigiDoc4, RIA DigiDoc</li>
 <li>Accessible with: LDAP protocol</li>
-<li>Accessible from: ldaps://esteid.ldap.sk.ee, ldaps://k3.ldap.sk.ee</li>
+<li>Accessible from: ldaps://esteid.ldap.sk.ee, ldaps://k3.ldap.sk.ee, ldaps://ldap.eidpki.ee</li>
 <li>Documentation: <a href="https://www.skidsolutions.eu/en/repository/ldap/">https://www.skidsolutions.eu/en/repository/ldap/</a></li>
 </ul>
 <p><a name="_TSL_repositories’_interfaces"></a></p>
@@ -1444,6 +1454,7 @@ Note that not all of the external base libraries are included in the component m
 <li>OCSP URL from signer certificate Authority Information Access extension.</li>
 <li>SK’s OCSP service for SK issued certificates: <a href="http://ocsp.sk.ee/">http://ocsp.sk.ee/</a></li>
 <li>SK’s test OCSP service: <a href="http://demo.sk.ee/ocsp">http://demo.sk.ee/ocsp</a></li>
+<li>Zetes’s test OCSP service: <a href="https://ocsp-test.eidpki.ee/ui/">https://ocsp-test.eidpki.ee/ui/</a></li>
 </ul>
 </li>
 <li>Documentation: <a href="https://tools.ietf.org/html/rfc6960">RFC6960</a></li>
@@ -1584,5 +1595,5 @@ Note that not all of the external base libraries are included in the component m
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-10-10 07:47:12.132632+00:00
+Build Date UTC : 2025-11-10 13:11:54.882450+00:00
 -->
