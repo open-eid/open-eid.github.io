@@ -32,7 +32,7 @@ jobs:
         mv site ../_site
     - name: Copy shared files
       run: |
-        for dir in domain nginx; do
+        for dir in domain nginx apache; do
           mkdir -p $dir/_includes
           cp _includes/head_custom.html $dir/_includes/head_custom.html
         done
@@ -46,6 +46,11 @@ jobs:
       with:
         source: ./nginx
         destination: ./_site/nginx
+    - name: Build apache page docs
+      uses: actions/jekyll-build-pages@v1
+      with:
+        source: ./apache
+        destination: ./_site/apache
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v5
 
