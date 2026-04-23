@@ -1,0 +1,7 @@
+remote_theme: just-the-docs/just-the-docs
+title: Estonian eID IIS Configuration
+description: Technical documentation for configuring IIS to support Estonian Digital ID-card for authentication.
+google_analytics:
+layout: minimal
+nav_enabled: false
+baseurl: "/iis"
