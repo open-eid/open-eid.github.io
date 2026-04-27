@@ -6,16 +6,18 @@ See dokument pakub põhjalikku tehnilist ülevaadet ja samm-sammulisi juhiseid s
 
 **Versioon:** 26.03/1
 
+**Väljaandja:** [RIA](https://www.ria.ee/)
+
 **Versiooni info**
 
 | Kuupäev    | Versioon | Muutused/märkused
 |:-----------|:--------:|:-----------------------------------------------------------
-| 21.01.2019 | 19.01/1  | Avalik versioon, baseerub 18.12 tarkvaral
-| 10.03.2022 | 22.03/1  | Uuendatud versioon, baseerub EID-22.1.0.1922 tarkvaral. — Muutja: Urmas Vanem
+| 21.01.2019 | 19.01/1  | Avalik versioon, baseerub `18.12` tarkvaral
+| 10.03.2022 | 22.03/1  | Uuendatud versioon, baseerub `eID-22.1.0.1922` tarkvaral. — Muutja: Urmas Vanem
 | 14.09.2022 | 22.09/1  | Lisatud uute Microsoft poolsete nõuete kirjeldus kasutaja ja eID kaardi sertifikaadi sidumiseks. — Muutja: Urmas Vanem
-| 11.12.2023 | 23.12/1  | Eemaldatud ESTEID-SK 2015 ahel + väiksed muutused. — Muutja: Urmas Vanem
+| 11.12.2023 | 23.12/1  | Eemaldatud `ESTEID-SK 2015` ahel + väiksed muutused. — Muutja: Urmas Vanem
 | 31.10.2025 | 25.10/1  | Lisatud Zetes ahelad — Muutja: Raul Kaidro
-| 13.03.2026 | 26.03/1  | Konverteeritud to Markdown formaati — Changed by: Raul Metsma
+| 13.03.2026 | 26.03/1  | Konverteeritud Markdown formaati — Muutja: Raul Metsma
 
 ---
 
@@ -40,7 +42,7 @@ eID logini rakendamine eeldab kogumit süsteemseid ettevalmistusi nii domeeni ku
 eID kaartidega domeeni logimiseks tuleb keskkond konfigureerida järgnevalt:
 
 *   Domeeni kontrollerid peavad omama endi tuvastamiseks spetsiifiliste omadustega sertifikaati, mida usaldavad ka kliendid.
-*   Domeeni kontrollerid peavad usaldama sertifitseerimiskeskuse eID kaartide harude juur- ja kesktasemete sertifikaate.
+*   Domeeni kontrollerid peavad usaldama [SK ID Solutions](https://www.skidsolutions.eu/resources/certificates/) (`EE-GovCA2018`) ja [Zetes](https://repository.eidpki.ee/) (`EEGovCA2025`) eID kaartide harude juur- ja kesktasemete sertifikaate.
 *   Klientarvutitel peab olema installeeritud ID-tarkvara (täna, märtsis 2026, soovitame kõige värskeimat versiooni 25.10.23.8403).
 *   Klientarvutid peavad toetama sertifikaate, millel puudub spetsiaalne kiipkaardiga logimise toe atribuut (`Smart Card Logon` EKU) ja samuti peab lubatud olema ECC sertifikaatide kasutamine arvutisse logimise eesmärgil.
 *   Domeenis peab eID kaartide autentimissertifikaat olema seotud kindla kasutajaga.
@@ -67,9 +69,9 @@ Juhul, kui ettevõttel PKI lahendus puudub, tundub mõistliku otsusena selle loo
 
 eID kaartide ja nendega seotud sertifikaatide kasutamisel domeeni sisselogimisel peavad domeeni kontrollerid neid usaldama, nii kesk- kui juurtaseme sertifikaadid peavad paiknema õigetes konteinerites. Sertifikaatide kehtivuse kontrollimiseks peab olema ligipääs SK ja Zetes OCSP teenusele.
 
-eID kaardiga domeeni logimise võimaldamiseks tuleb kesktaseme sertifikaadid (ESTEID2018, ESTEID2025) paigaldada ka domeeni NTAuthCertificates konteinerisse. Seda saame teha käsuga `certutil -dspublish -f 'SERDINIMI' NTAuthCA`. Samuti võime domeeni konteinerisse lisada ka juurtaseme sertifikaadi, siis on käsuks `certutil -dspublish -f 'SERDINIMI' RootCA`.
+eID kaardiga domeeni logimise võimaldamiseks tuleb kesktaseme sertifikaadid (`ESTEID2018`, `ESTEID2025`) paigaldada ka domeeni NTAuthCertificates konteinerisse. Seda saame teha käsuga `certutil -dspublish -f 'SERDINIMI' NTAuthCA`. Samuti võime domeeni konteinerisse lisada ka juurtaseme sertifikaadi, siis on käsuks `certutil -dspublish -f 'SERDINIMI' RootCA`.
 
-Sertifikaadid on allalaetavad lehelt [https://www.skidsolutions.eu/resources/certificates/](https://www.skidsolutions.eu/resources/certificates/) ja [https://repository.eidpki.ee/crt/](https://repository.eidpki.ee/crt/). Tänase seisuga vajame järgmiseid sertifikaate:
+Sertifikaadid on allalaetavad lehelt <https://www.skidsolutions.eu/resources/certificates/> ja <https://repository.eidpki.ee/crt/>. Tänase seisuga vajame järgmiseid sertifikaate:
 
 *   [EE-GovCA2018](https://c.sk.ee/EE-GovCA2018.der.crt) - usaldusväärne juursertifikaat;
 *   [EEGovCA2025](https://crt.eidpki.ee/EEGovCA2025.crt) - usaldusväärne juursertifikaat;
@@ -128,7 +130,7 @@ Juhul, kui eID kaartidega tahetakse logida näiteks domeenivälisest koduarvutis
 
 ### OCSP sertifikaadikontrolli meetodi keskne nõue
 
-Hetkel kasutusel olevate eID kaartide puhul ei ole meil vajalik OCSP teed enam keskselt kirjeldada, kuna see on sertifikaadis juba sees. CRL tee neis sertifikaatides puudub, seega toimub sertifikaadi kehtivuse kontroll vaikimisi ainult vastu vaba ligipääsuga AIA OCSP teenust (http://aia.sk.ee/esteid2018, http://ocsp.eidpki.ee).
+Hetkel kasutusel olevate eID kaartide puhul ei ole meil vajalik OCSP teed enam keskselt kirjeldada, kuna see on sertifikaadis juba sees. CRL tee neis sertifikaatides puudub, seega toimub sertifikaadi kehtivuse kontroll vaikimisi ainult vastu vaba ligipääsuga AIA OCSP teenust (<http://aia.sk.ee/esteid2018>, <http://ocsp.eidpki.ee>).
 
 > **Märkus:** OCSP nõude kehtestamise korral vii end kurssi ka mõistega OCSP maagiline number.[^3]
 

@@ -6,11 +6,11 @@
       if (altText && altText.trim() !== '') {
         const figure = document.createElement('figure');
         const figcaption = document.createElement('figcaption');
-        
+
         figure.className = 'generated-figure';
         figcaption.className = 'generated-figcaption';
         figcaption.textContent = altText;
-        
+
         const parent = img.parentNode;
         figure.appendChild(img.cloneNode(true));
         figure.appendChild(figcaption);

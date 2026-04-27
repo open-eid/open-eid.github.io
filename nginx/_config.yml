@@ -1,0 +1,7 @@
+remote_theme: just-the-docs/just-the-docs
+title: Estonian eID Nginx SSL Configuration
+description: Technical documentation for configuring two-way SSL using Estonian ID-cards in Ubuntu Nginx web server.
+google_analytics:
+layout: minimal
+nav_enabled: false
+baseurl: "/nginx"

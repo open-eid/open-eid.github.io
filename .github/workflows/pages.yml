@@ -30,13 +30,24 @@ jobs:
         cd ID_software_architecture_files
         mkdocs build
         mv site ../_site
+    - name: Copy shared files
+      run: |
+        for dir in domain nginx; do
+          mkdir -p $dir/_includes
+          cp _includes/head_custom.html $dir/_includes/head_custom.html
+        done
     - name: Build domain page docs
       uses: actions/jekyll-build-pages@v1
       with:
         source: ./domain
         destination: ./_site/domain
+    - name: Build nginx page docs
+      uses: actions/jekyll-build-pages@v1
+      with:
+        source: ./nginx
+        destination: ./_site/nginx
     - name: Upload artifact
-      uses: actions/upload-pages-artifact@v4
+      uses: actions/upload-pages-artifact@v5
 
   deploy:
     environment:
@@ -47,4 +58,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

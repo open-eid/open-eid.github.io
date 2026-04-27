@@ -6,14 +6,16 @@ This document provides a comprehensive technical overview and step-by-step guida
 
 **Version:** 26.03/1
 
+**Published by:** [RIA](https://www.ria.ee/)
+
 **Version information**
 
 | Date       | Version | Changes/Notices
 |:-----------|:-------:|:-----------------------------------------------------------
-| 21.01.2019 | 19.01/1 | Public version, based on software version 18.12.
-| 10.03.2022 | 22.03/1 | Updated version, based on software version eID-22.1.0.1922. — Changed by: Urmas Vanem
+| 21.01.2019 | 19.01/1 | Public version, based on software version `18.12`.
+| 10.03.2022 | 22.03/1 | Updated version, based on software version `eID-22.1.0.1922`. — Changed by: Urmas Vanem
 | 14.09.2022 | 22.09/1 | Added description of new requirements from Microsoft for mapping user and eID card certificate. — Changed by: Urmas Vanem
-| 11.12.2023 | 23.12/1 | Removed ESTEID-SK 2015 chain + minor changes. — Changed by: Urmas Vanem
+| 11.12.2023 | 23.12/1 | Removed `ESTEID-SK 2015` chain + minor changes. — Changed by: Urmas Vanem
 | 31.10.2025 | 25.10/1 | Added Zetes certificates — Changed by: Raul Kaidro
 | 13.03.2026 | 26.03/1 | Converted to Markdown format — Changed by: Raul Metsma
 
@@ -40,7 +42,7 @@ Configuring ID login requires a set of systemic preparations for both the domain
 To enable eID card logging into Windows domain following options must be enabled:
 
 *   Domain controllers must have a specific certificate to identify themselves, the certificate must also be trusted by clients/computers.
-*   Domain controllers must trust root and intermediate level certificates from eID card chains.
+*   Domain controllers must trust root and intermediate level certificates from [SK ID Solutions](https://www.skidsolutions.eu/resources/certificates/) (`EE-GovCA2018`) and [Zetes](https://repository.eidpki.ee/) (`EEGovCA2025`) eID card chains.
 *   Client computers must have ID-software installed (today, March 2026, we recommend the most recent version 25.10.23.8403).
 *   Client computers must support certificates that do not have a special `Smart Card Logon` EKU property and the use of ECC certificates for logging purposes into computers must also be allowed.
 *   In the domain, the authentication certificate of the eID card must be linked to a specific user.
@@ -67,9 +69,9 @@ If PKI services are not implemented in the domain, it could be a good idea to ch
 
 To use eID cards and related certificates for domain logging, domain controllers must trust those certificates. Both root and intermediate certificates form eID certificate chains must be trusted and installed into correct certificate containers. Domain controllers must also have access to the OCSP service described in certificates to check the validity of certificates.
 
-To enable domain logging with an eID card, intermediate level certificates (ESTEID2018, ESTEID2025) must be installed in the NTAuthCertificates container of the domain. We can do this with the command `certutil -dspublish -f 'CERTIFICATE NAME' NTAuthCA`. We can also add a root-level certificate to the domain container with the command `certutil -dspublish -f 'CERTIFICATE NAME' RootCA`.
+To enable domain logging with an eID card, intermediate level certificates (`ESTEID2018`, `ESTEID2025`) must be installed in the NTAuthCertificates container of the domain. We can do this with the command `certutil -dspublish -f 'CERTIFICATE NAME' NTAuthCA`. We can also add a root-level certificate to the domain container with the command `certutil -dspublish -f 'CERTIFICATE NAME' RootCA`.
 
-Certificates can be downloaded from [https://www.skidsolutions.eu/resources/certificates/](https://www.skidsolutions.eu/resources/certificates/) and [https://repository.eidpki.ee/crt/](https://repository.eidpki.ee/crt/). As of today, we need the following certificates:
+Certificates can be downloaded from <https://www.skidsolutions.eu/resources/certificates/> and <https://repository.eidpki.ee/crt/>. As of today, we need the following certificates:
 
 *   [EE-GovCA2018](https://c.sk.ee/EE-GovCA2018.der.crt) - trusted root certificate;
 *   [EEGovCA2025](https://crt.eidpki.ee/EEGovCA2025.crt) - trusted root certificate;
@@ -128,7 +130,7 @@ If you want to support eID card to log in from a non-domain, for example from ho
 
 ### Requiring OCSP revocation check
 
-For eID cards currently in use, it is no longer necessary for us to describe the OCSP path centrally, as it is already included in the certificate. There is no CRL path in these certificates, so by default the certificate's validity is checked only against the free access AIA OCSP service (http://aia.sk.ee/esteid2018, http://ocsp.eidpki.ee).
+For eID cards currently in use, it is no longer necessary for us to describe the OCSP path centrally, as it is already included in the certificate. There is no CRL path in these certificates, so by default the certificate's validity is checked only against the free access AIA OCSP service (<http://aia.sk.ee/esteid2018>, <http://ocsp.eidpki.ee>).
 
 > **Note:** If using OCSP, familiarize yourself with the concept of OCSP magic number also.[^3]
 
