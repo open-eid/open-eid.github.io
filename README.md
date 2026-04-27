@@ -2,6 +2,7 @@
 
  * [Architecture of ID-software](http://open-eid.github.io)
  * [Domain Controller Configuration](http://open-eid.github.io/domain)
+ * [Apache2 SSL Configuration](http://open-eid.github.io/apache)
  * [Nginx SSL Configuration](http://open-eid.github.io/nginx)
 
 ## Editing and building "Architecture of ID-software"
@@ -29,6 +30,22 @@ pandoc domain/index.md -L kramdown-toc.lua -o eID_Auth_Guide_EN.pdf
 
 # Export Estonian version
 pandoc domain/index.et.md -L kramdown-toc.lua -o eID_Auth_Guide_ET.pdf
+```
+
+## Editing and building "Apache2 SSL Configuration"
+
+Uses https://jekyllrb.com and https://just-the-docs.com styles for generating documentation.
+
+1.  Update source files in apache/
+
+2.  Build PDF document
+
+```bash
+# Export English version
+pandoc apache/index.md -L kramdown-toc.lua -o apache_SSL_EN.pdf
+
+# Export Estonian version
+pandoc apache/index.et.md -L kramdown-toc.lua -o apache_SSL_ET.pdf
 ```
 
 ## Editing and building "Nginx SSL Configuration"
