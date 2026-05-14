@@ -1,8 +1,8 @@
 # ARCHITECTURE OF ID-SOFTWARE
 
-Document version: 30  
-Software version: 25.11  
-Last updated: 27.10.2025  
+Document version: 31  
+Software version: 26.04  
+Last updated: 14.05.2026  
 
 
 # Introduction
@@ -15,7 +15,7 @@ Main sources for information about ID-software are [www.id.ee](https://www.id.ee
 
 This document covers description of ID-software and its components, their deployment in different environments, provided and required interfaces. The document does not include components that have reached the end of their support nor the components that have not yet been released.
 
-The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is **version 25.11**. Latest version numbers of the various ID-software components are provided at [https://www.id.ee/en/article/information-on-the-latest-software-versions/](https://www.id.ee/en/article/information-on-the-latest-software-versions/).
+The document is based on the latest released state of the ID-software components. At the time of writing, the latest released version of ID-software is **version 26.04**. Latest version numbers of the various ID-software components are provided at [https://www.id.ee/en/article/information-on-the-latest-software-versions/](https://www.id.ee/en/article/information-on-the-latest-software-versions/).
 
 The document is targeted for:
 
@@ -32,9 +32,9 @@ The document is targeted for:
 
 The software is being developed and tested by:  
 
-*   **RaulWalter** (RW, [https://www.raulwalter.com](https://www.raulwalter.com)) as the main contractor during 2019-2025;  
-*   **Nortal** ([https://nortal.com](https://nortal.com)) during 2019-2025;  
-*   **TTT** ([https://www.testijad.ee](https://www.testijad.ee)) during 2019-2025;  
+*   **RaulWalter** (RW, [https://www.raulwalter.com](https://www.raulwalter.com)) as the main contractor during 2019-2026;  
+*   **Nortal** ([https://nortal.com](https://nortal.com)) during 2019-2026;  
+*   **TTT** ([https://www.testijad.ee](https://www.testijad.ee)) during 2019-2026;  
 *   SK ID Solutions (SK, [https://www.skidsolutions.eu/en](https://www.skidsolutions.eu/en));  
 *   Aktors ([http://www.aktors.ee/wp/](http://www.aktors.ee/wp/));  
 *   CGI Estonia ([https://www.cgi.ee/et](https://www.cgi.ee/et)).
@@ -266,9 +266,6 @@ Note that not all of the external base libraries are included in the component m
 ![cmp DigiDoc4 signing components](index_files/comp_digidoc4_signing.png "cmp DigiDoc4 signing components")  
 **Figure: DigiDoc4 signing and crypto-components**
 
-![cmp DigiDoc4 management components](index_files/comp_digidoc4_eid.png "cmp DigiDoc4 management components")  
-**Figure: DigiDoc4 ID-card management components**
-
 | Component | Description | Owner |
 | - | - | - |
 | DigiDoc4 | DigiDoc4 enables handling digitally signed documents, encryption/decryption for managing ID-card’s PIN/PUK codes replacement and other services.<br/>Code repository: [https://github.com/open-eid/DigiDoc4-Client](https://github.com/open-eid/DigiDoc4-Client). | RIA |
@@ -279,6 +276,7 @@ Note that not all of the external base libraries are included in the component m
 | Central configuration repository | Described in chap. [Central configuration service](#_comp_central_conf). | RIA |
 | Central configuration client | Described in chap. [Central configuration service](#_comp_central_conf). | RIA |
 | Libdigidocpp | Described in chap. [Software libraries](#_comp_libraries). | RIA |
+| Libcdoc | Described in chap. [Software libraries](#_comp_libraries). | RIA |
 | SiVa | Described in chap. [Software libraries](#_DigiDoc4). | RIA |
 | TSL repository | Described in chap. [Software libraries](#_comp_libraries). | EU/RIA |
 | Time-stamping proxy service interface | Described in chap. [Software libraries](#_comp_libraries). | RIA |
@@ -314,9 +312,9 @@ Required:
 *   [Mobile-ID (MID) REST service](#_MID_REST_service)
 *   [Smart-ID (MID) REST service](#_SID_REST_service)
 *   [LDAP directory interface](#_LDAP_directory_interface)
-*   [CDoc 2.0 Decryption Service interface](#_CDoc_decryption_service)
 *   Interfaces with base libraries:
     *   [Libdigidocpp library’s API](#_Libdigidocpp_library’s_interfaces) – for handling documents in supported digital signature formats (ASiC, BDOC, DDOC and PDF)
+    *   [Libcdoc library’s API](#_Libcdoc_library’s_interfaces) – for handling documents in supported encryption formats (CDoc 1.0/1.1/2.0)
     *   External base libraries: Qt6, libldap, openssl
 *   Interfaces with cryptographic token’s drivers (described in chap. [Drivers](#_comp_drivers))
     *   PKCS#11 interface
@@ -801,9 +799,10 @@ The central configuration service's purpose is to enable on-line and central man
 | Central configuration client | Central Configuration Client component manages the configuration file validation and updating processes, returns the validated configuration data to the Requesting Application (DigiDoc4) and if necessary, updates the data from Central Configuration Server. | RIA |
 | Central configuration service | Central Configuration Server component provides configuration data on-line to the Central Configuration Client component. | RIA |
 | config.json | The central configuration file is named config.json, the file is in JSON format. The configuration file is signed. | RIA |
-| config.rsa | Stores the central configuration file's signature value. | RIA |
-| config.pub | Public key used for validating the central configuration file's signature value. | RIA |
-| Libdigidocpp | DigiDoc4's base library, also uses the central configuration file's settings. Described in chap. [Software libraries](#_comp_libraries). | RIA |
+| config.rsa / config.ecc | Stores the central configuration file's signature value. | RIA |
+| config.pub / config.ecpub | Public key used for validating the central configuration file's signature value. | RIA |
+| libdigidocpp | DigiDoc4's base library, also uses the central configuration file's settings. Described in chap. [Software libraries](#_comp_libraries). | RIA |
+| libcdoc | DigiDoc4's base library, also uses the central configuration file's settings. Described in chap. [Software libraries](#_comp_libraries). | RIA |
 
 **Table: Central configuration service's components**
 
@@ -819,8 +818,8 @@ Required:
 
 *   Central configuration file config.json from the [central configuration repository](#_comp_central_conf_server_interfaces)
 *   Central configuration file config.json from the local file system (or the local installation package)
-*   Central configuration file's signature config.rsa from the [central configuration repository](#_comp_central_conf_server_interfaces)
-*   Central configuration file's signature config.rsa from the local file system (or the local installation package)
+*   Central configuration file's signature config.rsa/config.ecc from the [central configuration repository](#_comp_central_conf_server_interfaces)
+*   Central configuration file's signature config.rsa/config.ecc from the local file system (or the local installation package)
 *   Client operating system's registry/environment variables
     *   LastCheck entry
 *   Base libraries:
@@ -842,13 +841,13 @@ The following chapter describes interfaces that different ID-software components
     *   User: central configuration client component
     *   Accessible from: <a href="https://id.eesti.ee/config.json">https://id.eesti.ee/config.json</a>
     *   Accessible with: HTTPS protocol
-*   Central configuration file's signature file config.rsa
+*   Central configuration file's signature file config.rsa / config.ecc
     *   User: central configuration client component
-    *   Accessible from: <a href="https://id.eesti.ee/config.rsa">https://id.eesti.ee/config.rsa</a>
+    *   Accessible from: <a href="https://id.eesti.ee/config.rsa">https://id.eesti.ee/config.rsa</a> / <a href="https://id.eesti.ee/config.ecc">https://id.eesti.ee/config.ecc</a>
     *   Accessible with: HTTPS protocol
-*   Central configuration file's public key file config.pub
+*   Central configuration file's public key file config.pub / config.ecpub
     *   User: central configuration client component
-    *   Accessible from: <a href="https://id.eesti.ee/config.pub">https://id.eesti.ee/config.pub</a> 
+    *   Accessible from: <a href="https://id.eesti.ee/config.pub">https://id.eesti.ee/config.pub</a> / <a href="https://id.eesti.ee/config.ecpub">https://id.eesti.ee/config.ecpub</a>
     *   Accessible with: HTTPS protocol
 
 <a name="_MID_REST_service"></a>
