@@ -5,6 +5,7 @@
  * [Apache2 SSL Configuration](http://open-eid.github.io/apache)
  * [Nginx SSL Configuration](http://open-eid.github.io/nginx)
  * [IIS SSL Configuration](http://open-eid.github.io/iis)
+ * [ID-software Administrator View](http://open-eid.github.io/admin)
 
 ## Editing and building "Architecture of ID-software"
 
@@ -79,6 +80,22 @@ pandoc iis/index.md -L kramdown-toc.lua -o iis_SSL_EN.pdf
 
 # Export Estonian version
 pandoc iis/index.et.md -L kramdown-toc.lua -o iis_SSL_ET.pdf
+```
+
+## Editing and building "ID-software Administrator View"
+
+Uses https://jekyllrb.com and https://just-the-docs.com styles for generating documentation.
+
+1.  Update source files in admin/
+
+2.  Build PDF document
+
+```bash
+# Export English version
+pandoc admin/index.md -L kramdown-toc.lua -o admin_view_EN.pdf
+
+# Export Estonian version
+pandoc admin/index.et.md -L kramdown-toc.lua -o admin_view_ET.pdf
 ```
 
 ## Support

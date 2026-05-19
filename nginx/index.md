@@ -39,13 +39,13 @@ This guide describes:
 - How to configure OCSP checks against the guaranteed OCSP as well as the AIA OCSP service.
 - How to protect the web server.
 
-In addition, we will look at other configuration options such as how to configure HTTP -\> HTTPS redirection, etc.
+This guide also covers other configuration options such as how to configure HTTP -\> HTTPS redirection, etc.
 
 ## Nginx installation and configuration
 
 ### Installation
 
-By default, Ubuntu 24.04 installs Nginx version 1.24. However, as we wish to use the latest version 1.28.1 in our guide, additional changes are required before installation.
+By default, Ubuntu 24.04 installs Nginx version 1.24. However, since version 1.28.1 is used in this guide, additional changes are required before installation.
 
 To install Nginx 1.28.1 on Ubuntu 24.04:
 
@@ -92,7 +92,7 @@ To install Nginx 1.28.1 on Ubuntu 24.04:
       libnginx-mod-stream-geoip2 nginx nginx-common
     ```
 
-We can check the Nginx version with the command
+The Nginx version can be checked with the command
 
 ```bash
 $ nginx -v
@@ -451,7 +451,7 @@ Preferring server ciphers over user ciphers can be enabled with `ssl_prefer_serv
 
 #### Additional filtering of client certificates
 
-Important! To guarantee access to our web service only for users with the right certificates, it is strongly recommended to add the following additional requirements in the server configuration:
+Important! To guarantee access to the web service only for users with the right certificates, it is strongly recommended to add the following additional requirements in the server configuration:
 
 1.  The certificate must include the correct OID value;
 2.  The certificate issuer must be `ESTEID2018` or `ESTEID2025`.

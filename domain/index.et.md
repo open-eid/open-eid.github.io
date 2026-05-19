@@ -4,7 +4,7 @@
 
 See dokument pakub põhjalikku tehnilist ülevaadet ja samm-sammulisi juhiseid süsteemiadministraatoritele Eesti ID-kaardi autentimise rakendamiseks Windowsi domeenikeskkonnas.
 
-**Versioon:** 26.03/1
+**Versioon:** 26.04/1
 
 **Väljaandja:** [RIA](https://www.ria.ee/)
 
@@ -18,6 +18,7 @@ See dokument pakub põhjalikku tehnilist ülevaadet ja samm-sammulisi juhiseid s
 | 11.12.2023 | 23.12/1  | Eemaldatud `ESTEID-SK 2015` ahel + väiksed muutused. — Muutja: Urmas Vanem
 | 31.10.2025 | 25.10/1  | Lisatud Zetes ahelad — Muutja: Raul Kaidro
 | 13.03.2026 | 26.03/1  | Konverteeritud Markdown formaati — Muutja: Raul Metsma
+| 19.05.2026 | 26.04/1  | Stiiliparandused. — Muutja: Raul Metsma
 
 ---
 
@@ -43,11 +44,11 @@ eID kaartidega domeeni logimiseks tuleb keskkond konfigureerida järgnevalt:
 
 *   Domeeni kontrollerid peavad omama endi tuvastamiseks spetsiifiliste omadustega sertifikaati, mida usaldavad ka kliendid.
 *   Domeeni kontrollerid peavad usaldama [SK ID Solutions](https://www.skidsolutions.eu/resources/certificates/) (`EE-GovCA2018`) ja [Zetes](https://repository.eidpki.ee/) (`EEGovCA2025`) eID kaartide harude juur- ja kesktasemete sertifikaate.
-*   Klientarvutitel peab olema installeeritud ID-tarkvara (täna, märtsis 2026, soovitame kõige värskeimat versiooni 25.10.23.8403).
+*   Klientarvutitel peab olema installeeritud ID-tarkvara (soovitatav versioon on 26.4.20.8412).
 *   Klientarvutid peavad toetama sertifikaate, millel puudub spetsiaalne kiipkaardiga logimise toe atribuut (`Smart Card Logon` EKU) ja samuti peab lubatud olema ECC sertifikaatide kasutamine arvutisse logimise eesmärgil.
 *   Domeenis peab eID kaartide autentimissertifikaat olema seotud kindla kasutajaga.
 
-Täpsemalt käsitleme konfiguratsiooni ettevalmistust järgmistes alampunktides.
+Täpsemalt käsitletakse konfiguratsiooni ettevalmistust järgmistes alampunktides.
 
 ## Domeenist
 
@@ -55,7 +56,7 @@ Domeeni ettevalmistuse osadeks on poliitikate häälestus domeeni kontrolleritel
 
 ### Domeeni kontrolleri sertifikaat
 
-Nagu juba öeldud, domeeni kontrollerid vajavad eID logini toimimiseks sertifikaate, millega nad suudavad klientarvutitele endi identiteeti ja kiipkaardiga logimise võimekuse tuge tõestada. Kõige mõistlikum on need sertifikaadid küsida lokaalse PKI lahenduse käest. Vaikimisi Windows CA konfiguratsioonis on võimalik publitseerida `Domain Controller Authentication` mall, mida reeglina küsivad endale kõik domeeni kontrollerid. Juhul kui domeeni kontrolleritel sertifikaatide autoenrollment ei ole lubatud, tuleb nimetatud sertifikaadid küsida "käsitsi".
+Nagu juba öeldud, domeeni kontrollerid vajavad eID logini toimimiseks sertifikaate, millega nad suudavad klientarvutitele endi identiteeti ja kiipkaardiga logimise võimekuse tuge tõestada. Kõige mõistlikum on need sertifikaadid küsida lokaalse PKI lahenduse käest. Vaikimisi Windows CA konfiguratsioonis on võimalik publitseerida `Domain Controller Authentication` mall, mida reeglina küsivad endale kõik domeeni kontrollerid. Juhul kui domeeni kontrolleritel sertifikaatide autoenrollment ei ole lubatud, tuleb nimetatud sertifikaadid küsida „käsitsi".
 
 Piltlikult väljendub nõutav domeeni kontrollerite sertifikaatide konfiguratsioon järgmisel joonisel:
 
@@ -69,9 +70,9 @@ Juhul, kui ettevõttel PKI lahendus puudub, tundub mõistliku otsusena selle loo
 
 eID kaartide ja nendega seotud sertifikaatide kasutamisel domeeni sisselogimisel peavad domeeni kontrollerid neid usaldama, nii kesk- kui juurtaseme sertifikaadid peavad paiknema õigetes konteinerites. Sertifikaatide kehtivuse kontrollimiseks peab olema ligipääs SK ja Zetes OCSP teenusele.
 
-eID kaardiga domeeni logimise võimaldamiseks tuleb kesktaseme sertifikaadid (`ESTEID2018`, `ESTEID2025`) paigaldada ka domeeni NTAuthCertificates konteinerisse. Seda saame teha käsuga `certutil -dspublish -f 'SERDINIMI' NTAuthCA`. Samuti võime domeeni konteinerisse lisada ka juurtaseme sertifikaadi, siis on käsuks `certutil -dspublish -f 'SERDINIMI' RootCA`.
+eID kaardiga domeeni logimise võimaldamiseks tuleb kesktaseme sertifikaadid (`ESTEID2018`, `ESTEID2025`) paigaldada ka domeeni NTAuthCertificates konteinerisse. Seda saab teha käsuga `certutil -dspublish -f 'SERDINIMI' NTAuthCA`. Samuti saab domeeni konteinerisse lisada ka juurtaseme sertifikaadi, siis on käsuks `certutil -dspublish -f 'SERDINIMI' RootCA`.
 
-Sertifikaadid on allalaetavad lehelt <https://www.skidsolutions.eu/resources/certificates/> ja <https://repository.eidpki.ee/crt/>. Tänase seisuga vajame järgmiseid sertifikaate:
+Sertifikaadid on allalaetavad lehelt <https://www.skidsolutions.eu/resources/certificates/> ja <https://repository.eidpki.ee/crt/>. Tänase seisuga on vajalikud järgmised sertifikaadid:
 
 *   [EE-GovCA2018](https://c.sk.ee/EE-GovCA2018.der.crt) - usaldusväärne juursertifikaat;
 *   [EEGovCA2025](https://crt.eidpki.ee/EEGovCA2025.crt) - usaldusväärne juursertifikaat;
@@ -80,11 +81,11 @@ Sertifikaadid on allalaetavad lehelt <https://www.skidsolutions.eu/resources/cer
 
 ![Juurtaseme sertifikaadid AD konteinerites](./img/image2.png)
 
-Lisaks võime SK/Zetes juur- ja kesktaseme sertifikaadid publitseerida kas ainult domeeni kontrolleritele või ka kõikidele domeeni serveritele ja/või tööjaamadele või nende gruppidele kesksete poliitikate abil.[^1]
+Lisaks saab SK/Zetes juur- ja kesktaseme sertifikaadid publitseerida kas ainult domeeni kontrolleritele või ka kõikidele domeeni serveritele ja/või tööjaamadele või nende gruppidele kesksete poliitikate abil.[^1]
 
-Kui soovime publitseerida sertifikaate domeeni kontrolleritel automaatselt, siis soovitame modifitseerida Default Domain Controllers või mõnda teist domeeni kontrollerite OU tasemelt rakenduvat poliitikat. Sertifikaadid tuleb paigutada konteineritesse vastavalt tüübile, juursertifikaadid juur- ja kesktaseme sertifikaadid kesktaseme konteineritesse.  Sertifikaadid võib keskse poliitika abil automaatselt paigutada ka kõikidele domeeni serveritele ja/või tööjaamadele.
+Sertifikaatide automaatseks publitseerimiseks domeeni kontrolleritel soovitatakse modifitseerida Default Domain Controllers või mõnda teist domeeni kontrollerite OU tasemelt rakenduvat poliitikat. Sertifikaadid tuleb paigutada konteineritesse vastavalt tüübile, juursertifikaadid juur- ja kesktaseme sertifikaadid kesktaseme konteineritesse.  Sertifikaadid võib keskse poliitika abil automaatselt paigutada ka kõikidele domeeni serveritele ja/või tööjaamadele.
 
-Järgnevalt näitame, kuidas publitseerida juur- ning kesktaseme sertifikaate. Sertifikaatide publitseerimiseks domeeni kontrollerite usaldatud ja kesktaseme sertifikaatide kaustades:
+Järgnevalt on kirjeldatud, kuidas publitseerida juur- ning kesktaseme sertifikaate. Sertifikaatide publitseerimiseks domeeni kontrollerite usaldatud ja kesktaseme sertifikaatide kaustades:
 
 1.  Ava **Group Policy Management** konsool ja vali omaduste lisamiseks sobilik GPO, kliki **Edit...**:
 
@@ -110,7 +111,7 @@ Nagu eelnevatelt illustreerivatelt piltideltki näha on, muutuvad sertifikaadid 
 
 ### eID kaardi omaduste häälestus domeenis
 
-Toetamaks eID kaardiga domeeni logimist keskselt kõikidel klientarvutitel kasutame siin näites domeeni taseme poliitikat:[^2]
+Toetamaks eID kaardiga domeeni logimist keskselt kõikidel klientarvutitel kasutatakse siin näites domeeni taseme poliitikat:[^2]
 
 1.  Ava **Group Policy Management** konsool ja vali omaduste lisamiseks sobilik GPO, kliki **Edit...**:
 
@@ -130,7 +131,7 @@ Juhul, kui eID kaartidega tahetakse logida näiteks domeenivälisest koduarvutis
 
 ### OCSP sertifikaadikontrolli meetodi keskne nõue
 
-Hetkel kasutusel olevate eID kaartide puhul ei ole meil vajalik OCSP teed enam keskselt kirjeldada, kuna see on sertifikaadis juba sees. CRL tee neis sertifikaatides puudub, seega toimub sertifikaadi kehtivuse kontroll vaikimisi ainult vastu vaba ligipääsuga AIA OCSP teenust (<http://aia.sk.ee/esteid2018>, <http://ocsp.eidpki.ee>).
+Hetkel kasutusel olevate eID kaartide puhul ei ole vajalik OCSP teed enam keskselt kirjeldada, kuna see on sertifikaadis juba sees. CRL tee neis sertifikaatides puudub, seega toimub sertifikaadi kehtivuse kontroll vaikimisi ainult vastu vaba ligipääsuga AIA OCSP teenust (<http://aia.sk.ee/esteid2018>, <http://ocsp.eidpki.ee>).
 
 > **Märkus:** OCSP nõude kehtestamise korral vii end kurssi ka mõistega OCSP maagiline number.[^3]
 
@@ -147,7 +148,7 @@ Kasutaja sertifikaadi hankimiseks on järgmised võimalused:
 3.  Käsuga `certutil.exe –scinfo` kui eID kaart on lugejas.
 4.  ...
 
-Juhin tähelepanu ka asjaolule, et eID kaartidel on kaks sertifikaati. Domeeni logimiseks eID kaardiga peame kasutama sertifikaati, millisel on EKU all kirjeldatud `Client Authentication`.
+Juhin tähelepanu ka asjaolule, et eID kaartidel on kaks sertifikaati. Domeeni logimiseks eID kaardiga tuleb kasutada sertifikaati, millisel on EKU all kirjeldatud `Client Authentication`.
 
 ![EKU osaks on Client Authentication](./img/image10.png)
 
@@ -157,7 +158,7 @@ Nagu juba öeldud, siis kasutades AD GUI-d seotakse sertifikaat kasutajaga välj
 
 ![&lt;I&gt; ja &lt;S&gt; viitavad sertifikaadi väljadele Issuer ja Subject.](./img/image11.png)
 
-Seega on ilmselt mõistlik järgida Microsofti soovitust ja siduda sertifikaat kasutajaga väljade `issuer` ja `serialnumber` abil. Seda saame üle GUI teha kasutades näiteks ADSI Edit võimalusi.
+Seega on ilmselt mõistlik järgida Microsofti soovitust ja siduda sertifikaat kasutajaga väljade `issuer` ja `serialnumber` abil. Seda saab üle GUI teha kasutades näiteks ADSI Edit võimalusi.
 
 **Tuleb märkida, et nii `issuer`'i kui `serialnumber` stringid tuleb sidumisel ümber keerata!** See tähendab, et kui:
 
@@ -181,7 +182,7 @@ Suuremate keskkondade ja kasutajate arvu puhul tuleb kindlasti mõelda eelkirjel
 
 ### Tarkvara
 
-Klientarvutitele tuleb installeerida ID-tarkvara (täna, novembris 2025, soovitame kõige värskeimat versiooni 25.10.23.8403). Tegelikult piisab ka eID kaardi minidraiveri korrektsest toimimisest, ent standardina ikkagi installeeritakse kogu ID-tarkvara.
+Klientarvutitele tuleb installeerida ID-tarkvara (soovitatav versioon on 26.4.20.8412). Tegelikult piisab ka eID kaardi minidraiveri korrektsest toimimisest, ent standardina ikkagi installeeritakse kogu ID-tarkvara.
 
 ### Omadused
 
@@ -196,13 +197,13 @@ eID logini reaalseks rakendamiseks tuleb lihtsalt teha nagu eelnevalt kirjeldatu
 3.  administraatorite koolitus;
 4.  kasutajate koolitus.
 
-Peale konfiguratsiooni jõustumist klientarvutis saame logimise aknas valida logimise viisiks kiipkaardi ![](img/image14.png).
+Peale konfiguratsiooni jõustumist klientarvutis saab logimise aknas valida logimise viisiks kiipkaardi ![](img/image14.png).
 
 ![eID kaardiga domeeni sisselogimine aken, ootab PIN-koodi sisestamist](./img/image15.png)
 
 ### eID kaardiga domeeni logimise nõue
 
-Mõnikord võime soovida, et kasutajad saaksidki ainult eID kaardiga süsteemidesse sisse logida (teisisõnu keelame parooli kasutamise). See võib puudutada nii tavalisi või spetsiifilisi tööjaamu ja/või RDP servereid. Nõude kehtestamiseks tuleb soovitud arvutitele rakendada järgmine poliitika:
+Mõnikord võib soovida, et kasutajad saaksidki ainult eID kaardiga süsteemidesse sisse logida (teisisõnu keelatakse parooli kasutamine). See võib puudutada nii tavalisi või spetsiifilisi tööjaamu ja/või RDP servereid. Nõude kehtestamiseks tuleb soovitud arvutitele rakendada järgmine poliitika:
 `Computer Configuration / Policies / Windows Settings / Security Settings / Local Policies / Security Options` `Interactive logon: Require Windows Hello for Business or Smart Card` = **Enabled**.
 
 ![Arvutisse või serverisse logimiseks ei piisa enam kasutajanimest ja paroolist!](./img/image16.png)
@@ -211,7 +212,7 @@ Mõnikord võime soovida, et kasutajad saaksidki ainult eID kaardiga süsteemide
 
 ### Arvuti käitumise juhtimine kiipkaardi eemaldamisel
 
-Võime konfigureerida ka arvuti või arvutite grupi käitumise kiipkaardi eemaldamisel. (Muidugi töötab see poliitika vaid juhul, kui oleme arvutisse/domeeni kiipkaardiga loginud.) Valikutes on:
+On võimalik konfigureerida ka arvuti või arvutite grupi käitumine kiipkaardi eemaldamisel. (Muidugi töötab see poliitika vaid juhul, kui arvutisse/domeeni on kiipkaardiga loginud.) Valikutes on:
 
 1.  No Action (vaikimisi);
 2.  Lock Workstation;
@@ -234,7 +235,7 @@ Kui domeenis on välistele HTTP aadressidele ligipääsuks häälestatud proxy j
 
 Kui üks autentimissertifikaat on seotud rohkem kui ühe kasutajaga domeenis, siis logimine ei õnnestu.
 
-**Mis teha:** eemaldada sertifikaat sidumine "vale(de)lt" kasutaja(te)lt.
+**Mis teha:** eemaldada sertifikaat sidumine „vale(de)lt" kasutaja(te)lt.
 
 ## Kokkuvõte
 
@@ -245,10 +246,10 @@ Kasutajate vaates on kindlasti mugavaks omaduseks parooli unustamise vältimine 
 Administraatorite ja kasutajatoe vaade on arvatavasti samuti positiivne, kuna lisaks turvalisuse kasvule esineb vähem probleeme paroolide unustamisega kasutajate poolt. Samuti on vastava konfiguratsiooni loomine küllaltki lihtne.
 
 ---
-[^1]: Kui oleme eelnevalt kirjeldatud meetodil nii kesk- kui juurtaseme sertifikaadid juba domeenis publitseerinud, puudub selleks küll otsene vajadus. Saame samas näiteks kesktaseme sertifikaadi publitseerida domeeni NTAuthCertificates konteinerisse paigutamisega ja juurtaseme sertifikaadi tavalise domeeni poliitikaga, nagu kirjeldatud allpool. Sellega on lugu tegelikult üldse natuke segane, sest kuigi teoreetiliselt Microsoft nõuab, et kaardi sertifikaadi väljastanud CA sertifikaat kuuluks domeeni NTAuthCertificates konteinerisse (vt. [Guidelines for enabling smart card logon with third-party certification authorities](https://docs.microsoft.com/en-us/troubleshoot/windows-server/windows-security/enabling-smart-card-logon-third-party-certification-authorities)), siis praktikas töötab eID kaardiga login ka siis, kui seda pole tehtud ja ahel on lihtsalt usaldatud. Siiski soovitame konfiguratsiooni luues järgida Microsofti tehnilisi nõudeid.
-[^2]: Muidugi võime vastava poliitika rakendada ka ainult klientarvutite ja/või serverite OU baasilt või mõnel muul loogikal baseeruvalt.
+[^1]: Kui eelnevalt kirjeldatud meetodil on nii kesk- kui juurtaseme sertifikaadid juba domeenis publitseeritud, puudub selleks küll otsene vajadus. Samas saab näiteks kesktaseme sertifikaadi publitseerida domeeni NTAuthCertificates konteinerisse paigutamisega ja juurtaseme sertifikaadi tavalise domeeni poliitikaga, nagu kirjeldatud allpool. Sellega on lugu tegelikult üldse natuke segane, sest kuigi teoreetiliselt Microsoft nõuab, et kaardi sertifikaadi väljastanud CA sertifikaat kuuluks domeeni NTAuthCertificates konteinerisse (vt. [Guidelines for enabling smart card logon with third-party certification authorities](https://docs.microsoft.com/en-us/troubleshoot/windows-server/windows-security/enabling-smart-card-logon-third-party-certification-authorities)), siis praktikas töötab eID kaardiga login ka siis, kui seda pole tehtud ja ahel on lihtsalt usaldatud. Siiski soovitatakse konfiguratsiooni luues järgida Microsofti tehnilisi nõudeid.
+[^2]: Muidugi saab vastava poliitika rakendada ka ainult klientarvutite ja/või serverite OU baasilt või mõnel muul loogikal baseeruvalt.
 [^3]: [How Certificate Revocation Works](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/ee619754(v=ws.10))
-[^4]: Kui issuer on meil reeglina konstant, siis serialnumber tuleb ümber pöörata kõikidel kasutajatel. Kasutage selle PowerShelli funktsiooni:
+[^4]: Kui issuer on reeglina konstant, siis serialnumber tuleb ümber pöörata kõikidel kasutajatel. Kasutage selle PowerShelli funktsiooni:
 
     ```powershell
     function Reverse-SerialNumber { param([string]$SerialNumber)
