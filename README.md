@@ -24,14 +24,14 @@ Uses https://jekyllrb.com and https://just-the-docs.com styles for generating do
 
 1.  Update source files in domain/
 
-2.  Build PDF document
+2.  Build the PDF document from the repository root
 
 ```bash
 # Export English version
-pandoc domain/index.md -L kramdown-toc.lua -o eID_Auth_Guide_EN.pdf
+pandoc domain/index.md --resource-path=domain -L kramdown-toc.lua -o eID_Auth_Guide_EN.pdf
 
 # Export Estonian version
-pandoc domain/index.et.md -L kramdown-toc.lua -o eID_Auth_Guide_ET.pdf
+pandoc domain/index.et.md --resource-path=domain -L kramdown-toc.lua -o eID_Auth_Guide_ET.pdf
 ```
 
 ## Editing and building "Apache2 SSL Configuration"
@@ -40,14 +40,14 @@ Uses https://jekyllrb.com and https://just-the-docs.com styles for generating do
 
 1.  Update source files in apache/
 
-2.  Build PDF document
+2.  Build the PDF document from the repository root
 
 ```bash
 # Export English version
-pandoc apache/index.md -L kramdown-toc.lua -o apache_SSL_EN.pdf
+pandoc apache/index.md --resource-path=apache -L kramdown-toc.lua -o apache_SSL_EN.pdf
 
 # Export Estonian version
-pandoc apache/index.et.md -L kramdown-toc.lua -o apache_SSL_ET.pdf
+pandoc apache/index.et.md --resource-path=apache -L kramdown-toc.lua -o apache_SSL_ET.pdf
 ```
 
 ## Editing and building "Nginx SSL Configuration"
@@ -56,14 +56,14 @@ Uses https://jekyllrb.com and https://just-the-docs.com styles for generating do
 
 1.  Update source files in nginx/
 
-2.  Build PDF document
+2.  Build the PDF document from the repository root
 
 ```bash
 # Export English version
-pandoc nginx/index.md -L kramdown-toc.lua -o nginx_SSL_EN.pdf
+pandoc nginx/index.md --resource-path=nginx -L kramdown-toc.lua -o nginx_SSL_EN.pdf
 
 # Export Estonian version
-pandoc nginx/index.et.md -L kramdown-toc.lua -o nginx_SSL_ET.pdf
+pandoc nginx/index.et.md --resource-path=nginx -L kramdown-toc.lua -o nginx_SSL_ET.pdf
 ```
 
 ## Editing and building "IIS SSL Configuration"
@@ -72,14 +72,14 @@ Uses https://jekyllrb.com and https://just-the-docs.com styles for generating do
 
 1.  Update source files in iis/
 
-2.  Build PDF document
+2.  Build the PDF document from the repository root
 
 ```bash
 # Export English version
-pandoc iis/index.md -L kramdown-toc.lua -o iis_SSL_EN.pdf
+pandoc iis/index.md --resource-path=iis -L kramdown-toc.lua -o iis_SSL_EN.pdf
 
 # Export Estonian version
-pandoc iis/index.et.md -L kramdown-toc.lua -o iis_SSL_ET.pdf
+pandoc iis/index.et.md --resource-path=iis -L kramdown-toc.lua -o iis_SSL_ET.pdf
 ```
 
 ## Editing and building "ID-software Administrator View"
@@ -88,14 +88,14 @@ Uses https://jekyllrb.com and https://just-the-docs.com styles for generating do
 
 1.  Update source files in admin/
 
-2.  Build PDF document
+2.  Build the PDF document from the repository root
 
 ```bash
 # Export English version
-pandoc admin/index.md -L kramdown-toc.lua -o admin_view_EN.pdf
+pandoc admin/index.md --resource-path=admin -L kramdown-toc.lua -o admin_view_EN.pdf
 
 # Export Estonian version
-pandoc admin/index.et.md -L kramdown-toc.lua -o admin_view_ET.pdf
+pandoc admin/index.et.md --resource-path=admin -L kramdown-toc.lua -o admin_view_ET.pdf
 ```
 
 ## Support

@@ -2,7 +2,7 @@
 
 **[Eesti keeles (In Estonian)](index.et.md)**
 
-**Version:** 26.04/1
+**Version:** 26.06/1
 
 **Published by:** [RIA](https://www.ria.ee/)
 
@@ -30,6 +30,7 @@
 | 16/06/2025 | 25.06/1  | Replaced AWP with IDPlug. — Changed by: Raul Metsma
 | 31/10/2025 | 25.10/1  | Added SmartCard Client. — Changed by: Raul Kaidro
 | 19/05/2026 | 26.04/1  | Published as online documentation. Added Edge NativeMessagingAllowlist configuration. — Changed by: Raul Metsma
+| 11/06/2026 | 26.06/1  | Updated GPO-MSI distribution guidance and screenshots. — Changed by: Raul Metsma
 
 ---
 
@@ -79,15 +80,15 @@ When it is installed and the smart card is removed from the card reader, all ID-
 
 #### Digidoc_ShellExt
 
-This component allows starting signing and encryption in DigiDoc4 by right-clicking on the file.
+This component installs the legacy Windows Explorer context-menu extension, which allows signing or encryption to be started in DigiDoc4 by right-clicking a file. On Windows 11, commands provided by this extension appear under *Show more options*. If the extension has already been loaded into Windows Explorer, installing or updating it may require restarting Explorer or the computer.
 
 #### DigiDoc4
 
-DigiDoc4 is an application that enables the signing, validation, encryption, and decryption of documents as well as managing the PINs and PUKs of ID-cards.
+DigiDoc4 is an application that enables the signing, validation, encryption, and decryption of documents as well as managing the PINs and PUKs of ID-cards. Both the DigiDoc4 MSI and the Microsoft Store app install the modern Windows Explorer context-menu extension; the MSI does so through an AppX-based solution.
 
 #### ID-updater
 
-ID-updater is a mandatory component that bundles shared third-party libraries (Qt, OpenSSL, etc.) required by other ID-software components. During installation, the task scheduler task `id updater task` is created, which checks the availability of new software once per week and suggests any identified updates to the user.
+The ID-software EXE installer always installs ID-updater, which bundles shared third-party libraries (Qt, OpenSSL, etc.) required by other ID-software components. By default, the EXE installer also creates the scheduled task `id updater task`, which checks for new software once per week and offers any available update to the user. Creating the scheduled task can be disabled with `AutoUpdate=0`, but ID-updater is still installed. ID-updater is not required when the ID-software components are installed as separate MSI packages.
 
 ![Example: ID-updater found a newer version of the software (EST)](./img/image3.png)
 
@@ -103,11 +104,11 @@ In large and medium enterprises, the ID-software is usually installed and contro
 
 In addition to the configuration options available in the GUI, the following command-line parameters can be used for unattended installations:
 
-1. `ChromeSupport=0` — the Chrome extension is not added, 1 by default.
-2. `EdgeSupport=0` — the Edge extension is not added, 1 by default.
+1. `ChromeSupport=0` — the Chrome extension, registry entries, and native messaging manifest are not installed, 1 by default.
+2. `EdgeSupport=0` — the Edge extension, registry entries, and native messaging manifest are not installed, 1 by default.
 3. `ForceChromeExtensionActivation2=1` — the Chrome extension is activated automatically, 1 by default.
 4. `ForceEdgeExtensionActivation2=1` — the Edge extension is activated automatically, 1 by default.
-5. `FirefoxSupport=0` — the Firefox extension is not added, 1 by default.
+5. `FirefoxSupport=0` — the Firefox extension, registry entries, and native messaging manifest are not installed, 1 by default.
 6. `InstallCertSynchronizer=1` — installs the component `OTCertSynchronizer`, 0 by default[^3].
 7. `MinidriverInstall=0` — the minidriver is not installed, 1 by default.
 8. `Qdigidoc4Install=0` — the DigiDoc software is not installed, 1 by default.
@@ -115,6 +116,8 @@ In addition to the configuration options available in the GUI, the following com
 10. `AutoUpdate=0` — `id updater task` is not added to the task scheduler, 1 by default.
 
 > **Note:** The installation keys shown above are case sensitive.
+
+> **Note:** If `ChromeSupport`, `EdgeSupport`, and `FirefoxSupport` are all set to 0, the native messaging application is not installed either.
 
 For example, the command line `Open-EID-<version>.exe /quiet AutoUpdate=0 IconsDesktop=0` installs the ID-software in unattended mode, does not activate automatic updates, and does not add the ID-software icons to the desktop.
 
@@ -146,15 +149,7 @@ The MST files described below in the manual can be downloaded from the location 
 
 Below is a brief overview about how to configure GPO-MSI installations.
 
-##### ID-updater
-
-ID-updater is a mandatory component. It is recommended to install it first.
-
-Options:
-
-- If you do not want to activate the automatic software update functionality (deferred `id updater task`), use the transform file `2410-no_autoupdate.mst` with this MSI installation. And it probably makes sense to disable it, since MSI installations don't support software update checking in this way.
-
-![Sample about adding a transform file to the MSI installation](./img/image6.png)
+> **Note:** Compared to earlier versions of this guide, `ID-updater` no longer needs to be installed for GPO-MSI deployments, and components no longer need transform files that force installation into the same `PROGRAM FILES\Open-EID` folder.
 
 ##### IDPlug
 
@@ -181,26 +176,19 @@ DigiDoc4 is a necessary component if you want to sign and encrypt documents as w
 
 Options:
 
-- For GPO-MSI installations, it is necessary to use the transform file `2410-DD-Location.mst`. In this case, the software is installed in the same folder `PROGRAM FILES\Open-EID` as the necessary drivers.
 - The default MSI installation does not install the necessary icons on the desktop. However, if desktop icons are required, the transform file `2410-DD-Shortcut` must also be added to the installation.
+
+The DigiDoc4 MSI installs the modern Windows Explorer context-menu extension through an AppX-based solution.
 
 ![Adding transform files for MSI installation](./img/image7.png)
 
-##### Adding right-click signing and encryption to Windows
+##### Adding the legacy right-click extension to Windows
 
-Enables right-click signing and encryption of files in Windows Explorer.
-
-Options:
-
-- For GPO-MSI installations, it is necessary to use the transform file `2410-DD-Shell-Location.mst`. In this case, the software is installed in the same folder `PROGRAM FILES\Open-EID` as the necessary drivers.
-
-![Sample of adding a transform file to a GPO-MSI installation](./img/image8.png)
+The `Digidoc_ShellExt` MSI installs the legacy Windows Explorer context-menu extension. On Windows 11, commands provided by this extension appear under *Show more options*. Use it only when the legacy extension is required instead of the modern extension included with the DigiDoc4 MSI. If the legacy extension has already been loaded into Explorer, installing or updating it may require restarting Explorer or the computer.
 
 ##### Web eID
 
-Browser extensions and native app. For GPO-MSI installations, it is necessary to use the transform file `2410-Web-Location.mst`. In this case, the software is installed in the same folder `PROGRAM FILES\Open-EID` as the necessary drivers.
-
-![Sample of adding a transform file to a GPO-MSI installation](./img/image9.png)
+Browser extensions and native app.
 
 The list of MSI custom packages in the GPMC management console looks like this:
 
@@ -210,7 +198,7 @@ For GPO-MSI installations, all installed programs also appear in the software li
 
 ![MSI installations in the program list of the Control Panel](./img/image11.png)
 
-> **Note:** The order of MSI installation components is not important, but all components depend on the MSI `Open-EID updater`. The minidriver is also important, as other components depend on it.
+> **Note:** The order of MSI installation components is not important, but the required minidriver must be installed because other components depend on it.
 
 > **Note:** MST files can be downloaded from <https://www.id.ee/en/article/administrators-guide-for-administration-and-installation-of-open-eid/>.
 
