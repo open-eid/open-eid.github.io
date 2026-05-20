@@ -1,0 +1,7 @@
+remote_theme: just-the-docs/just-the-docs
+title: ID-software administrator view
+description: Technical documentation for IT administrators on installing and managing ID-software in Windows environments.
+google_analytics:
+layout: minimal
+nav_enabled: false
+baseurl: "/admin"

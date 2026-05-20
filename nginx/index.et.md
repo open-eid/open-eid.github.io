@@ -37,7 +37,7 @@ Käesolevas juhendis kirjeldatakse:
 - Kuidas häälestada HTTPS (ühepoolne SSL) veebiserveril.
 - Kuidas häälestada [SK ID Solutions](https://www.skidsolutions.eu/resources/certificates/) (`EE-GovCA2018`) ja [Zetes](https://repository.eidpki.ee/) (`EEGovCA2025`) ID-kaartidega autentimine (kahepoolne SSL) veebiserveril.
 - Kuidas häälestada OCSP kontroll nii vastu garanteeritud kui AIA OCSP teenust.
-- Kuidas turvata oma veebiserverit.
+- Kuidas turvata veebiserverit.
 
 Lisaks on käsitletud muid konfiguratsioonivõimalusi, nt kuidas HTTP liiklus suunata HTTPS kanalisse jpm.
 
@@ -45,7 +45,7 @@ Lisaks on käsitletud muid konfiguratsioonivõimalusi, nt kuidas HTTP liiklus su
 
 ### Paigaldus
 
-Ubuntu 24.04 versiooni puhul paigaldatakse vaikimisi juhiste puhul Nginx versioon 1.24. Kuna aga soovime oma demojuhendis kasutada viimast versiooni 1.28.1, siis tuleb enne paigaldust teha täiendavaid muudatusi.
+Ubuntu 24.04 versiooni puhul paigaldatakse vaikimisi juhiste puhul Nginx versioon 1.24. Kuna juhendis kasutatakse viimast versiooni 1.28.1, siis tuleb enne paigaldust teha täiendavaid muudatusi.
 
 Nginx versiooni 1.28.1 paigaldamiseks Ubuntu versioonile 24.04 tuleb teha järgmised sammud:
 
