@@ -2,7 +2,7 @@
 
 **[In English](index.md)**
 
-**Versioon:** 26.04/1
+**Versioon:** 26.06/1
 
 **Väljaandja:** [RIA](https://www.ria.ee/)
 
@@ -30,6 +30,7 @@
 | 16.06.2025 | 25.06/1  | AWP asendatud IDPlug-iga. — Muutja: Raul Metsma
 | 31.10.2025 | 25.10/1  | Lisatud SmartCard Client. — Muutja: Raul Kaidro
 | 19.05.2026 | 26.04/1  | Avaldatud veebidokumentatsioonina. Lisatud Edge NativeMessagingAllowlist konfiguratsioon. — Muutja: Raul Metsma
+| 11.06.2026 | 26.06/1  | Uuendatud GPO-MSI levitamise juhiseid ja kuvatõmmiseid. — Muutja: Raul Metsma
 
 ---
 
@@ -79,15 +80,15 @@ Selle paigaldamisel kustutakse kaardi lugejast eemaldamisel Windowsi kasutaja se
 
 #### Digidoc_ShellExt
 
-See komponent lisab võimaluse alustada hiire paremklikiga kiiresti ja mugavalt dokumendi allkirjastamist ning krüpteerimist DigiDoc4 rakenduses.
+See komponent paigaldab klassikalise (*legacy*) Windows Exploreri kontekstimenüü laienduse, mis võimaldab alustada faili paremklõpsuga dokumendi allkirjastamist või krüpteerimist DigiDoc4 rakenduses. Windows 11-s kuvatakse selle laienduse käsud menüü *Show more options* all. Kui laiendus on Windows Explorerisse juba laaditud, võib selle paigaldamine või uuendamine nõuda Exploreri või arvuti taaskäivitamist.
 
 #### DigiDoc4
 
-DigiDoc4 on rakendus, mis võimaldab dokumente allkirjastada ja digiallkirjastatud dokumente valideerida, dokumente krüpteerida ja dekrüpteerida, saada ülevaadet ID-kaardi sertifikaatidest ning ID-kaardi PIN- ja PUK-koode hallata.
+DigiDoc4 on rakendus, mis võimaldab dokumente allkirjastada ja digiallkirjastatud dokumente valideerida, dokumente krüpteerida ja dekrüpteerida, saada ülevaadet ID-kaardi sertifikaatidest ning ID-kaardi PIN- ja PUK-koode hallata. Nii DigiDoc4 MSI kui ka Microsoft Store'i rakendus paigaldavad Windows Exploreri moodsa kontekstimenüü laienduse; MSI teeb seda AppX-põhise lahenduse kaudu.
 
 #### ID-updater
 
-ID-updater on kohustuslik komponent, mis sisaldab teiste ID-tarkvara komponentide jaoks vajalikke kolmanda osapoole teeke (Qt, OpenSSL jms). Installatsiooni käigus luuakse ka *Task Scheduleri* käsk `id updater task`, mis vaikimisi kontrollib uue tarkvara saadavust kord nädalas ja uuenduse leidmisel pakub selle kasutajale välja.
+ID-tarkvara EXE-paigaldus paigaldab alati komponendi ID-updater, mis sisaldab teiste ID-tarkvara komponentide jaoks vajalikke kolmanda osapoole teeke (Qt, OpenSSL jms). Vaikimisi loob EXE-paigaldus ka *Task Scheduleri* käsu `id updater task`, mis kontrollib kord nädalas uue tarkvara saadavust ja pakub leitud uuenduse kasutajale. Automaatkorralduse loomise saab keelata parameetriga `AutoUpdate=0`, kuid ID-updater paigaldatakse ka sel juhul. Kui ID-tarkvara komponendid paigaldatakse eraldi MSI-pakkidena, ei ole ID-updater vajalik.
 
 ![Näide: ID-updater leidis uuema versiooni tarkvarast (EST)](./img/image3.png)
 
@@ -103,11 +104,11 @@ Keskmistes ja suuremates ettevõtetes paigaldatakse tarkvara tavapäraselt mõne
 
 Lisaks interaktiivse installatsiooni puhul saadaolevatele konfiguratsioonivõimalustele on automaatsete installatsioonide puhul võimalik kasutada EXE-installatsioonidel järgmiseid võtmeid:
 
-1. `ChromeSupport=0` — ei lisata Chrome laiendust, vaikimisi 1.
-2. `EdgeSupport=0` — ei lisata Edge laiendust, vaikimisi 1.
+1. `ChromeSupport=0` — ei paigaldata Chrome laiendust, registri kirjeid ega native messaging manifesti, vaikimisi 1.
+2. `EdgeSupport=0` — ei paigaldata Edge laiendust, registri kirjeid ega native messaging manifesti, vaikimisi 1.
 3. `ForceChromeExtensionActivation2=1` — Chrome laiendus aktiveeritakse automaatselt, vaikimisi 1.
 4. `ForceEdgeExtensionActivation2=1` — Edge laiendus aktiveeritakse automaatselt, vaikimisi 1.
-5. `FirefoxSupport=0` — ei lisata Firefox laiendust, vaikimisi 1.
+5. `FirefoxSupport=0` — ei paigaldata Firefox laiendust, registri kirjeid ega native messaging manifesti, vaikimisi 1.
 6. `InstallCertSynchronizer=1` — installeeritakse vaikimisi `OTCertSynchronizer`, vaikimisi 0[^3].
 7. `MinidriverInstall=0` — ei installeerita minidraiverit, vaikimisi 1.
 8. `Qdigidoc4Install=0` — ei installeerita DigiDoc tarkvara, vaikimisi 1.
@@ -115,6 +116,8 @@ Lisaks interaktiivse installatsiooni puhul saadaolevatele konfiguratsioonivõima
 10. `AutoUpdate=0` — ei lisata *Task Scheduleri* käsku `id updater task`, vaikimisi 1.
 
 > **Märkus:** Ülaltoodud installivõtmed on tõusutundlikud.
+
+> **Märkus:** Kui `ChromeSupport`, `EdgeSupport` ja `FirefoxSupport` on kõik seatud väärtusele 0, ei paigaldata ka native messaging rakendust.
 
 Näiteks käsurida `Open-EID-<version>.exe /q AutoUpdate=0 IconsDesktop=0` installeerib ID-tarkvara vaikimisi režiimil, ei aktiveeri automaatset uuenduste otsimist ega paigalda ID-tarkvara ikoone töölauale.
 
@@ -144,15 +147,7 @@ Juhendis järgnevalt kirjeldatavad MST failid on allalaetavad asukohast <https:/
 
 Palun märgake ka seda, et uute MSI versioonidega on ka mitmeid MST faile uuendatud ja kindlasti kasutage uusi — vanad ei toimi.
 
-##### ID Updater
-
-Kohustuslik komponent, soovituslik installeerida esimesena.
-
-Kohandused:
-
-- Juhuks, kui automaatset uuenduste otsimist (ajastatud käsk `id updater task`) ei soovita aktiveerida, tuleb koos selle MSI installiga kasutada ka transformfaili `2410-no_autoupdate.mst`. Usutavasti on selle keelamine mõttekas, kuna MSI installatsioonid ei toeta sel viisil tarkvara uuenduste kontrolli.
-
-![Näide transformfaili lisamisest GPO-MSI installile](./img/image6.png)
+> **Märkus:** Võrreldes juhendi varasemate versioonidega ei ole GPO-MSI paigalduste puhul enam vaja paigaldada komponenti `ID-updater` ning komponendid ei vaja enam transformfaile, mis sunnivad tarkvara paigaldamist samasse kausta `PROGRAMMIFAILID\Open-EID`.
 
 ##### IDPlug
 
@@ -179,26 +174,19 @@ Vajalik, kui soovitakse paksu kliendiga sertifikaate hallata, allkirjastada ja k
 
 Kohandused:
 
-- GPO-MSI installatsioonide puhul on vaja kasutada transformfaili `2410-DD-Location.mst`. Sellisel juhul installeeritakse tarkvara vajalike draiveritega samasse kausta `PROGRAMMIFAILID\Open-EID`.
 - Vaikimisi MSI installatsioon töölauale vajalikke ikoone ei paigalda. Kui on soov seda teha, tuleb installatsioonile lisada ka transformfail `2410-DD-Shortcut`.
+
+DigiDoc4 MSI paigaldab Windows Exploreri moodsa kontekstimenüü laienduse AppX-põhise lahenduse kaudu.
 
 ![Näide transformfaili lisamisest GPO-MSI installile](./img/image7.png)
 
-##### Windows-ile paremklikiga allkirjastamise ja krüpteerimise lisamine
+##### Windowsile klassikalise paremkliki-laienduse lisamine
 
-Windows paremklikiga allkirjastamise ja krüpteerimise lubamine.
-
-Kohandused:
-
-- GPO-MSI installatsioonide puhul on vaja kasutada transformfaili `2410-DD-Shell-Location.mst`. Sellisel juhul installeeritakse tarkvara vajalike draiveritega samasse kausta `PROGRAMMIFAILID\Open-EID`.
-
-![Näide transformfaili lisamisest GPO-MSI installile](./img/image8.png)
+`Digidoc_ShellExt` MSI paigaldab Windows Exploreri klassikalise kontekstimenüü laienduse. Windows 11-s kuvatakse selle laienduse käsud menüü *Show more options* all. Kasuta seda ainult siis, kui moodsa, DigiDoc4 MSI-ga kaasneva laienduse asemel on vaja klassikalist laiendust. Kui klassikaline laiendus on Explorerisse juba laaditud, võib selle paigaldamine või uuendamine nõuda Exploreri või arvuti taaskäivitamist.
 
 ##### Web eID
 
-Brauserite laiendused ja omarakendus (*native app*). GPO-MSI installatsioonide puhul on vaja kasutada transformfaili `2410-Web-Location.mst`. Sellisel juhul installeeritakse tarkvara vajalike draiveritega samasse kausta `PROGRAMMIFAILID\Open-EID`.
-
-![Näide transformfaili lisamisest GPO-MSI installile](./img/image9.png)
+Brauserite laiendused ja omarakendus (*native app*).
 
 MSI kohandatud pakkide loend näeb GPMC halduskonsoolis välja nii:
 
@@ -208,7 +196,7 @@ GPO-MSI installatsioonide puhul ilmuvad kõik installeeritud programmid ka progr
 
 ![MSI installatsioonid programmide loendis](./img/image11.png)
 
-> **Märkus:** MSI-de installatsioonide järjestus ei ole oluline, ent kõik sõltuvad MSI-st „OpenEID Updater". Samuti on oluline minidraiver, millest samuti teised komponendid sõltuvad.
+> **Märkus:** MSI-de installatsioonide järjestus ei ole oluline, kuid vajalik minidraiver peab olema paigaldatud, sest teised komponendid sõltuvad sellest.
 
 > **Märkus:** MST failid on allalaetavad asukohast <https://www.id.ee/artikkel/open-eid-administreerimise-ja-paigaldamise-juhised-administraatoritele/>.
 
