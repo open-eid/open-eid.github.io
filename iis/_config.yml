@@ -4,4 +4,5 @@ description: Technical documentation for configuring IIS to support Estonian Dig
 google_analytics:
 layout: minimal
 nav_enabled: false
+enable_copy_code_button: true
 baseurl: "/iis"

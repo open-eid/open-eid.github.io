@@ -2,7 +2,7 @@
 
 **[In English](index.md)**
 
-**Versioon:** 26.04/1
+**Versioon:** 26.08/1
 
 **Väljaandja:** [RIA](https://www.ria.ee/)
 
@@ -23,6 +23,7 @@
 | 22.08.2024 | 24.08/1  | Ubuntu uuendatud versioonile Ubuntu Server 24.04 ja Nginx versioonile 1.27.1. — Muutja: Urmas Vanem
 | 31.10.2025 | 25.10/1  | Lisatud Zetes ahelad, eemaldatud SK OCSP lõik. — Muutja: Lauris Kaplinski
 | 22.04.2026 | 26.04/1  | Konverteeritud Markdown formaati. — Muutja: Raul Metsma
+| 21.08.2026 | 26.08/1  | Uuendatud sertifikaadivõtme, TLS-protokollide, šifrikomplektide, sertifikaadipoliitikate ja OCSP juhiseid 2026. aasta krüptograafiliste algoritmide elutsükli aruande põhjal. — Muutja: Raul Metsma
 
 ---
 
@@ -36,7 +37,8 @@ Käesolevas juhendis kirjeldatakse:
 - Kuidas paigaldada ja häälestada Nginx 1.28.1 veebiserver Ubuntu 24.04 serveril.
 - Kuidas häälestada HTTPS (ühepoolne SSL) veebiserveril.
 - Kuidas häälestada [SK ID Solutions](https://www.skidsolutions.eu/resources/certificates/) (`EE-GovCA2018`) ja [Zetes](https://repository.eidpki.ee/) (`EEGovCA2025`) ID-kaartidega autentimine (kahepoolne SSL) veebiserveril.
-- Kuidas häälestada OCSP kontroll nii vastu garanteeritud kui AIA OCSP teenust.
+- Kuidas kontrollida kliendisertifikaadi tühistusolekut ja häälestada
+  serverisertifikaadi OCSP stapling.
 - Kuidas turvata veebiserverit.
 
 Lisaks on käsitletud muid konfiguratsioonivõimalusi, nt kuidas HTTP liiklus suunata HTTPS kanalisse jpm.
@@ -119,6 +121,17 @@ $ openssl req -new -key Nginx2404.key -out Nginx2404.csr -subj /C=EE/O=OctoX/CN=
 3.  `CN=Nginx2404.octox.demo` on väljastatava sertifikaadi *common name;*
 4.  `DNS:Nginx2404.octox.demo` ja `DNS:MYWEBSERVER.octox.demo` on sertifikaadil olevad SAN DNS nimed, mis peavad kindlasti vastama veebilehe tegelikule aadressile[^2]. Need nimed peavad ka nimeserveris lahenema.
 
+Genereeri igale sõltumatule TLS-serverile eraldi privaatvõti. Ära kopeeri
+sama võtit mitmesse serverisse üksnes seetõttu, et metamärgiga või mitme SAN
+nimega sertifikaat kataks kõik serverinimed. Eraldi võtmed piiravad serveri
+või võtme kompromiteerumise mõju.
+
+Tootmislahenduses kasuta võimaluse korral füüsilist turvamoodulit (HSM) või
+samaväärset mitteeksporditava võtmega riistvaralist võtmehoidlat. Genereeri
+võti seadmes ja hoia see mitteeksporditavana. Enne kasutuselevõttu veendu, et
+HSM, OpenSSL-i integratsioon ja sertifikaadi väljastaja toetavad valitud ECDSA
+P-384 võtit. Näite failipõhine võti ei ole HSM-i seadistus.
+
 Loodud sertifikaadi päringufaili sisu on võimalik vaadata käsuga
 
 ```bash
@@ -146,64 +159,6 @@ Certificate Request:
                     DNS:Nginx2404.octox.demo, DNS:MYWEBSERVER.octox.demo
         Signature Algorithm: ecdsa-with-SHA256
         Signature Value:
-```
-
-###### RSA
-
-*See lõik on säilitatud neile, kes eelistavad RSA-põhiseid sertifikaate. Ülejäänud juhend kasutab ECC-d.*
-
-Loo sertifikaadi päring ja privaatvõti käsuga
-
-```bash
-$ openssl req -newkey rsa:2048 -keyout NGINX20PRIV.key -sha256 -subj "/CN=Nginx20.kaheksa.xi" -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf "[SAN]\nsubjectAltName=DNS: Nginx20.kaheksa.xi,DNS: Nginx22.kaheksa.xi ")) -out NGINX20.csr -nodes
-Generating a RSA private key
-........................................................................+++++
-.....................................+++++
-writing new private key to 'NGINX20PRIV.key'
------
-```
-
-1.  `NGINX20PRIV.key` on sertifikaadi privaatvõti;
-2.  `NGINX20.csr` on sertifikaadi päringufail, mis edastatakse sertifitseerimiskeskusele;
-3.  `Nginx20.kaheksa.xi` on väljastatava sertifikaadi subjekt;
-4.  `Nginx20.kaheksa.xi` ja `Nginx22.kaheksa.xi` on sertifikaadil olevad SAN DNS nimed, mis peavad kindlasti vastama veebilehe tegelikule aadressile[^3]. Need nimed peavad ka nimeserveris lahenema (piisab ka ühest nimest).
-
-Loodud sertifikaadi päringufaili sisu on võimalik vaadata käsuga
-
-```bash
-$ openssl req -in NGINX20.csr -noout -text
-Certificate Request:
-    Data:
-        Version: 1 (0x0)
-        Subject: CN = Nginx20.kaheksa.xi
-        Subject Public Key Info:
-            Public Key Algorithm: rsaEncryption
-                RSA Public-Key: (2048 bit)
-                Modulus:
-                    00:f1:62:c3:ed:1d:0b:ea:cb:7c:22:17:41:1e:e3:
-                    c1:02:a6:7b:f3:72:13:ae:8d:72:72:6f:09:77:d6:
-                    51:84:4b:2a:f6:7b:65:9d:9f:f3:2a:0c:16:e5:26:
-                    47:70:aa:3e:c8:4c:50:62:5b:6c:2a:49:ea:51:01:
-                    60:5c:94:2c:d6:1d:78:70:eb:41:88:6c:09:c8:2f:
-                    e4:d5:bb:2f:fb:ec:2f:9d:0c:42:66:b5:de:91:e3:
-                    60:62:ff:94:11:21:aa:de:bb:52:bd:20:a6:ff:b4:
-                    c3:92:0a:5b:b5:fc:2f:88:bc:44:3e:b4:5b:a4:ec:
-                    de:49:16:b6:c0:13:ed:d0:e2:ee:d0:58:bc:cb:36:
-                    32:c9:1b:6d:8f:79:db:83:22:fd:fe:a7:9a:b2:cd:
-                    26:b1:d7:52:c4:0c:40:6d:0e:49:b5:18:07:c2:3c:
-                    c0:c9:70:5d:06:da:0a:e6:01:1a:a4:78:19:aa:a7:
-                    38:1c:9d:36:07:4d:db:d2:b5:7b:50:f1:4b:d0:c7:
-                    5d:90:86:92:2d:a6:ea:d7:d2:09:8f:51:e8:b6:52:
-                    07:b1:1e:5e:ca:65:f3:d4:69:52:f1:d9:47:02:24:
-                    98:42:70:83:bc:49:13:c1:92:51:f7:ca:b2:fa:f6:
-                    a7:08:13:c1:74:23:d6:58:ab:27:d5:e5:02:20:3f:
-                    11:3b
-                Exponent: 65537 (0x10001)
-        Attributes:
-            Requested Extensions:
-                X509v3 Subject Alternative Name:
-                    DNS:Nginx20.kaheksa.xi, DNS: Nginx22.kaheksa.xi
-        Signature Algorithm: sha256WithRSAEncryption
 ```
 
 ##### SSL sertifikaadi tellimine ja paigaldamine
@@ -260,7 +215,7 @@ Paigalda loodud kausta mõni lihtne ja äratuntav veebileht nimega `index.html`.
 
 Järgmiseks tee valmis virtuaalse veebilehe konfiguratsioonifail. Tee uus fail nimega `/etc/nginx/conf.d/Nginx2404.conf` (näiteks käsuga `nano /etc/nginx/conf.d/Nginx2404.conf`).
 
-Nüüd muuda uut konfiguratsioonifaili vastavalt oma soovidele. Lisa sinna järgmine sisu[^4]:
+Nüüd muuda uut konfiguratsioonifaili vastavalt oma soovidele. Lisa sinna järgmine sisu[^3]:
 
 ```nginx
 server {
@@ -373,11 +328,14 @@ To                         Action      From
 443/tcp (v6)               ALLOW       Anywhere (v6)
 ```
 
-### Kasutaja sertifikaadi staatuse kontroll OCSP teenuse vastu[^5]
+### Kliendisertifikaadi tühistusoleku kontroll OCSP abil[^4]
 
-OCSP (*Online Certificate Status Protocol*) teenuse abil saab kasutaja sertifikaadi staatust kontrollida reaalajas. Iga kasutaja autentimisel saadab veebiserver päringu OCSP teenusele, mis tagastab sertifikaadi staatuse info.
+OCSP (*Online Certificate Status Protocol*) võimaldab Nginxil kontrollida
+kliendisertifikaadi tühistusolekut autentimise ajal.
 
-SK ja Zetes pakuvad vaba ligipääsuga (tasuta) AIA OCSP teenust. `ESTEID2018` ja `ESTEID2025` CA alt väljastatud sertifikaatide puhul on AIA OCSP aadress juba sertifikaadis kirjas (<http://aia.sk.ee/esteid2018>, <http://ocsp.eidpki.ee>).
+CA-de `ESTEID2018` ja `ESTEID2025` väljastatud sertifikaatides on AIA OCSP
+teenuse aadress (<http://aia.sk.ee/esteid2018> ja
+<http://ocsp.eidpki.ee>).
 
 ![ESTEID2018 AIA OCSP aadress sertifikaadis](./img/image7.png)
 
@@ -391,95 +349,255 @@ ssl_client_certificate /etc/ssl/certs/EID_Bundle.pem;
 ssl_verify_client on;
 ssl_verify_depth 2;
 ssl_ocsp leaf;
-ssl_ocsp_cache off;
+ssl_ocsp_cache shared:OCSP:10m;
 resolver 194.126.115.18;
 ```
 
-Ülaltoodud konfiguratsiooni puhul võetakse OCSP teenuse aadress kasutaja sertifikaadist. Asendage `resolver` IP-aadress avaliku DNS-serveri IP-aadressiga[^6].
+Väärtus `leaf` kontrollib lõppkasutaja sertifikaati ja jagatud vahemälu
+vähendab korduvaid päringuid. OCSP teenuse aadress võetakse
+kliendisertifikaadist. Asenda `resolver` IP-aadress avalikke aadresse lahendava
+DNS-serveri IP-aadressiga[^5]. Luba serverist väljuv DNS- ja HTTP-liiklus OCSP
+teenustesse ning monitoori Nginxi tõrkeid: OCSP kontrolli ebaõnnestumisel
+kliendisertifikaadiga autentimine ei õnnestu.
+
+### Serverisertifikaadi OCSP vastuse stapling
+
+Eespool kirjeldatud kliendisertifikaadi kontroll ja serverisertifikaadi OCSP
+stapling on eri funktsioonid. Stapling võimaldab Nginxil hankida oma
+serverisertifikaadi kohta allkirjastatud olekuvastuse ja saata selle TLS
+kätluse ajal. Nii ei pea iga veebilehitseja väljastanud CA-le eraldi päringut
+tegema ja kliendi privaatsus paraneb.[^6]
+
+Esmalt kontrolli, kas serverisertifikaat sisaldab OCSP teenuse URI-d:
+
+```bash
+$ openssl x509 -in /etc/ssl/certs/Nginx2404_Bundle.pem -noout -ocsp_uri
+```
+
+Kui käsk tagastab toetatud URI, loo PEM-vormingus fail
+`/etc/ssl/certs/Nginx2404_CA.pem`, mis sisaldab väljastaja, kesktaseme ja
+juur-CA sertifikaate. Seejärel luba stapling ja vastuse kontroll:
+
+```nginx
+ssl_stapling on;
+ssl_stapling_verify on;
+ssl_trusted_certificate /etc/ssl/certs/Nginx2404_CA.pem;
+resolver 194.126.115.18;
+```
+
+Ära luba stapling'ut, kui sertifikaadi väljastaja OCSP teenust ei paku. Pärast
+Nginxi konfiguratsiooni taaslaadimist kontrolli kaasatud OCSP vastust:
+
+```bash
+$ openssl s_client -connect Nginx2404.octox.demo:443 \
+    -servername Nginx2404.octox.demo -status </dev/null
+```
+
+Väljundis peab olema edukas OCSP vastus ja sertifikaadi olek `good`. Monitoori
+vastuse uuendamise tõrkeid ning taga serveri ligipääs OCSP teenusele.
 
 ### Soovituslikud Nginxi turvasätted
 
 #### SSL/TLS
 
-Ubuntu platvormil töötav Nginx server versiooniga 1.23.3 võib toetada aegunud TLS versioone nagu TLS 1.0 või TLS 1.1. Tänapäeval on tungivalt soovitav mitte kasutada TLS protokolli versioonist 1.2 madalamaid versioone. Juba mõnda aega on kasutusel ka TLS versioon 1.3.
+TLS protokollide valikul ei tohi tugineda Nginxi või operatsioonisüsteemi
+vaikesätetele. TLS 1.0 ja TLS 1.1 tuleb keelata. Uutes ja ajakohastatud
+lahendustes tuleb vaikimisi lubada ainult TLS 1.3.
 
-Kui puudub spetsiifiline nõue TLS 1.2 versiooni lubamiseks, siis on soovitav kasutada vaid TLS versiooni 1.3. TLS 1.2 on küll korrektse konfiguratsiooni puhul väga stabiilne ja turvaline, ent TLS 1.3 on kiirem, vaikimisi turvalisem ja nõuab vähem konfigureerimist. Standardlahendustes võiks TLS 1.2 olla toetatud vaid tõestatud vajaduse puhul ja sel juhul tuleb olla veendunud, et kasutusel on vaid turvalised šifrikomplektid ja laiendused.
+TLS 1.2 võib lisada üksnes dokumenteeritud erandina, kui teenust peavad
+kasutama 2020. aasta või vanemad kliendid või kui kliendisertifikaati
+peab küsima pärast esialgse TLS ühenduse loomist. TLS 1.2 kasutamisel
+tuleb konfigureerida ka selge turvaliste šifrikomplektide lubatud loend.
 
-Kui on soov Nginx serveris kasutada vaid TLS protokolli versiooni 1.3, tuleb konfiguratsioonifaili lisada rida:
+TLS 1.3 konfiguratsioon:
 
 ```nginx
 ssl_protocols TLSv1.3;
 ```
 
-Toetamaks ka TLS versiooni 1.2, tuleb konfiguratsioonireale lisada `TLSv1.2`.
+Dokumenteeritud ühilduvuserandi korral võib lubada TLS 1.2 ja TLS 1.3:
 
-Sama muudatuse serveri tasemel kehtestamiseks muuda `ssl_protocols` direktiivi failis `/etc/nginx/nginx.conf`.
+```nginx
+ssl_protocols TLSv1.2 TLSv1.3;
+```
 
-Rohkem infot TLS protokolli kasutamise soovituste kohta leiab RIA tellitud krüptograafiliste algoritmide elutsükli uuringust aadressil <https://www.id.ee/artikkel/kruptograafiliste-algoritmide-elutsukli-uuringud-2/>.
+Nginx küsib kliendisertifikaati esialgse kätluse ajal, seega ei vaja selle
+juhendi autentimisvoog TLS 1.2 korduskätlust. Alltoodud konfiguratsioon
+keelab selle selgesõnaliselt.
+
+Kui TLS-i teostus ja kasutatavad kliendid pakuvad tootmiskõlblikku tuge,
+eelista hübriidrühma `X25519MLKEM768`. Juhend ei määra rühma seadistust
+jäigalt, sest tugi ja standarditud identifikaator sõltuvad paigaldatud
+OpenSSL-i versioonist. Enne sellele tuginemist kontrolli tegelikku rühma
+ajakohase TLS-skanneriga.
+
+Sama muudatuse serveri tasemel kehtestamiseks muuda `ssl_protocols`
+direktiivi failis `/etc/nginx/nginx.conf`.
+
+Rohkem infot TLS protokolli kasutamise soovituste kohta leiab RIA
+tellitud krüptograafiliste algoritmide elutsükli uuringust aadressil
+<https://www.id.ee/artikkel/kruptograafiliste-algoritmide-elutsukli-uuringud-2/>.
 
 #### Šifrikomplektid (*Cipher suites*)
 
-TLS 1.3 versiooni kõiki šifreid peetakse hetkeseisuga turvaliseks, seega turvakaalutlustel selle protokolli jaoks lisakonfiguratsiooni looma ei pea.
-
-TLS 1.2 puhul see päris nii ei ole. Nginx 1.23.3 versiooniga on vaikimisi kasutusel suur hulk erinevaid TLS šifreid[^7], mida näeb käsuga
-
-```bash
-$ openssl ciphers -v
-```
-
-Kui on soov määrata täpsemalt TLS 1.2 protokolliga kasutatavaid šifrikomplekte, saab Nginx kaustapõhises konfiguratsioonifailis kasutada direktiivi `ssl_ciphers`. Siin omakorda saab kasutada kas eeldefineeritud *alias*i või täpseid šifrikomplektide kirjeldusi.
-
-Kindlat soovitust erinevate šifrikomplektide kasutamiseks ei ole võimalik anda ilma veebilehele esitatavaid tingimusi teadmata. Küll aga tuleb kindlasti eemaldada loendist ebaturvalised šifrikomplektid. Mõistlik on kirjeldada konkreetsed lubatud šifrikomplektid TLS 1.2 kasutamiseks.
-
-Näide — järgnev rida konfiguratsioonifailis lubab vaid loetletud šifrikomplektide kasutamist:
+OpenSSL-i aliastele, näiteks `HIGH`, tuginemise asemel tuleb konfigureerida
+selge lubatud loend. TLS 1.3 jaoks luba järgmised šifrikomplektid toodud
+järjekorras:
 
 ```nginx
-ssl_ciphers ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384;
+ssl_conf_command Ciphersuites TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256;
 ```
 
-Alternatiivina saab kasutatavaid šifreid konfigureerida serveripõhiselt failis `/etc/nginx/nginx.conf` muutes selles parameetrit `ssl_ciphers`.
+`TLS_AES_128_CCM_SHA256` võib kasutada ainult varuvariandina, kui AES-GCM
+ja ChaCha20-Poly1305 ei ole saadaval. CCM_8 komplekte ei tohi lubada.
 
-Rohkem infot šifrikomplektide soovituste kohta leiab RIA tellitud krüptograafiliste algoritmide elutsükli uuringust aadressil <https://www.id.ee/artikkel/kruptograafiliste-algoritmide-elutsukli-uuringud-2/>.
+Dokumenteeritud TLS 1.2 ühilduvuserandi korral luba ainult järgmised kolm
+ECDHE-ECDSA ja AEAD šifrikomplekti. See vastab juhendis kasutatavale
+ainult ECDSA sertifikaadi profiilile:
+
+```nginx
+ssl_ciphers 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305';
+```
+
+Direktiiv `ssl_ciphers` juhib TLS 1.2 ja vanemaid versioone;
+`ssl_conf_command Ciphersuites` juhib OpenSSL-i kaudu TLS 1.3 komplekte.
+TLS 1.2 loend välistab RSA autentimise ja võtmevahetuse, staatilise DH/ECDH,
+CBC, CCM_8 ja muud mitte-AEAD komplektid.
+
+Neid direktiive saab konfigureerida ka serveripõhiselt failis
+`/etc/nginx/nginx.conf`. Kontrolli kehtivat loendit käsuga
+`openssl ciphers -v` ning testi pärast iga muudatust ajakohase TLS
+skanneriga läbiräägitud protokolli ja šifrikomplekti.
+
+##### Pakkimine ja korduskätlus
+
+Hoia TLS-i pakkimine ja TLS 1.2 korduskätlus selgesõnaliselt keelatuna:
+
+```nginx
+ssl_conf_command Options -Compression,NoRenegotiation;
+```
+
+HTTP vastuste pakkimine on TLS-i pakkimisest eraldiseisev ja võib saladusi
+lekitada, kui vastus sisaldab nii ründaja juhitavat sisendit kui ka tundlikke
+andmeid. Määra tundlikes dünaamilistes asukohtades `gzip off;` ja keela seal
+ka seadistatud Brotli moodul. Kui vastuste pakkimine peab jääma lubatuks,
+peab rakendus takistama saitidevahelist päringuvõltsimist ning leevendama
+vastuse pikkuse leket.
+
+Rohkem infot šifrikomplektide soovituste kohta leiab RIA tellitud
+krüptograafiliste algoritmide elutsükli uuringust aadressil
+<https://www.id.ee/artikkel/kruptograafiliste-algoritmide-elutsukli-uuringud-2/>.
 
 ##### ssl_prefer_server_ciphers
 
-Eelistamaks serveri šifrikomplektide valikut kasutaja omale, tuleb Nginx konfiguratsioonifailis defineerida määrang `ssl_prefer_server_ciphers` ja panna selle väärtuseks `on`.
+Eelistamaks serveri šifrikomplektide valikut kasutaja omale, tuleb Nginx
+konfiguratsioonifailis defineerida määrang `ssl_prefer_server_ciphers`
+ja panna selle väärtuseks `on`.
 
 #### Kasutajasertifikaatide lisafiltreerimine
 
-Oluline! Veebiteenusele juurdepääsu piiramiseks vaid õigete sertifikaatidega kasutajatele tuleb serveri konfiguratsioonis kehtestada järgmised nõuded:
+CA ahela usaldamine ei tõesta, et lõppsertifikaat on ID-kaardi
+autentimissertifikaat. Erinevad sertifikaaditooted võivad kasutada sama juur-
+või kesktaseme CA-d. Enne autenditud identiteedi aktsepteerimist tuleb nõuda,
+et:
 
-1.  sertifikaadis peab olema korrektne OID väärtus;
-2.  sertifikaadi väljastaja peab olema `ESTEID2018` või `ESTEID2025`.
+1.  Nginx valideerib edukalt kogu sertifikaadiahela;
+2.  väljastaja on selgesõnaliselt lubatud kesktaseme CA;
+3.  `extendedKeyUsage` lubab TLS veebikliendi autentimist;
+4.  lõppsertifikaadi laiendus `X509v3 CertificatePolicies` (`2.5.29.32`)
+    sisaldab nii NCP+ autentimispoliitika OID-d kui ka sertifikaadi CA
+    põlvkonnale vastavat lubatud dokumendipoliitika OID-d.[^7]
 
-Hetkeseisuga ei ole teada ühtki meetodit õige OID kontrollimiseks Nginx serveri tasemel. Seetõttu on soovitatav see kontroll teha veebirakenduse tasemel.
+Käesolevas juhendis käsitletud tootmissertifikaatide lubatud loend on:
 
-Teise nõude täitmiseks saab luua konfiguratsiooni, kus ühendus katkestatakse, kui sertifikaat ei ole väljastatud serveris lubatud CAde poolt. Selleks tuleb lisada konfiguratsioonifaili (serveri sektsiooni, näiteks SSL kirjeldusele järgnevalt) järgmised tingimused:
+```text
+# Nõutav igas aktsepteeritavas autentimissertifikaadis
+0.4.0.2042.1.2
+
+# ESTEID2018 - nõua üht neist dokumendipoliitika OID-dest
+1.3.6.1.4.1.51361.1.1.1
+1.3.6.1.4.1.51361.1.1.2
+1.3.6.1.4.1.51361.1.1.3
+1.3.6.1.4.1.51361.1.1.4
+1.3.6.1.4.1.51361.1.1.5
+1.3.6.1.4.1.51361.1.1.6
+1.3.6.1.4.1.51361.1.1.7
+1.3.6.1.4.1.51455.1.1.1
+
+# ESTEID2025 - nõua üht neist dokumendipoliitika OID-dest
+1.3.6.1.4.1.51361.2.1.1
+1.3.6.1.4.1.51361.2.1.2
+1.3.6.1.4.1.51361.2.1.3
+1.3.6.1.4.1.51361.2.1.4
+1.3.6.1.4.1.51361.2.1.5
+1.3.6.1.4.1.51361.2.1.6
+1.3.6.1.4.1.51455.2.1.1
+```
+
+Seosta dokumendipoliitika OID valideeritud väljastajaga: `ESTEID2018`
+sertifikaati ei tohi aktsepteerida `ESTEID2025` poliitika OID alusel ega
+vastupidi. Ühine NCP+ OID ei ole tootepõhine ja sellest üksi ei piisa.
+Tootmise lubatud loendisse ei tohi lisada test-OID-sid, näiteks Zetesi OID-sid
+prefiksiga `2.999`.
+
+Nginxil ei ole direktiivi, mis suudaks `CertificatePolicies` laienduse
+poliitika OID-de lubatud loendit usaldusväärselt rakendada. Kontroll tuleb
+teha rakenduses või autentimislüüsis. Sertifikaaditoodet ei tohi tuletada
+ainult subjekti, väljastaja või EKU järgi ning `anyPolicy` OID-d
+(`2.5.29.32.0`) ei tohi käsitleda ID-kaardi poliitika tõendina.
+
+Esialgse lisakaitsena lükka tagasi sertifikaadid, mille väljastaja CA nimi ei
+ole `ESTEID2018` ega `ESTEID2025`. Lisa järgmised tingimused pärast TLS-i
+konfiguratsiooni `server`-sektsiooni:
 
 ```nginx
-#Determine IMCA and cancel, if not trusted
-set $ocspr "";
+# Esialgne filter kesktaseme CA nime järgi
+set $trusted_client_issuer 0;
 
-if ($ssl_client_i_dn = "CN=ESTEID2018,organizationIdentifier=NTREE-10747013,O=SK ID Solutions AS,C=EE") {
-    set $ocspr "http://aia.sk.ee/esteid2018";
+if ($ssl_client_i_dn ~ "^CN=ESTEID2018,") {
+    set $trusted_client_issuer 1;
 }
 
-if ($ssl_client_i_dn = "CN=ESTEID2025, organizationIdentifier=NTREE-17066049, O=Zetes Estonia OÜ, C=EE") {
-    set $ocspr "http://ocsp.eidpki.ee";
+if ($ssl_client_i_dn ~ "^CN=ESTEID2025,") {
+    set $trusted_client_issuer 1;
 }
 
-if ($ocspr = "") {
+if ($trusted_client_issuer = 0) {
     return 403;
 }
 ```
 
-Nende tingimuste lisamisel lükatakse ühendus tagasi, kui kasutaja sertifikaati ei ole väljastanud usaldusväärne CA — `ESTEID2018` või `ESTEID2025`.
+Nende tingimustega lükkab Nginx sertifikaadi tagasi, kui selle väljastaja ei
+ole `ESTEID2018` ega `ESTEID2025`. Väljastaja kontroll ei asenda
+sertifikaadipoliitika kontrolli.
+
+HTTP upstream'i puhul kirjuta valideeritud lõppsertifikaat selleks ettenähtud
+päisesse:
+
+```nginx
+proxy_set_header X-Client-Certificate $ssl_client_escaped_cert;
+```
+
+Rakendus peab sertifikaadi URL-dekodeerima ja parsima ning autentimise tagasi
+lükkama, kui selles ei ole nii NCP+ OID-d kui ka väljastajale vastavat
+dokumendipoliitika OID-d. Päist tohib usaldada ainult siis, kui rakendus on
+ligipääsetav üksnes usaldatud Nginxi proksi kaudu. Muude liideste puhul tuleb
+kasutada rakendusplatvormi TLS kliendisertifikaadi integratsiooni.
+
+Eksporditud sertifikaadi laienduse kontrollimiseks testi:
+
+```bash
+$ openssl x509 -in client.pem -noout -text
+```
+
+Võrdle jaotist `X509v3 Certificate Policies` eespool viidatud kehtivate
+poliitika- ja sertifikaadiprofiilide allikatega. Testi vähemalt üht
+lubatud ID-kaardi sertifikaati ja seotud hierarhiates väljastatud muude
+toodete sertifikaate, sealhulgas vajaduse korral Mobiil-ID-d.
 
 > **Märkus:** Kui on kasutusel mõni muu liikluse filtreerimise vahend/võimalus, siis on soovitav turvaline konfiguratsioon juurutada ka seal. SK on F5 konfiguratsiooni osas publitseerinud järgmise informatsiooni (vt. peakükki „Only accept certificates with trusted key usage"): <https://github.com/SK-EID/smart-id-documentation/wiki/Secure-Implementation-Guide>
 
 > **Märkus:** SK soovitused turvaliseks autentimiseks ID-kaardiga on leitavad peatükist „Defence: implement ID-card authentication securely": <https://github.com/SK-EID/smart-id-documentation/wiki/Secure-Implementation-Guide>
-
-> **Märkus:** Soovituslik meetod ebakorrektsete sertifikaatide vältimiseks on kasutada sertifikaatides olevaid OIDe. Paraku ei ole hetkeseisuga teada meetodit, kuidas seda serveri tasemel teha. Võimalusel tuleks võtta autentimise sertifikaat veebirakenduse tasemel lahti ja kontrollida, kas see sisaldab mõnda korrektset OIDi ning kui ei sisalda, siis mitte autentida. Hetkeseisuga teadaolevad OIDid on SK publitseerinud peatükis „Only accept certificates with trusted issuance policy": <https://github.com/SK-EID/smart-id-documentation/wiki/Secure-Implementation-Guide>
 
 #### *HTTP Strict Transport Security* (HSTS) lubamine
 
@@ -643,14 +761,23 @@ server {
     ssl_verify_client on;
     ssl_verify_depth 2;
 
-    # OCSP — uncomment to enable AIA OCSP checking
-    # ssl_ocsp leaf;
-    # ssl_ocsp_cache off;
-    # resolver 194.126.115.18;
+    # Kliendisertifikaadi tühistusoleku kontroll
+    ssl_ocsp leaf;
+    ssl_ocsp_cache shared:OCSP:10m;
+    resolver 194.126.115.18;
+
+    # Serverisertifikaadi OCSP stapling - luba ainult CA OCSP toe korral
+    # ssl_stapling on;
+    # ssl_stapling_verify on;
+    # ssl_trusted_certificate /etc/ssl/certs/Nginx2404_CA.pem;
 
     # TLS
     ssl_protocols TLSv1.3;
-    # ssl_ciphers ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384;
+    ssl_conf_command Ciphersuites TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256;
+    # Dokumenteeritud ühilduvuserand TLS 1.2 jaoks:
+    # ssl_protocols TLSv1.2 TLSv1.3;
+    # ssl_ciphers 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305';
+    ssl_conf_command Options -Compression,NoRenegotiation;
     ssl_prefer_server_ciphers on;
 
     # HSTS and session settings
@@ -659,18 +786,19 @@ server {
     ssl_session_timeout  1h;
     ssl_session_tickets  on;
 
-    # Filter by certificate issuer — reject if not a trusted CA
-    set $ocspr "";
+    # Osaline filtreerimine väljastaja CA nime järgi; rakendus peab lisaks
+    # lubama ainult ID-kaardi CertificatePolicies OID-d
+    set $trusted_client_issuer 0;
 
-    if ($ssl_client_i_dn = "CN=ESTEID2018,organizationIdentifier=NTREE-10747013,O=SK ID Solutions AS,C=EE") {
-        set $ocspr "http://aia.sk.ee/esteid2018";
+    if ($ssl_client_i_dn ~ "^CN=ESTEID2018,") {
+        set $trusted_client_issuer 1;
     }
 
-    if ($ssl_client_i_dn = "CN=ESTEID2025, organizationIdentifier=NTREE-17066049, O=Zetes Estonia OÜ, C=EE") {
-        set $ocspr "http://ocsp.eidpki.ee";
+    if ($ssl_client_i_dn ~ "^CN=ESTEID2025,") {
+        set $trusted_client_issuer 1;
     }
 
-    if ($ocspr = "") {
+    if ($trusted_client_issuer = 0) {
         return 403;
     }
 
@@ -682,14 +810,20 @@ server {
 
 [^1]: Lisaks käsureal kirjeldatud sertifikaadi atribuutidele C, O ja CN on võimalik soovi korral lisaks kirjeldada atribuudid L, OU ja S. Võib kasutada ka ainult CNi.
 
-[^2]: Kaasaegsed veebilehitsejad ei pea veebilehte usaldusväärseks, kui vähemalt üks SAN DNS ei vasta veebilehe tegelikule aadressile.
+[^2]: Kaasaegsed veebilehitsejad usaldavad sertifikaati ainult siis, kui veebilehe aadress vastab vähemalt ühele sertifikaadi SAN DNS nimele.
 
-[^3]: Veebilehitsejad ei pea veebilehte usaldusväärseks, kui vähemalt üks SAN DNS ei vasta veebilehe tegelikule aadressile.
+[^3]: HTTP osa siin konfiguratsioonifailis ei ole tegelikult vajalik ja on toodud lihtsalt HTTP -\>HTTPS ümbersuunamise näitena.
 
-[^4]: HTTP osa siin konfiguratsioonifailis ei ole tegelikult vajalik ja on toodud lihtsalt HTTP -\>HTTPS ümbersuunamise näitena.
+[^4]: Sertifikaatide kehtivust on võimalik kontrollida ka sertifikaatide tühistusnimekirjade (CRL) abil, ent sellel käesolevas dokumendis ei peatuta, kuna OCSP-põhine lahendus on eelistatum.
 
-[^5]: Sertifikaatide kehtivust on võimalik kontrollida ka sertifikaatide tühistusnimekirjade (CRL) abil, ent sellel käesolevas dokumendis ei peatuta, kuna OCSP-põhine lahendus on eelistatum.
+[^5]: *Resolver* -- asendage see soovi korral mõne DNS serveriga, mis on võimeline avalikke DNS aadresse lahendama. Selliseks serveriks võib olla ka teie enda sisevõrgu DNS server.
 
-[^6]: *Resolver* -- asendage see soovi korral mõne DNS serveriga, mis on võimeline avalikke DNS aadresse lahendama. Selliseks serveriks võib olla ka teie enda sisevõrgu DNS server.
+[^6]: <https://nginx.org/en/docs/http/ngx_http_ssl_module.html>
 
-[^7]: Siin ei käsitleta teiste TLS protokollide šifreid, kuna versioonist 1.2 vanemad protokollid on eelduslikult keelatud ja 1.3 versioon on hetkel eelistatuim.
+[^7]: Lubatud loend põhineb
+    [ESTEID2018 sertifitseerimispoliitikal v4.0](https://www.id.ee/wp-content/uploads/2025/10/cp_esteid_v4.0-08.10.2025.pdf),
+    [ESTEID2025 sertifitseerimispoliitikal v2.0](https://repository.eidpki.ee/static/documents/eid-cp-v-2.0_04.06.2026_allkirjastatud.pdf)
+    ja [Zetesi sertifikaadiprofiilidel](https://repository.eidpki.ee/static/documents/CertificateProfiles-20260520.pdf).
+    Enne tootmise lubatud loendi muutmist kontrolli
+    [Zetesi repositooriumi](https://repository.eidpki.ee/repository/) ning
+    teenuseosutajate kehtivaid poliitikaid ja profiile.
