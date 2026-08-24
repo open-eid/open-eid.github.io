@@ -2,7 +2,7 @@
 
 **[In English](index.md)**
 
-**Versioon:** 26.06/1
+**Versioon:** 26.07/1
 
 **Väljaandja:** [RIA](https://www.ria.ee/)
 
@@ -20,10 +20,10 @@
 | 29.03.2022 | 22.03/1  | Laiendite keskse levitamise peatükis parandatud Chrome Web eID laienduse väärtus. — Muutja: Urmas Vanem
 | 13.04.2022 | 22.04/1  | Lisatud Web eID laienduste paigaldamise vaikekoha muutmine. — Muutja: Tarmo Nurmela
 | 21.04.2022 | 22.04/2  | Lisatud MSI pakiga Idemia minidraiveri automaatinstallatsiooni kirjeldus (ilma kaardita/lugejata, RDP juhtum). — Muutja: Urmas Vanem
-| 13.06.2022 | 22.06/1  | Lisatud peatükk „Tarkvara uuenduste loogika" ja Chrome „Configure native messaging blocklist/allowlist" poliitikate kirjeldus. — Muutja: Urmas Vanem
+| 13.06.2022 | 22.06/1  | Lisatud peatükk „Tarkvara uuenduste loogika“ ja Chrome „Configure native messaging blocklist/allowlist“ poliitikate kirjeldus. — Muutja: Urmas Vanem
 | 29.07.2022 | 22.07/1  | Dokumendis kirjeldatava tarkvara baasversioon on uuendatud versioonile 22.06.0.1930, kirjeldatud on uue versiooniga seotud muudatused, eemaldatud aegunud info, lisatud Firefox kesksete poliitikate kirjeldus. — Muutjad: Kristel Merilain, Urmas Vanem
 | 11.08.2022 | 22.08/1  | Lisatud ID-tarkvara uuenduste protsessi kirjeldus. — Muutja: Urmas Vanem
-| 31.08.2022 | 22.08/2  | Parandatud „Veebilehitsejate käitumisest laiendite vaates installatsiooni ajal" peatükis olevate tabelite informatsioon. — Muutja: Kristel Merilain
+| 31.08.2022 | 22.08/2  | Parandatud „Veebilehitsejate käitumisest laiendite vaates installatsiooni ajal“ peatükis olevate tabelite informatsioon. — Muutja: Kristel Merilain
 | 14.12.2022 | 22.12/1  | Muudetud laiendite käitumise kirjeldust Edge ja Chrome veebilehitsejates installatsiooni ajal ning tarkvara on kaasajastatud versioonile 22.11. — Muutja: Kristjan Vaikla
 | 29.12.2022 | 22.12/1  | Uuendatud transform failide info `AWP`, `Digidoc_ShellExt` ja Web eID peatükkides. — Muutja: Märt Hirtentreu
 | 24.10.2024 | 24.10/1  | Eemaldatud Gemalto minidraiver, uuendatud installatsiooniloogikat, muudetud veebilehitsejatesse suhtumist installatsiooni ajal jpm. — Muutja: Urmas Vanem
@@ -31,6 +31,7 @@
 | 31.10.2025 | 25.10/1  | Lisatud SmartCard Client. — Muutja: Raul Kaidro
 | 19.05.2026 | 26.04/1  | Avaldatud veebidokumentatsioonina. Lisatud Edge NativeMessagingAllowlist konfiguratsioon. — Muutja: Raul Metsma
 | 11.06.2026 | 26.06/1  | Uuendatud GPO-MSI levitamise juhiseid ja kuvatõmmiseid. — Muutja: Raul Metsma
+| 29.07.2026 | 26.07/1  | Lisatud Microsoft Intune paigaldusjuhised ID-tarkvarale ning laienduste keskseks haldamiseks. — Muutja: Raul Metsma
 
 ---
 
@@ -98,7 +99,7 @@ Web eID võimaldab Eesti ID-kaarte kasutada veebis autentimiseks ja allkirjastam
 
 ### Ettevõttes
 
-Keskmistes ja suuremates ettevõtetes paigaldatakse tarkvara tavapäraselt mõne keskse halduslahenduse abil. Enim on levinud SCCM[^1] ja AD/GP[^2] lahendused.
+Keskmistes ja suurtes organisatsioonides paigaldatakse ja hallatakse ID-tarkvara tavaliselt keskselt. Levinud lahendused on Microsoft Intune, Microsoft Configuration Manager (SCCM) ja Active Directory rühmapoliitikad (AD/GPO).
 
 #### SCCM
 
@@ -109,7 +110,7 @@ Lisaks interaktiivse installatsiooni puhul saadaolevatele konfiguratsioonivõima
 3. `ForceChromeExtensionActivation2=1` — Chrome laiendus aktiveeritakse automaatselt, vaikimisi 1.
 4. `ForceEdgeExtensionActivation2=1` — Edge laiendus aktiveeritakse automaatselt, vaikimisi 1.
 5. `FirefoxSupport=0` — ei paigaldata Firefox laiendust, registri kirjeid ega native messaging manifesti, vaikimisi 1.
-6. `InstallCertSynchronizer=1` — installeeritakse vaikimisi `OTCertSynchronizer`, vaikimisi 0[^3].
+6. `InstallCertSynchronizer=1` — installeeritakse vaikimisi `OTCertSynchronizer`, vaikimisi 0[^1].
 7. `MinidriverInstall=0` — ei installeerita minidraiverit, vaikimisi 1.
 8. `Qdigidoc4Install=0` — ei installeerita DigiDoc tarkvara, vaikimisi 1.
 9. `IconsDesktop=0` — ei paigutata DigiDoc ikooni desktopile, vaikimisi 1.
@@ -133,9 +134,9 @@ Selle tavapärase installatsiooni tulemusena on ID-tarkvara tavapäraselt näha 
 
 Juhul, kui keskne süsteemihaldusvahend on ettevõttes puudu, küll aga on võimalik kasutada rühmapoliitikate (GPO) võimalusi, on võimalik kasutada ka MSI tüüpi installatsioone. Soovitatav on GPO installatsioonid teha arvutipõhised.
 
-> **Märkus:** Vaikimisi on MSI installatsioonid mõeldud vaid uute installatsioonide tegemiseks. Ükski eID tarkvara MSI komponent vanemaid, exe põhiselt installeeritud tarkvara versioone ei eemalda.
+> **Märkus:** MSI-pakke saab kasutada nii esmaseks paigalduseks kui ka keskselt hallatud uuendusteks. Need ei eemalda ega vii olemasolevat EXE-põhist paigaldust automaatselt MSI-põhisele haldusele. EXE-lt MSI-põhisele haldusele üleminekul eemalda EXE-põhine paigaldus eraldi. Järgnevate MSI-uuenduste puhul levita uuemaid komponendipakke keskhalduslahenduse kaudu ja testi enne juurutamist konkreetse versiooni uuenduskäitumist.
 
-Milleks erinevad komponendid on vajalikud, leiad peatükist „[Lühidalt erinevatest komponentidest](#lühidalt-erinevatest-id-tarkvara-komponentidest)", allpool tuleb ülevaade GPO-MSI installatsioonide konfigureerimise kohta.
+Milleks erinevad komponendid on vajalikud, leiad peatükist „[Lühidalt erinevatest komponentidest](#lühidalt-erinevatest-id-tarkvara-komponentidest)“, allpool tuleb ülevaade GPO-MSI installatsioonide konfigureerimise kohta.
 
 MSI pakid on EXE-sse sisse pakitud, kuid neid ei saa sealt lahti pakkida. Küll aga on need eraldi allalaetavad aadressilt <https://installer.id.ee/media/win/Open-EID.zip>.
 
@@ -202,17 +203,95 @@ GPO-MSI installatsioonide puhul ilmuvad kõik installeeritud programmid ka progr
 
 > **Märkus:** Skoobis olevad juur- ja kesktaseme sertifikaadid on soovitatav domeenis publitseerida rühmapoliitikate abil kõikidele serveritele ja tööjaamadele.
 
+#### Microsoft Intune'i rakenduste levitamine
+
+Kui seadmeid hallatakse Microsoft Intune'iga, levita eespool kirjeldatud eraldi MSI pakke Win32 rakendustena. MSI paigalduste puhul ei ole `ID-updater` vajalik.
+
+MSI komponendi Intune'i jaoks pakkimiseks:
+
+1. Laadi alla *Microsoft Win32 Content Prep Tool* (`IntuneWinAppUtil.exe`) aadressilt <https://github.com/microsoft/Microsoft-Win32-Content-Prep-Tool>.
+2. Pane komponendi MSI ja kõik vajalikud MST failid eraldi lähtekausta.
+3. Pakenda MSI tööriista abil `.intunewin` failiks.
+4. Ava Intune halduskeskuses *Apps > All apps > Create*, vali rakenduse tüübiks *Windows app (Win32)* ja laadi üles tekkinud `.intunewin` fail.
+
+Ilma käsureaparameetriteta käivitamisel küsib `IntuneWinAppUtil.exe` lähtekausta, installifaili ja väljundkausta. Tööriist toetab ka käsureaparameetreid, mis on kasulikud pakkimise sammu skriptimiseks:
+
+```
+IntuneWinAppUtil.exe -c Source -s "<tegelik komponendi MSI failinimi>" -o Out -q
+```
+
+- `-c` — lähtekaust (kõik installatsiooniks vajalikud failid)
+- `-s` — paigaldatava komponendi MSI fail
+- `-o` — väljundkaust, kuhu tekib `.intunewin` fail
+- `-q` — vaikne režiim, mis jätab ära interaktiivsed küsimused (nt kinnituse küsimise olemasoleva väljundfaili ülekirjutamiseks)
+
+Installatsiooni käsk, eemaldamise käsk ja tuvastusreegel (*detection rule*) sisestatakse Intune halduskeskuse rakenduse loomise juhendatud protsessis. Alltoodud failinimed on kohatäitjad; asenda need allalaaditud `Open-EID.zip` failis olevate tegelike versioonipõhiste failinimedega:
+
+- *Program* vahekaart:
+  - Installatsiooni käsk, näiteks: `msiexec /i "<tegelik Web eID MSI failinimi>" /quiet`
+  - Eemaldamise käsk: `msiexec /x "{PRODUCT-CODE}" /quiet`
+  - Installatsiooni käituskontekst (*Install behavior*): *System*
+- *Detection rules* vahekaart — vali *Manually configure detection rules*, lisa *MSI* reegel, sisesta vastava versiooni MSI tootekood ja luba MSI tooteversiooni kontroll.
+- *Assignments* vahekaart — rakenduse automaatseks paigaldamiseks määra see soovitud seadme- või kasutajagruppidele profiiliga *Required*.
+
+> **Märkus:** `{PRODUCT-CODE}` on kohatäitja. Kui Content Prep Tooli installifailiks (`-s`) valida MSI, loeb tööriist selle metaandmed ning Intune saab tootekoodi MSI tuvastusreeglis kasutada. Kontrolli Intune'is kuvatud väärtust ning kasuta sama GUID-i eemaldamiskäsus. Enne pakkimist saab väärtust vaadata ka [Orcaga](https://learn.microsoft.com/en-us/windows/win32/msi/orca-exe): ava MSI, vali tabel `Property` ning loe rea `ProductCode` veerust `Value` vajalik GUID. Tootekood võib versiooni, arhitektuuri ja keelepaketi lõikes erineda, seetõttu ei ole selles juhendis konkreetseid GUID-e loetletud.
+
+Transformfailid antakse MSI käsureal kaasa `TRANSFORMS` parameetriga, näiteks:
+
+```
+msiexec /i "<tegelik IDPlug MSI failinimi>" TRANSFORMS=DisableIDPlugServices.mst /quiet
+```
+
+Kui MSI komponendid levitatakse eraldi Win32 rakendustena, määra vajalik minidraiver seda vajavate komponentide sõltuvuseks.
+
+> **Märkus:** MSI komponendid ja transformfailid on samad, mis eespool kirjeldatud peatükis [AD/GPO](#adgpo).
+
+##### DigiDoc4 levitusviisi valimine
+
+DigiDoc4 saab levitada kas Microsoft Store'ist või MSI-põhise Win32 rakendusena. Kasuta ühe seadmegrupi jaoks ainult ühte neist meetoditest.
+
+###### Valik 1: Microsoft Store
+
+DigiDoc4 on saadaval [Microsoft Store'is](https://apps.microsoft.com/detail/9pfpfk4dj1s6). Selle Intune'i kaudu levitamiseks ava *Apps > All apps > Create*, vali *Microsoft Store app (new)* ning otsi rakendust nimega `DigiDoc4` või Store'i tootetunnusega `9PFPFK4DJ1S6`. Rakenduse saab seejärel määrata profiiliga *Required* või *Available for enrolled devices*.
+
+Store'i rakendus sisaldab DigiDoc4 rakendust koos failiseoste ja Windows Exploreri moodsa kontekstimenüü laiendusega. See ei asenda ID-kaardi minidraiverit ega Web eID omarakendust ja brauserilaiendusi. Levita need vajalikud komponendid eraldi eespool kirjeldatud MSI pakkidega.
+
+Intune'i kaudu Microsoft Store'ist levitatud rakendusi uuendatakse automaatselt. Kasuta seda võimalust, kui DigiDoc4 uusima versiooni automaatne vastuvõtmine on sobiv; kui iga DigiDoc4 versioon peab enne levitamist olema testitud ja heaks kiidetud, kasuta eespool kirjeldatud MSI-põhist Win32 paigaldust.
+
+###### Valik 2: MSI-põhine Win32 rakendus
+
+Pakenda DigiDoc4 MSI eespool kirjeldatud viisil. MSI paigaldab Windows Exploreri moodsa kontekstimenüü laienduse AppX-põhise lahenduse kaudu. Töölaua otseteede lisamiseks pane `2410-DD-Shortcut.mst` lähtekausta ja kasuta käsku:
+
+```
+msiexec /i "<tegelik DigiDoc4 MSI failinimi>" TRANSFORMS=2410-DD-Shortcut.mst /quiet
+```
+
+`Digidoc_ShellExt` MSI-d ei ole moodsa kontekstimenüü laienduse jaoks vaja. Levita see eraldi ainult siis, kui vaja on Windows Exploreri klassikalist kontekstimenüü laiendust. Windows 11-s kuvatakse selle laienduse käsud menüü *Show more options* all. Kui klassikaline laiendus on Explorerisse juba laaditud, võib selle paigaldamine või uuendamine nõuda Exploreri või arvuti taaskäivitamist. MSI-põhine valik võimaldab organisatsioonil iga DigiDoc4 versiooni enne levitamist testida ja heaks kiita, kuid uuendusi tuleb hallata Intune'is.
+
+##### Intune'i paigalduse uuendamine
+
+Store'i valiku puhul uuendab Microsoft Store DigiDoc4 rakendust automaatselt. MSI-põhiste Win32 rakenduste puhul levita iga heakskiidetud komponendiuuendus Intune'i kaudu:
+
+1. Loo uue komponendi MSI-st uus `.intunewin` pakk.
+2. Uuenda installatsiooni- ja eemaldamiskäske, MSI tootekoodi ning tooteversiooni tuvastust.
+3. Loo uus Win32 rakendus või uuenda olemasoleva rakenduse sisu. Uue rakenduse loomisel määra see eelmise versiooni asendajaks (*supersedence*). Kui testimine kinnitab, et uus MSI uuendab olemasoleva paigalduse, määra *Uninstall previous version* väärtuseks *No*. Kasuta väärtust *Yes* ainult siis, kui eelmine pakk tuleb enne uue paigaldamist eemaldada.
+4. Testi paigaldust ja määra uus versioon seejärel vajalikele gruppidele.
+
+Kõigi MSI-põhiste ID-tarkvara komponentide järgnevate versioonide levitamise eest vastutab Intune.
+
 ### Laienduste levitamine keskselt
 
-Veebilehitsejate laiendusi on võimalik levitada ka keskselt kasutades GPO meetodeid.
+Veebilehitsejate laiendusi saab keskselt levitada rühmapoliitika või Microsoft Intune'i kaudu.
 
 Alltoodud konfiguratsioonid tuleb kindlasti enne reaalset rakendamist kohalikes oludes testida.
 
-#### Chromium Edge
+#### Brauserilaienduste poliitikad AD/GPO kaudu
+
+##### Chromium Edge
 
 Edge puhul tuleb alla laadida värskeim Edge poliitikate raamistik aadressilt <https://www.microsoft.com/en-us/edge/business/download> ja siduda see enda domeeni lahendusega.
 
-Pärast poliitikate keskkonnale tutvustamist saab teha uue poliitika, millega muudetakse Web eID laienduse kasutamine domeenis automaatseks. Selleks tuleb määrata välja `CC/Administrative Templates/Microsoft Edge/Extensions — „Control which extensions are installed silently"` väärtuseks `gnmckgbandlkacikdndelhfghdejfido`.
+Pärast poliitikate keskkonnale tutvustamist saab teha uue poliitika, millega muudetakse Web eID laienduse kasutamine domeenis automaatseks. Selleks tuleb määrata välja `Computer Configuration/Policies/Administrative Templates/Microsoft Edge/Extensions — Control which extensions are installed silently` väärtuseks `gnmckgbandlkacikdndelhfghdejfido`.
 
 ![Edge laienduse ID on gnmckgbandlkacikdndelhfghdejfido](./img/image12.png)
 
@@ -220,11 +299,11 @@ Pärast poliitikate keskkonnale tutvustamist saab teha uue poliitika, millega mu
 
 ![Poliitika informatsioon registris](./img/image14.png)
 
-##### Vajalik lisakonfiguratsioon „native messaging" vaates
+###### Vajalik lisakonfiguratsioon `native messaging` jaoks
 
 Vaikimisi on kõik native messaging hostid Edge'is lubatud. Kui aga `NativeMessagingBlocklist` poliitika väärtuseks on määratud `*`, siis Web eID allkirjastamine ei toimi. Lahenduseks tuleb `eu.webeid` lisada `NativeMessagingAllowlist` poliitikasse. Lisainfo: Edge poliitika dokumentatsioon [NativeMessagingAllowlist](https://learn.microsoft.com/en-us/deployedge/microsoft-edge-browser-policies/nativemessagingallowlist).
 
-#### Google Chrome
+##### Google Chrome
 
 Chrome poliitika pannakse paika juba ID-tarkvara installeerimise käigus. Registrisse kirjutatakse info, millega lubatakse Web eID laiendus Chrome's automaatselt:
 
@@ -234,7 +313,7 @@ Kui on soov Chrome poliitikaid ettevõttes keskselt hallata, võib abi olla allj
 
 Chrome puhul tuleb kesksete poliitikate kasutamiseks alla laadida värskeimad Chrome haldusmallid aadressilt <https://chromeenterprise.google/browser/download/#windows-tab> ja siduda need domeeni lahendusega.
 
-Pärast poliitikate keskkonnale tutvustamist saab teha uue poliitika, millega muudetakse Web eID laienduse kasutamine domeenis automaatseks. Selleks tuleb määrata loendi `CC/Administrative Templates/Google/Google Chrome/Extensions — „Configure the list of force-installed apps and extensions"` üheks väärtuseks `ncibgoaomkmdpilpocfeponihegamlic`.
+Pärast poliitikate keskkonnale tutvustamist saab teha uue poliitika, millega muudetakse Web eID laienduse kasutamine domeenis automaatseks. Selleks tuleb määrata loendi `Computer Configuration/Policies/Administrative Templates/Google/Google Chrome/Extensions — Configure the list of force-installed apps and extensions` üheks väärtuseks `ncibgoaomkmdpilpocfeponihegamlic`.
 
 ![Chrome Web eID laienduse ID on ncibgoaomkmdpilpocfeponihegamlic](./img/image16.png)
 
@@ -242,11 +321,14 @@ Pärast poliitikate keskkonnale tutvustamist saab teha uue poliitika, millega mu
 
 ![Poliitika informatsioon registris](./img/image18.png)
 
-##### Vajalik lisakonfiguratsioon „native messaging" vaates
+###### Vajalik lisakonfiguratsioon `native messaging` jaoks
 
-Juhul, kui Chrome poliitikatega on konfigureeritud omadus `Configure native messaging blocklist` ja määratud seal väärtuseks `*`, siis kasutades ülalkirjeldatud Chrome veebilehitseja laiendust allkirjastamine ei toimi. Näiteks testlehel <https://hwcrypto.github.io/hwcrypto.js/sign.html> allkirjastamisel kuvatakse tulemuseks `getCertificate() failed: Error: technical_error`.
+Juhul, kui Chrome poliitikatega on konfigureeritud omadus `Configure native messaging blocklist` ja määratud seal väärtuseks `*`, siis kasutades ülalkirjeldatud Chrome veebilehitseja laiendust allkirjastamine ei toimi. Näiteks testlehel <https://hwcrypto.github.io/hwcrypto.js/sign.html> allkirjastamisel kuvatakse:
 
-![Allkirjastamise katsel saadud viga](./img/image19.png)
+```
+Debug: hwcrypto.js 0.0.13 with failing backend Chrome native messaging extension
+getCertificate() failed: Error: technical_error
+```
 
 Lubamaks sellises situatsioonis veebis siiski allkirjastamist, tuleb lubada host `eu.webeid` poliitikas `Configure native messaging allowlist`:
 
@@ -254,9 +336,14 @@ Lubamaks sellises situatsioonis veebis siiski allkirjastamist, tuleb lubada host
 
 Pärast poliitika rakendamist allkirjastamine õnnestub.
 
-![Allkirjastamine veebilehel õnnestub](./img/image21.png)
+```
+Debug: hwcrypto.js 0.0.13 with Chrome native messaging extension 2.0.1/2.0.0.552
+Using certificate:
+-----BEGIN CERTIFICATE-----
+...
+```
 
-#### Mozilla Firefox
+##### Mozilla Firefox
 
 Firefox poliitika määratakse juba ID-tarkvara installeerimise käigus, registrisse kirjutatakse järgneval pildil kajastatud info. Eelnimetatud poliitika abil installeeritakse Web eID laiendus Firefoxile automaatselt:
 
@@ -266,7 +353,7 @@ Kui on soov Firefox poliitikaid ettevõttes keskselt hallata, võib abi olla all
 
 Firefox puhul tuleb kesksete poliitikate kasutamiseks alla laadida Firefox värskeimad haldusmallid aadressilt <https://github.com/mozilla/policy-templates/releases> ja siduda need domeeni lahendusega.
 
-Pärast poliitikate keskkonnale tutvustamist saab teha uue poliitika, millega muudetakse Web eID laienduse kasutamine domeenis automaatseks. Selleks on mitmeid võimalusi, ent soovitav on üle kirjutada juba installatsiooni käigus kirjeldatud poliitika. Selleks määratakse välja `CC/Administrative Templates/Mozilla/Firefox/Extensions — 'Extension Management'` väärtuseks järgnev tekst:
+Pärast poliitikate keskkonnale tutvustamist saab teha uue poliitika, millega muudetakse Web eID laienduse kasutamine domeenis automaatseks. Selleks on mitmeid võimalusi, ent soovitav on üle kirjutada juba installatsiooni käigus kirjeldatud poliitika. Selleks määratakse välja `Computer Configuration/Policies/Administrative Templates/Mozilla/Firefox/Extensions — Extension Management` väärtuseks järgnev tekst:
 
 ```json
 {
@@ -286,7 +373,7 @@ Registris paigaldatakse vastav info samasse kohta, kuhu ka installatsiooni ajal.
 Kui on soov, et kasutaja ei saaks iseseisvalt Web eID laiendust välja lülitada, tuleb:
 
 1. Asendada ülaltoodud välja väärtuses tekst `normal_installed` tekstiga `force_installed`;
-2. Lisada rida `{e68418bc-f2b0-4459-a9ea-3e72b6751b07}` loendisse `CC/Administrative Templates/Mozilla/Firefox/Extensions — 'Prevent extensions from being disabled or removed'`.
+2. Lisada rida `{e68418bc-f2b0-4459-a9ea-3e72b6751b07}` loendisse `Computer Configuration/Policies/Administrative Templates/Mozilla/Firefox/Extensions — Prevent extensions from being disabled or removed`.
 
 ![Firefox Web eID poliitika keelamine](./img/image25.png)
 
@@ -294,7 +381,33 @@ Pärast kummagi poliitika rakendamist ei saa kasutaja enda Firefoxis Web eID lai
 
 ![Web eID laiendus on alati sees](./img/image26.png)
 
-Lisaks on võimalik laiendus installida ka loendi `CC/Administrative Templates/Mozilla/Firefox/Extensions — 'Extensions to install'` abil, ent praeguse konfiguratsiooni puhul on pigem soovitav olemasoleva väärtuse ülekirjutamine.
+Lisaks on võimalik laiendus installida ka loendi `Computer Configuration/Policies/Administrative Templates/Mozilla/Firefox/Extensions — Extensions to install` abil, ent praeguse konfiguratsiooni puhul on pigem soovitav olemasoleva väärtuse ülekirjutamine.
+
+#### Brauserilaienduste poliitikad Microsoft Intune'i kaudu
+
+Veebilehitsejate laienduste poliitikaid saab levitada ka Microsoft Intune seadme konfiguratsiooniprofiilide abil, mitte ainult GPO kaudu.
+
+##### Google Chrome ja Microsoft Edge
+
+Chrome ja Edge poliitikad põhinevad samadel ADMX mallidel, millele viidati eespool ([Chromium Edge](#chromium-edge), [Google Chrome](#google-chrome)):
+
+1. Ava Intune halduskeskuses *Devices > Manage devices > Configuration > Create > New policy*. Vali platvormiks *Windows 10 and later* ja profiili tüübiks *Settings catalog*. Chrome'i ja Edge'i sätted on kataloogis olemas ning nende ADMX malle ei ole vaja importida.
+2. Seadista laienduse sundinstalli lubav säte (Chrome puhul `Configure the list of force-installed apps and extensions`, Edge puhul `Control which extensions are installed silently`) Web eID laienduse ID-ga: Chrome'i puhul `ncibgoaomkmdpilpocfeponihegamlic`, Edge'i puhul `gnmckgbandlkacikdndelhfghdejfido`.
+3. Kui native messaging on piiratud blocklist-poliitikaga, lisa ka `eu.webeid` vastavasse allowlist-sättesse, samamoodi nagu eespool kirjeldatud peatükkides [Chromium Edge](#chromium-edge) ja [Google Chrome](#google-chrome).
+4. Määra profiil vajalikele seadme- või kasutajagruppidele.
+
+##### Mozilla Firefox
+
+Firefoxi poliitikad ei ole Intune'i sisseehitatud *settings catalog*'i osa:
+
+1. Laadi alla Firefoxi ADMX mallid (vt [Mozilla Firefox](#mozilla-firefox) eespool). Impordi asukohas *Devices > Manage devices > Configuration > Import ADMX* esmalt `mozilla.admx` koos vastava `mozilla.adml` failiga. Kui nende olek on *Available*, impordi `firefox.admx` koos vastava `firefox.adml` failiga.
+2. Loo uus profiil, valides platvormiks *Windows 10 and later* ja profiili tüübiks *Templates > Imported Administrative templates (Preview)*. Seadista `Extension Management` sama JSON väärtusega, mis on kirjeldatud eespool peatükis [Mozilla Firefox](#mozilla-firefox).
+
+   > **Hoiatus:** Kui asutuses on laienduste poliitikad grupeeritud kokku, kasuta varianti `Extension Management (JSON on one line)`. Vastasel juhul võib Intune lisada poliitikasse võõrsümboleid, mis jõuavad avatekstina Windowsi registrisse ja põhjustavad JSON-is süntaksivea. Intune ja Firefox ei võimalda praegu mõlemat varianti samal ajal kasutada. Näide registrisse jõudnud vigasest väärtusest: `�"*": {"installation_mode": "…`.
+
+3. Määra profiil vajalikele seadme- või kasutajagruppidele.
+
+> **Märkus:** Nagu GPO puhulgi, testi eespool kirjeldatud konfiguratsioone kindlasti enda keskkonna(s) enne rakendamist.
 
 ## Tarkvara uuendamine
 
@@ -304,7 +417,7 @@ ID-tarkvara uuenduste kontrollimisel on kasutusel keskne konfiguratsioon, mille 
 2. DigiDoc4 programmi startimisel;
 3. Käsitsi tarkvarauuenduste otsimine DigiDoc4 rakenduse käivitamisel.
 
-### Automaatkorraldus „id updater task"
+### Automaatkorraldus `id updater task`
 
 > **Märkus:** See meetod töötab vaid EXE-installatsioonidega — allkirjeldatud registriväärtuseid MSI installatsiooniga ei teki.
 
@@ -316,7 +429,7 @@ ID-tarkvara versiooni 26.4.20.8412 puhul on arvutis olev versioon kirjas registr
 
 ![ID-tarkvara versiooni 26.4.20.8412 informatsioon arvuti registris](./img/image28.png)
 
-Genereeritud unikaalne võti (siin: `{DF5112B3-AAE7-44E3-8F9B-B9F33CDE0DC9}`) on iga ID-tarkvara versiooni puhul erinev. Automaatkorralduse `id updater task` käivitamisel laaditakse keskne konfiguratsioon arvuti mällu, loetakse sealt parameeter `WIN-LATEST` ja võrreldakse seda registris oleva parameetriga *DisplayVersion*. Juhul, kui `WIN-LATEST` on suurem kui registris asuva *DisplayVersion* välja väärtus, pakutakse kasutajale tarkvara uuendust.
+Genereeritud unikaalne võti (siin: `{5FBF3885-332F-4E02-B7C8-589775D00818}`) on iga ID-tarkvara versiooni puhul erinev. Automaatkorralduse `id updater task` käivitamisel laaditakse keskne konfiguratsioon arvuti mällu, loetakse sealt parameeter `WIN-LATEST` ja võrreldakse seda registris oleva parameetriga *DisplayVersion*. Juhul, kui `WIN-LATEST` on suurem kui registris asuva *DisplayVersion* välja väärtus, pakutakse kasutajale tarkvara uuendust.
 
 ### DigiDoc4 käivitamine
 
@@ -332,11 +445,11 @@ Juhul, kui DigiDoc4 versioon kasutaja registriosas väljal *LastVersion* on väi
 
 #### Uuem versioon tarkvarast
 
-Juhul, kui DigiDoc4 versioon kasutaja registriosas väljal *LastVersion* on väiksem konfiguratsioonifailis real `QDIGIDOC4-LATEST` kirjeldatud, teavitatakse sellest kasutajat DigiDoc4 programmi käivitamisel: *Saadaval on ID-tarkvara uuendus, mille saad paigaldada veebilehelt id.ee ...*. Kasutajat teavitatakse uuendusest esimesel korral pärast versioonide erinevuse leidmist ja järgnevad teavitused tulevad alles siis, kui keskses konfiguratsioonifailis on tehtud mõni muudatus[^4].
+Juhul, kui DigiDoc4 versioon kasutaja registriosas väljal *LastVersion* on väiksem konfiguratsioonifailis real `QDIGIDOC4-LATEST` kirjeldatud, teavitatakse sellest kasutajat DigiDoc4 programmi käivitamisel: *Saadaval on ID-tarkvara uuendus, mille saad paigaldada veebilehelt id.ee ...*. Kasutajat teavitatakse uuendusest esimesel korral pärast versioonide erinevuse leidmist ja järgnevad teavitused tulevad alles siis, kui keskses konfiguratsioonifailis on tehtud mõni muudatus[^2].
 
 ### Käsitsi uuenduste otsing
 
-Käsitsi ID-tarkvara uuenduste otsinguks tuleb DigiDoc4 programmis avada seaded ja klikkida all ääres oleval tekstil „Kontrolli värskendusi". Selle tulemusena kontrollitakse alati uue konfiguratsioonifaili olemasolu, vajadusel laaditakse see alla ja seejärel võrreldakse seal olevat versiooni arvutis oleva tarkvara versiooniga. Arvuti versioon loetakse analoogselt automaatkorraldusele `id updater task` registri väljast *DisplayVersion* võtme `HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{5FBF3885-332F-4E02-B7C8-589775D00818}` alt.
+Käsitsi ID-tarkvara uuenduste otsinguks tuleb DigiDoc4 programmis avada seaded ja klikkida all ääres oleval tekstil „Kontrolli värskendusi“. Selle tulemusena kontrollitakse alati uue konfiguratsioonifaili olemasolu, vajadusel laaditakse see alla ja seejärel võrreldakse seal olevat versiooni arvutis oleva tarkvara versiooniga. Arvuti versioon loetakse analoogselt automaatkorraldusele `id updater task` registri väljast *DisplayVersion* võtme `HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{5FBF3885-332F-4E02-B7C8-589775D00818}` alt.
 
 ![Värskenduste kontroll DigiDoc4 seadetes](./img/image30.png)
 
@@ -346,7 +459,5 @@ Kui tarkvara uuendus on olemas, pakutakse see kasutajale välja. Kasutajat teavi
 
 > **Märkus:** Ka see meetod töötab korrektselt vaid EXE installide puhul.
 
-[^1]: System Center Configuration Manager
-[^2]: Active Directory / Group Policy
-[^3]: Selle määrangu lubamisel eemaldatakse kasutaja sertifikaadid EID kaardi eemaldamisel Windows sertifikaadihoidlast.
-[^4]: Reeglina tehakse keskses konfiguratsioonifailis muudatus kord kuus.
+[^1]: Selle määrangu lubamisel eemaldatakse kasutaja sertifikaadid EID kaardi eemaldamisel Windows sertifikaadihoidlast.
+[^2]: Reeglina tehakse keskses konfiguratsioonifailis muudatus kord kuus.
