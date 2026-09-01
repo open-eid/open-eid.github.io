@@ -2,7 +2,7 @@
 
 **[Eesti keeles (In Estonian)](index.et.md)**
 
-**Version:** 26.04/1
+**Version:** 26.08/1
 
 **Published by:** [RIA](https://www.ria.ee/)
 
@@ -23,6 +23,7 @@
 | 22/08/2024 | 24.08/1 | Ubuntu updated to Server 24.04 and Nginx to 1.27.1. — Changed by: Urmas Vanem
 | 31/10/2025 | 25.10/1 | Added Zetes chain, removed SK OCSP section. — Changed by: Lauris Kaplinski
 | 22/04/2026 | 26.04/1 | Converted to Markdown format. — Changed by: Raul Metsma
+| 21/08/2026 | 26.08/1 | Updated certificate-key, TLS protocol, cipher-suite, certificate-policy, and OCSP guidance based on the 2026 cryptographic algorithms life-cycle report. — Changed by: Raul Metsma
 
 ---
 
@@ -36,7 +37,8 @@ This guide describes:
 - How to install and configure the Nginx 1.28.1 web server on Ubuntu Server 24.04.
 - How to configure HTTPS (one-way SSL) in the web server.
 - How to configure ID-card authentication (two-way SSL) using [SK ID Solutions](https://www.skidsolutions.eu/resources/certificates/) (`EE-GovCA2018`) and [Zetes](https://repository.eidpki.ee/) (`EEGovCA2025`) ID-cards.
-- How to configure OCSP checks against the guaranteed OCSP as well as the AIA OCSP service.
+- How to check client-certificate revocation and configure server-certificate
+  OCSP stapling.
 - How to protect the web server.
 
 This guide also covers other configuration options such as how to configure HTTP -\> HTTPS redirection, etc.
@@ -119,6 +121,17 @@ $ openssl req -new -key Nginx2404.key -out Nginx2404.csr -subj /C=EE/O=OctoX/CN=
 3.  `CN=Nginx2404.octox.demo` is the common name for the certificate;
 4.  `DNS:Nginx2404.octox.demo` and `DNS:MYWEBSERVER.octox.demo` are SAN DNS names for the certificate. These names must correspond to the actual address of the website[^2]. The names must also be resolvable in name services.
 
+Generate a separate private key for every independent TLS server. Do not copy
+one key between servers merely because a wildcard or multi-SAN certificate
+could cover all their names. Keeping keys separate limits the impact of a
+server or key compromise.
+
+For production deployments, use a hardware security module (HSM) or an
+equivalent non-exportable hardware-backed key store where supported. Generate
+the key inside the device and keep it non-exportable. Confirm that the HSM,
+OpenSSL integration, and certificate issuer support the selected ECDSA P-384
+key before deployment. The file-based key in this example is not an HSM setup.
+
 The contents of the CSR can be viewed by running
 
 ```bash
@@ -146,64 +159,6 @@ Certificate Request:
                     DNS:Nginx2404.octox.demo, DNS:MYWEBSERVER.octox.demo
         Signature Algorithm: ecdsa-with-SHA256
         Signature Value:
-```
-
-###### RSA
-
-*This section is retained for those who prefer RSA-based certificates. The rest of the document uses ECC.*
-
-Create a CSR and a private key with the command
-
-```bash
-$ openssl req -newkey rsa:2048 -keyout NGINX20PRIV.key -sha256 -subj "/CN=Nginx20.kaheksa.xi" -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf "[SAN]\nsubjectAltName=DNS: Nginx20.kaheksa.xi,DNS: Nginx22.kaheksa.xi ")) -out NGINX20.csr -nodes
-Generating a RSA private key
-........................................................................+++++
-.....................................+++++
-writing new private key to 'NGINX20PRIV.key'
------
-```
-
-1.  `NGINX20PRIV.key` is the private key of the certificate;
-2.  `NGINX20.csr` is the CSR for the CA;
-3.  `Nginx20.kaheksa.xi` is the subject name for the certificate;
-4.  `Nginx20.kaheksa.xi` and `Nginx22.kaheksa.xi` are certificate SAN DNS names. These names must correspond to the actual address of the website[^3]. The names must also be resolvable in name services.
-
-The contents of the CSR can be viewed with the command
-
-```bash
-$ openssl req -in NGINX20.csr -noout -text
-Certificate Request:
-    Data:
-        Version: 1 (0x0)
-        Subject: CN = Nginx20.kaheksa.xi
-        Subject Public Key Info:
-            Public Key Algorithm: rsaEncryption
-                RSA Public-Key: (2048 bit)
-                Modulus:
-                    00:f1:62:c3:ed:1d:0b:ea:cb:7c:22:17:41:1e:e3:
-                    c1:02:a6:7b:f3:72:13:ae:8d:72:72:6f:09:77:d6:
-                    51:84:4b:2a:f6:7b:65:9d:9f:f3:2a:0c:16:e5:26:
-                    47:70:aa:3e:c8:4c:50:62:5b:6c:2a:49:ea:51:01:
-                    60:5c:94:2c:d6:1d:78:70:eb:41:88:6c:09:c8:2f:
-                    e4:d5:bb:2f:fb:ec:2f:9d:0c:42:66:b5:de:91:e3:
-                    60:62:ff:94:11:21:aa:de:bb:52:bd:20:a6:ff:b4:
-                    c3:92:0a:5b:b5:fc:2f:88:bc:44:3e:b4:5b:a4:ec:
-                    de:49:16:b6:c0:13:ed:d0:e2:ee:d0:58:bc:cb:36:
-                    32:c9:1b:6d:8f:79:db:83:22:fd:fe:a7:9a:b2:cd:
-                    26:b1:d7:52:c4:0c:40:6d:0e:49:b5:18:07:c2:3c:
-                    c0:c9:70:5d:06:da:0a:e6:01:1a:a4:78:19:aa:a7:
-                    38:1c:9d:36:07:4d:db:d2:b5:7b:50:f1:4b:d0:c7:
-                    5d:90:86:92:2d:a6:ea:d7:d2:09:8f:51:e8:b6:52:
-                    07:b1:1e:5e:ca:65:f3:d4:69:52:f1:d9:47:02:24:
-                    98:42:70:83:bc:49:13:c1:92:51:f7:ca:b2:fa:f6:
-                    a7:08:13:c1:74:23:d6:58:ab:27:d5:e5:02:20:3f:
-                    11:3b
-                Exponent: 65537 (0x10001)
-        Attributes:
-            Requested Extensions:
-                X509v3 Subject Alternative Name:
-                    DNS:Nginx20.kaheksa.xi, DNS: Nginx22.kaheksa.xi
-        Signature Algorithm: sha256WithRSAEncryption
 ```
 
 ##### Ordering and installing an SSL certificate
@@ -264,7 +219,7 @@ Then, prepare the configuration file for the new virtual website. Create a new f
 $ nano /etc/nginx/conf.d/Nginx2404.conf
 ```
 
-Now, change the new configuration file as you wish. Paste the following configuration in it[^4]:
+Now, change the new configuration file as you wish. Paste the following configuration in it[^3]:
 
 ```nginx
 server {
@@ -377,11 +332,14 @@ To                         Action      From
 443/tcp (v6)               ALLOW       Anywhere (v6)
 ```
 
-### Checking the status of the user's certificate against the OCSP service[^5]
+### Checking client-certificate revocation with OCSP[^4]
 
-Using the OCSP (Online Certificate Status Protocol) service, you can check the revocation status of client certificates practically in real time. With every client authentication attempt, the web server sends a query to the OCSP service, which responds with the certificate status.
+OCSP (Online Certificate Status Protocol) lets Nginx check the revocation
+status of a client certificate during authentication.
 
-SK and Zetes offer a free-access (free-of-charge) AIA OCSP service. For certificates issued under the `ESTEID2018` and `ESTEID2025` CA, AIA OCSP service location is already included in the certificate (<http://aia.sk.ee/esteid2018>, <http://ocsp.eidpki.ee>).
+Certificates issued under the `ESTEID2018` and `ESTEID2025` CAs contain
+their AIA OCSP service address (<http://aia.sk.ee/esteid2018> and
+<http://ocsp.eidpki.ee>).
 
 ![ESTEID2018 AIA OCSP address in the certificate](./img/image7.png)
 
@@ -395,95 +353,256 @@ ssl_client_certificate /etc/ssl/certs/EID_Bundle.pem;
 ssl_verify_client on;
 ssl_verify_depth 2;
 ssl_ocsp leaf;
-ssl_ocsp_cache off;
+ssl_ocsp_cache shared:OCSP:10m;
 resolver 194.126.115.18;
 ```
 
-With the configuration shown above, the address of the OCSP service is taken from the client certificate. Replace the `resolver` IP with any DNS server capable of resolving public addresses[^6].
+The `leaf` value checks the end-user certificate, and the shared cache
+reduces repeated responder queries. The responder address is taken from the
+client certificate. Replace the `resolver` IP with a DNS server capable of
+resolving public addresses[^5]. Allow outbound DNS and HTTP access to the
+responders and monitor Nginx errors: an OCSP validation failure prevents
+client-certificate authentication.
+
+### Stapling the server-certificate OCSP response
+
+Client-certificate validation above and server-certificate OCSP stapling are
+separate functions. Stapling lets Nginx obtain a signed status response for
+its own server certificate and send it during the TLS handshake. This avoids
+each browser querying the issuing CA and improves client privacy.[^6]
+
+First check whether the server certificate contains an OCSP responder URI:
+
+```bash
+$ openssl x509 -in /etc/ssl/certs/Nginx2404_Bundle.pem -noout -ocsp_uri
+```
+
+If the command returns a supported URI, create
+`/etc/ssl/certs/Nginx2404_CA.pem` containing the issuing, intermediate, and
+root CA certificates in PEM format. Then enable stapling and response
+verification:
+
+```nginx
+ssl_stapling on;
+ssl_stapling_verify on;
+ssl_trusted_certificate /etc/ssl/certs/Nginx2404_CA.pem;
+resolver 194.126.115.18;
+```
+
+Do not enable stapling when the issuing CA does not provide an OCSP service.
+After reloading Nginx, verify the stapled response:
+
+```bash
+$ openssl s_client -connect Nginx2404.octox.demo:443 \
+    -servername Nginx2404.octox.demo -status </dev/null
+```
+
+The output must contain a successful OCSP response and a `good` certificate
+status. Monitor refresh errors and ensure the server can reach the responder.
 
 ### Recommended security settings for Nginx
 
 #### SSL/TLS
 
-Nginx version 1.23.3 running on Ubuntu can support old TLS versions like TLS 1.0 or TLS 1.1 by default. It is no longer recommended to use TLS protocols with a version number lower than TLS 1.2. TLS version 1.3 has also been in use for a while.
+Do not rely on the Nginx or operating-system defaults to select TLS
+protocol versions. Disable TLS 1.0 and TLS 1.1. New and updated
+deployments should enable only TLS 1.3 by default.
 
-If there is no specific requirement to allow TLS 1.2, it is recommended to only use TLS 1.3. While TLS 1.2 is very stable and secure with the correct configuration, TLS version 1.3 is faster, more secure by default, and needs less configuration. In standard situations, TLS 1.2 should be enabled only if really needed, and if it is enabled, it is mandatory to allow only secure cipher suites and extensions.
+Add TLS 1.2 only as a documented exception when the service must support
+clients from 2020 or earlier, or when a client certificate must be
+requested after the initial TLS connection has been established. When
+TLS 1.2 is enabled, configure an explicit secure cipher-suite allowlist.
 
-To configure Nginx to support only TLS protocol version 1.3, add the following line to the Nginx configuration file:
+TLS 1.3 configuration:
 
 ```nginx
 ssl_protocols TLSv1.3;
 ```
 
-To support TLS versions 1.2 and 1.3, add `TLSv1.2` to configuration line.
+For a documented compatibility exception, enable TLS 1.2 and TLS 1.3:
 
-If you want to make the change at the server level, modify the parameter `ssl_protocols` in the file `/etc/nginx/nginx.conf`.
+```nginx
+ssl_protocols TLSv1.2 TLSv1.3;
+```
 
-More information about the recommendations for the use of the TLS protocol can be found in the cryptographic algorithms life cycle report ordered by RIA at <https://www.id.ee/en/article/cryptographic-algorithms-life-cycle-reports-2/>.
+Nginx requests client certificates at the initial handshake, so TLS 1.2
+renegotiation is not required for the authentication flow in this guide. The
+configuration below disables it explicitly.
+
+When the TLS implementation and deployed clients provide production support,
+prioritize the hybrid `X25519MLKEM768` group. This guide does not hard-code a
+group setting because support and the standardized identifier depend on the
+installed OpenSSL version. Confirm the effective group with a current TLS
+scanner before relying on it.
+
+If you want to make the change at the server level, modify the parameter
+`ssl_protocols` in the file `/etc/nginx/nginx.conf`.
+
+More information about the recommendations for the use of the TLS
+protocol can be found in the cryptographic algorithms life cycle report
+ordered by RIA at
+<https://www.id.ee/en/article/cryptographic-algorithms-life-cycle-reports-2/>.
 
 #### Cipher suites
 
-All TLS 1.3 cipher suites are currently considered safe, no additional configuration is required for security considerations for this protocol.
-
-TLS 1.2 is different. There are many different TLS cipher suites available with Nginx version 1.23.3[^7], which can be viewed with the command
-
-```bash
-$ openssl ciphers -v
-```
-
-If you wish to configure the available cipher suites used with TLS 1.2 in more detail, you can use the `ssl_ciphers` directive in the Nginx configuration file. Here, you can use predefined aliases or exact cipher suite descriptions.
-
-It is impossible to give an exact recommendation for configuring cipher suites without knowing the requirements applicable to the webpage. However, non-secure cipher suites must be removed from the list. It is reasonable to describe the specific enabled cipher suites for TLS 1.2.
-
-Example — the following line in the configuration file allows only the described cipher suites:
+Configure an explicit allowlist instead of relying on OpenSSL aliases
+such as `HIGH`. For TLS 1.3, enable the following suites in this order:
 
 ```nginx
-ssl_ciphers ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384;
+ssl_conf_command Ciphersuites TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256;
 ```
 
-You can also configure cipher suites at the server level by modifying the parameter `ssl_ciphers` in the file `/etc/nginx/nginx.conf`.
+`TLS_AES_128_CCM_SHA256` may be used only as a fallback when AES-GCM and
+ChaCha20-Poly1305 are unavailable. Do not enable CCM_8 suites.
 
-More information about the recommendations for the use of the cipher suites can be found in the cryptographic algorithms life cycle report ordered by RIA at <https://www.id.ee/en/article/cryptographic-algorithms-life-cycle-reports-2/>.
+When the documented TLS 1.2 compatibility exception applies, enable only the
+three ECDHE-ECDSA and AEAD suites below. This matches the ECDSA-only
+certificate profile used in this guide:
+
+```nginx
+ssl_ciphers 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305';
+```
+
+The `ssl_ciphers` directive controls TLS 1.2 and older versions;
+`ssl_conf_command Ciphersuites` controls TLS 1.3 through OpenSSL. The
+TLS 1.2 list excludes RSA authentication and key exchange, static DH/ECDH,
+CBC, CCM_8, and non-AEAD suites.
+
+You can also configure these directives at the server level in
+`/etc/nginx/nginx.conf`. Check the effective list with
+`openssl ciphers -v` and verify the negotiated protocol and suite with a
+current TLS scanner after every configuration change.
+
+##### Compression and renegotiation
+
+Keep TLS compression and TLS 1.2 renegotiation disabled explicitly:
+
+```nginx
+ssl_conf_command Options -Compression,NoRenegotiation;
+```
+
+HTTP response compression is separate from TLS compression and can disclose
+secrets when a response contains both attacker-controlled input and sensitive
+data. Set `gzip off;` for sensitive dynamic locations and also disable any
+configured Brotli module there. If response compression must remain enabled,
+the application must prevent cross-site request forgery and mitigate
+response-length leakage.
+
+More information about the recommendations for the use of the cipher
+suites can be found in the cryptographic algorithms life cycle report
+ordered by RIA at
+<https://www.id.ee/en/article/cryptographic-algorithms-life-cycle-reports-2/>.
 
 ##### ssl_prefer_server_ciphers
 
-Preferring server ciphers over user ciphers can be enabled with `ssl_prefer_server_ciphers`. Set its value to 'on' in the configuration file.
+Preferring server ciphers over user ciphers can be enabled with
+`ssl_prefer_server_ciphers`. Set its value to `on` in the configuration
+file.
 
 #### Additional filtering of client certificates
 
-Important! To guarantee access to the web service only for users with the right certificates, it is strongly recommended to add the following additional requirements in the server configuration:
+Trusting a CA chain does not prove that the leaf certificate is an ID-card
+authentication certificate. Different certificate products can share a root
+or intermediate CA. Before accepting the authenticated identity, require all
+of the following:
 
-1.  The certificate must include the correct OID value;
-2.  The certificate issuer must be `ESTEID2018` or `ESTEID2025`.
+1.  Nginx successfully validates the complete certificate chain;
+2.  the issuer is an explicitly allowed intermediate CA;
+3.  `extendedKeyUsage` permits TLS web-client authentication;
+4.  the leaf certificate's `X509v3 CertificatePolicies` extension
+    (`2.5.29.32`) contains both the NCP+ authentication-policy OID and an
+    allowed document-policy OID for the certificate's CA generation.[^7]
 
-There is currently no known way to check the correct OID at the Nginx server level. It is recommended to perform this check at the web application level instead.
+For production certificates covered by this guide, use this allowlist:
 
-To implement the second recommendation above, you can check the end-user certificate issuer and reject the connection if it is not issued by a CA enabled in the server. To implement it, add the following conditions to the configuration file (server section, e.g. after the SSL description):
+```text
+# Required in every accepted authentication certificate
+0.4.0.2042.1.2
+
+# ESTEID2018 - require one of these document-policy OIDs
+1.3.6.1.4.1.51361.1.1.1
+1.3.6.1.4.1.51361.1.1.2
+1.3.6.1.4.1.51361.1.1.3
+1.3.6.1.4.1.51361.1.1.4
+1.3.6.1.4.1.51361.1.1.5
+1.3.6.1.4.1.51361.1.1.6
+1.3.6.1.4.1.51361.1.1.7
+1.3.6.1.4.1.51455.1.1.1
+
+# ESTEID2025 - require one of these document-policy OIDs
+1.3.6.1.4.1.51361.2.1.1
+1.3.6.1.4.1.51361.2.1.2
+1.3.6.1.4.1.51361.2.1.3
+1.3.6.1.4.1.51361.2.1.4
+1.3.6.1.4.1.51361.2.1.5
+1.3.6.1.4.1.51361.2.1.6
+1.3.6.1.4.1.51455.2.1.1
+```
+
+Correlate the document-policy OID with the validated issuer: an `ESTEID2018`
+certificate must not be accepted using an `ESTEID2025` policy OID, or vice
+versa. The common NCP+ OID is not product-specific and is insufficient on its
+own. Do not add test OIDs, such as Zetes OIDs prefixed with `2.999`, to a
+production allowlist.
+
+Nginx does not provide a directive that can reliably apply an allowlist to
+the policy OIDs inside `CertificatePolicies`. Perform that check in the
+application or an authentication gateway. Do not infer the certificate
+product from its subject, issuer, or EKU alone, and do not treat the
+`anyPolicy` OID (`2.5.29.32.0`) as proof of an ID-card policy.
+
+As a preliminary, defence-in-depth check, reject certificates whose issuer CA
+name is not `ESTEID2018` or `ESTEID2025`. Add these conditions to the `server`
+section after the TLS configuration:
 
 ```nginx
-#Determine IMCA and cancel, if not trusted
-set $ocspr "";
+# Preliminary filter by intermediate CA name
+set $trusted_client_issuer 0;
 
-if ($ssl_client_i_dn = "CN=ESTEID2018,organizationIdentifier=NTREE-10747013,O=SK ID Solutions AS,C=EE") {
-    set $ocspr "http://aia.sk.ee/esteid2018";
+if ($ssl_client_i_dn ~ "^CN=ESTEID2018,") {
+    set $trusted_client_issuer 1;
 }
 
-if ($ssl_client_i_dn = "CN=ESTEID2025, organizationIdentifier=NTREE-17066049, O=Zetes Estonia OÜ, C=EE") {
-    set $ocspr "http://ocsp.eidpki.ee";
+if ($ssl_client_i_dn ~ "^CN=ESTEID2025,") {
+    set $trusted_client_issuer 1;
 }
 
-if ($ocspr = "") {
+if ($trusted_client_issuer = 0) {
     return 403;
 }
 ```
 
-With these conditions in place, any connection will be rejected if the user certificate was not issued by a trusted CA — `ESTEID2018` or `ESTEID2025`.
+With these conditions, Nginx rejects a certificate unless its issuer is
+`ESTEID2018` or `ESTEID2025`. This issuer check does not replace the
+certificate-policy check.
+
+For an HTTP upstream, overwrite a dedicated request header with the verified
+leaf certificate:
+
+```nginx
+proxy_set_header X-Client-Certificate $ssl_client_escaped_cert;
+```
+
+The application must URL-decode and parse the certificate, then reject
+authentication unless both the NCP+ OID and a document-policy OID matching
+the issuer are present. Only trust this header when the application is
+reachable exclusively through the trusted Nginx proxy. Other application
+interfaces should use their native TLS client-certificate integration.
+
+To inspect the extension while testing an exported certificate:
+
+```bash
+$ openssl x509 -in client.pem -noout -text
+```
+
+Check the `X509v3 Certificate Policies` section against the current policy
+and certificate-profile sources cited above. Test at least one
+accepted ID-card certificate and certificates for other products issued in
+related hierarchies, including Mobile-ID where applicable.
 
 > **Note:** If you are using another feature to filter network traffic, the secure configuration should be implemented there, too. SK has published information about the F5 configuration in the chapter 'Only accept certificates with trusted key usage' in the following article: <https://github.com/SK-EID/smart-id-documentation/wiki/Secure-Implementation-Guide>
 
 > **Note:** SK's recommendations for secure ID-card authentication are published here in the chapter 'Defense: implement ID-card authentication securely': <https://github.com/SK-EID/smart-id-documentation/wiki/Secure-Implementation-Guide>
-
-> **Note:** The recommended method for avoiding incorrect certificates is using OIDs in the certificates. Unfortunately, there is currently no method for doing this at the server level. If possible, open the certificate at the web application level, check for a correct OID in the certificate, and if there is none, reject the authentication request. All currently known OIDs are listed in the chapter 'Only accept certificates with trusted issuance policy' in the following article published by SK: <https://github.com/SK-EID/smart-id-documentation/wiki/Secure-Implementation-Guide>
 
 #### Enabling HTTP Strict Transport Security (HSTS)
 
@@ -647,14 +766,23 @@ server {
     ssl_verify_client on;
     ssl_verify_depth 2;
 
-    # OCSP — uncomment to enable AIA OCSP checking
-    # ssl_ocsp leaf;
-    # ssl_ocsp_cache off;
-    # resolver 194.126.115.18;
+    # Client-certificate revocation checking
+    ssl_ocsp leaf;
+    ssl_ocsp_cache shared:OCSP:10m;
+    resolver 194.126.115.18;
+
+    # Server-certificate OCSP stapling - enable only if its CA supports OCSP
+    # ssl_stapling on;
+    # ssl_stapling_verify on;
+    # ssl_trusted_certificate /etc/ssl/certs/Nginx2404_CA.pem;
 
     # TLS
     ssl_protocols TLSv1.3;
-    # ssl_ciphers ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384;
+    ssl_conf_command Ciphersuites TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256;
+    # Documented TLS 1.2 compatibility exception:
+    # ssl_protocols TLSv1.2 TLSv1.3;
+    # ssl_ciphers 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305';
+    ssl_conf_command Options -Compression,NoRenegotiation;
     ssl_prefer_server_ciphers on;
 
     # HSTS and session settings
@@ -663,18 +791,19 @@ server {
     ssl_session_timeout  1h;
     ssl_session_tickets  on;
 
-    # Filter by certificate issuer — reject if not a trusted CA
-    set $ocspr "";
+    # Partial filtering by issuer CA name; the application must also
+    # allowlist ID-card CertificatePolicies OIDs
+    set $trusted_client_issuer 0;
 
-    if ($ssl_client_i_dn = "CN=ESTEID2018,organizationIdentifier=NTREE-10747013,O=SK ID Solutions AS,C=EE") {
-        set $ocspr "http://aia.sk.ee/esteid2018";
+    if ($ssl_client_i_dn ~ "^CN=ESTEID2018,") {
+        set $trusted_client_issuer 1;
     }
 
-    if ($ssl_client_i_dn = "CN=ESTEID2025, organizationIdentifier=NTREE-17066049, O=Zetes Estonia OÜ, C=EE") {
-        set $ocspr "http://ocsp.eidpki.ee";
+    if ($ssl_client_i_dn ~ "^CN=ESTEID2025,") {
+        set $trusted_client_issuer 1;
     }
 
-    if ($ocspr = "") {
+    if ($trusted_client_issuer = 0) {
         return 403;
     }
 
@@ -686,14 +815,20 @@ server {
 
 [^1]: In addition to the certificate attributes C, O, and CN described on the command line, it is also possible to describe the attributes L, OU, and S if desired. However, only CN can also be used.
 
-[^2]: Modern browsers do not trust websites where at least one SAN DNS name is not equal to the actual address of the website.
+[^2]: Modern browsers trust the certificate only when the requested hostname matches at least one of its SAN DNS names.
 
-[^3]: Browsers do not trust websites where at least one SAN DNS name is not equal to the actual address of the website.
+[^3]: The HTTP sections in the configuration file are not necessary and are shown here as an example of the HTTP -\> HTTPS redirection.
 
-[^4]: The HTTP sections in the configuration file are not necessary and are shown here as an example of the HTTP -\> HTTPS redirection.
+[^4]: The certificate check is also doable with certificate revocation lists (CRL), but this is not covered in this document, as the OCSP-based solution is preferred.
 
-[^5]: The certificate check is also doable with certificate revocation lists (CRL), but this is not covered in this document, as the OCSP-based solution is preferred.
+[^5]: Resolver -- replace the IP address here with any DNS server that can resolve public DNS addresses. You can also use the DNS server of your intranet for this.
 
-[^6]: Resolver -- replace the IP address here with any DNS server that can resolve public DNS addresses. You can also use the DNS server of your intranet for this.
+[^6]: <https://nginx.org/en/docs/http/ngx_http_ssl_module.html>
 
-[^7]: The ciphers of other protocols are not covered in this chapter, because protocols older than version 1.2 should be disabled and version 1.3. is currently preferred.
+[^7]: The allowlist is based on the
+    [ESTEID2018 certificate policy v4.0](https://www.id.ee/wp-content/uploads/2025/10/cp_esteid_v4.0-08.10.2025.pdf)
+    and the [ESTEID2025 certificate policy v2.0](https://repository.eidpki.ee/static/documents/eid-cp-v-2.0_04.06.2026_allkirjastatud.pdf),
+    supplemented by the [Zetes certificate profiles](https://repository.eidpki.ee/static/documents/CertificateProfiles-20260520.pdf).
+    Check the [Zetes repository](https://repository.eidpki.ee/repository/)
+    and the service providers' current policies and profiles before changing
+    the production allowlist.

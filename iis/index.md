@@ -2,7 +2,7 @@
 
 **[Eesti keeles (In Estonian)](index.et.md)**
 
-**Version:** 26.04/1
+**Version:** 26.08/1
 
 **Published by:** [RIA](https://www.ria.ee/)
 
@@ -26,6 +26,7 @@
 | 18.12.2023 | 23.12/1  | Removed `ESTEID-SK 2015` chain. — Changed by: Urmas Vanem
 | 31.10.2025 | 25.10/1  | Added Zetes certificates. — Changed by: Raul Kaidro
 | 22.04.2026 | 26.04/1  | Converted to Markdown format. — Changed by: Raul Metsma
+| 21.08.2026 | 26.08/1  | Updated the platform to Windows Server 2025 and revised certificate-key, TLS, cipher-suite, certificate-policy, and OCSP guidance based on the 2026 cryptographic algorithms life-cycle report. — Changed by: Raul Metsma
 
 Instructions on how to configure IIS to support Estonian eID cards for authentication.
 
@@ -38,7 +39,13 @@ Instructions on how to configure IIS to support Estonian eID cards for authentic
 
 This guide describes how to configure Microsoft IIS web services to require two-way SSL. On the server side, any certificate with `server authentication` EKU trusted by clients can be used. On the client side, any Estonian eID card (ID-card, residence card, digital ID or e-Resident's digital ID) can be used.
 
-Windows Server 2022 and Windows 10 operating systems have been used to create this guide. On the client side, certificates issued from the [SK ID Solutions](https://www.skidsolutions.eu/resources/certificates/) `EE-GovCA2018` and [Zetes](https://repository.eidpki.ee/) `EEGovCA2025` chain are supported. To recognize user smart card certificate, ID-software is also needed on the client side[^1]. The server certificate in this demo-guidance is issued from OctoX test CA.
+This guide targets Windows Server 2025; Windows 10 is used on the client
+side. Client certificates issued from the
+[SK ID Solutions](https://www.skidsolutions.eu/resources/certificates/)
+`EE-GovCA2018` and [Zetes](https://repository.eidpki.ee/) `EEGovCA2025`
+chains are supported. ID-software is also required on the client to recognize
+the smart-card certificate[^1]. The server certificate in this example is
+issued by the OctoX test CA.
 
 Different authentication methods are available in IIS. In this guide, IIS is configured in the simplest possible way and only anonymous authentication is used — after authentication, users can access the website as the dedicated (IUSR) user.
 
@@ -96,19 +103,57 @@ In the extensions tab, set the following options:
 
 ##### Tab Private Key
 
-Here, select the CSP (cryptographic service provider). In this example, to use `ECDSA_P256`, unselect RSA and select `ECDSA_P256`.
+Here, select the CSP (cryptographic service provider). In this example,
+unselect RSA and select `ECDSA_P384`.
 
-![Selecting CSP](./img/image6.png)
+![Selecting the ECDSA P-384 CSP](./img/image6.png)
+
+Generate a separate private key for every independent TLS server. Do not copy
+one key between servers merely because a wildcard or multi-SAN certificate
+could cover all their names. Keeping keys separate limits the impact of a
+server or key compromise.
+
+For production deployments, use a hardware security module (HSM) or an
+equivalent non-exportable hardware-backed key provider where supported.
+Generate the key inside the device and keep it non-exportable. Confirm that
+the HSM provider, IIS, and certificate issuer support the selected ECDSA P-384
+key before deployment. The software-provider workflow shown here is not an
+HSM setup.
 
 Click *OK* and *Next* to save the request file with any name you like in `Base64` format.
 
-The contents of the request file can be checked with the command `certutil -dump REQUEST_FILE_NAME`.
+Inspect the request file with `certutil`:
 
-![Request file contents](./img/image7.png)
+```bat
+certutil -dump iis2112.req
+```
 
-The DNS aliases defined in this query are also visible:
+The relevant output should resemble the following; request-specific hashes
+and raw public-key bytes are omitted:
 
-![DNS aliases in query file](./img/image8.png)
+```text
+PKCS10 Certificate Request:
+Version: 1
+Subject:
+    CN=iis2111.kaheksa.xi
+    C=EE
+    O=OctoX
+    OU=DEV
+
+Public Key Algorithm:
+    Algorithm ObjectId: 1.2.840.10045.2.1 ECC
+    Algorithm Parameters:
+        1.3.132.0.34 ECDH_P384
+Public Key Length: 384 bits
+
+Subject Alternative Name
+    DNS Name=iis2112.kaheksa.xi
+    DNS Name=iis2111.kaheksa.xi
+    DNS Name=MyWebServer.kaheksa.xi
+```
+
+Verify that the public key is 384 bits and that every required DNS name is
+present under `Subject Alternative Name`.
 
 The query file must now be sent to any CA for certificate generation. If everything goes fine, the certificate will be returned.
 
@@ -126,9 +171,14 @@ Certificate for IIS server must belong to `Local Computer/Personal` certificates
 
 ### Configuring IIS for one-way SSL
 
-To configure one-way SSL on IIS server, a new HTTP(S) binding (usually port 443) must be added and a certificate applied to it. And it is definitely a good idea to disable legacy TLS protocols!
+To configure one-way TLS on IIS, add an HTTPS binding (usually port 443),
+select the server certificate, and disable legacy TLS protocols.
 
-![Defining HTTPS binding with certificate iis2111.kaheksa.xi and disabling legacy TLS protocols](./img/image12.png)
+The Windows Server 2025 binding dialog below shows the relevant controls.
+Select the server certificate, keep *Disable Legacy TLS* selected, and leave
+*Disable TLS 1.3 over TCP* unselected.
+
+![Windows Server 2025 HTTPS binding controls](./img/image12.png)
 
 After applying settings, one-way SSL works and the website is accessible over HTTPS protocol.
 
@@ -139,6 +189,37 @@ The Firefox information window shows that:
 1.  Web server certificate `iis2111.kaheksa.xi` is in use;
 2.  TLS protocol version 1.3 is in use.
 
+#### Stapling the server-certificate OCSP response
+
+If the server certificate contains an OCSP responder URI and its issuing CA
+supports OCSP, keep *Disable OCSP Stapling* unselected in the HTTPS binding.
+HTTP.sys can then obtain a signed status response for the server certificate
+and send it during the TLS handshake. This avoids each browser querying the
+issuing CA and improves client privacy.[^8]
+
+Display the binding and confirm that OCSP stapling is not disabled:
+
+```bat
+netsh http show sslcert 0.0.0.0:443
+```
+
+If required, enable stapling for the existing binding:
+
+```bat
+netsh http update sslcert ipport=0.0.0.0:443 disableocspstapling=disable
+```
+
+Do not enable stapling when the issuing CA does not provide an OCSP service.
+From a client with OpenSSL, verify the result with:
+
+```bash
+$ openssl s_client -connect iis2111.kaheksa.xi:443 \
+    -servername iis2111.kaheksa.xi -status </dev/null
+```
+
+The output must contain a successful OCSP response and a `good` certificate
+status. Monitor retrieval errors and ensure HTTP.sys can reach the responder.
+
 #### Disabling HTTP access
 
 To disable access to the website over unsecure HTTP (usually port 80), the binding can be removed from configuration and firewall access to port 80 can be disabled. As an alternative, an automatic redirection rule can be created from port 80 to port 443. This can be useful for cases when users do not type the https:// prefix to the server address and cannot reach the website.
@@ -147,13 +228,27 @@ To disable access to the website over unsecure HTTP (usually port 80), the bindi
 
 ### Preset
 
-> **Note:** As of 2022 and still applicable in 2026, IIS 10/Schannel running on Windows Server 2022 uses post-handshake authentication method with `TLS 1.3` by default. But because common browsers do not support this method, this configuration in practice is faulty. The problem with `TLS 1.3` is that the server will not send certificate request query to the client in default configuration and because of missing client certificate server resets connection. To re-enable certificate-based authentication, `TLS 1.3` must be turned off. An alternative is to enable the in-handshake authentication method, discussed later in chapter "[Enabling in-handshake authentication method](#enabling-in-handshake-authentication-method)".
+> **Note:** TLS 1.3 with in-handshake client-certificate authentication
+> is the recommended Windows Server 2025 configuration. In the HTTPS site
+> binding, select *Negotiate Client Certificate* so that HTTP.sys requests
+> the certificate during the initial TLS handshake. Leave
+> *Disable TLS 1.3 over TCP* unselected. Microsoft describes this Server 2025
+> behavior in the IIS Support Blog[^3].
 
-> **Note:** On Windows Server 2025 this has been resolved natively — IIS adds a *Negotiate Client Certificate* checkbox directly in the HTTPS binding UI, enabling in-handshake authentication without the `netsh` workaround described below.
+> **Compatibility:** Windows Server 2022 does not expose the
+> *Negotiate Client Certificate* option in IIS Manager. Use the legacy
+> [`netsh` procedure](#windows-server-2022-compatibility) below when Server
+> 2022 must be retained. Common browsers do not support the TLS 1.3
+> post-handshake client authentication used by default on this platform.
+> Disable TLS 1.3 and use TLS 1.2 only as a documented exception when the
+> application must request a client certificate after the initial TLS
+> connection and its flow cannot be changed.
 
-On Windows Server 2022, while this problem exists, `TLS 1.3` over TCP must be turned off. This can be done by selecting `Disable TLS 1.3 over TCP` in the IIS bindings window:
+The following Windows Server 2025 screenshot shows the TLS 1.2 compatibility
+exception. Select the server certificate before saving the binding. This is
+not the recommended Windows Server 2025 configuration:
 
-![Turn TLS 1.3 off to enable certificate based authentication](./img/image14.png)
+![TLS 1.2 compatibility exception: disabling TLS 1.3 in the HTTPS binding](./img/image14.png)
 
 ### Configuring IIS server to support Estonian eID cards
 
@@ -164,7 +259,7 @@ The following certificates must be added to the IIS server certificate store:
 1.  Trusted Root Certification Authorities:
     1.  `EE-GovCA2018` (<http://c.sk.ee/EE-GovCA2018.der.crt>)
     2.  `EEGovCA2025` (<https://crt.eidpki.ee/EEGovCA2025.crt>)
-2.  Intermediate Certification Authorities[^3]:
+2.  Intermediate Certification Authorities[^4]:
     1.  `ESTEID2018` (<http://c.sk.ee/esteid2018.der.crt>)
     2.  `ESTEID2025` (<https://crt.eidpki.ee/ESTEID2025.crt>)
 
@@ -178,31 +273,76 @@ Described configuration allows access to website over port 443, client certifica
 
 After entering PIN, certificate revocation status will be checked by IIS server and if it is good, user can access website.
 
-![Authentication succeeded over TLS 1.2 protocol](./img/image17.png)
+![TLS 1.2 compatibility example: authentication succeeded](./img/image17.png)
+
+Before testing the recommended TLS 1.3 configuration, enable in-handshake
+authentication as described below.
 
 As an alternative, certificate acceptance can be used instead of requiring it. In this case, websites can be accessed also with username or password or without authentication at all.
 
 ### Enabling in-handshake authentication method
 
-To use `TLS 1.3` protocol with Windows Server 2022 IIS 10, the in-handshake authentication method must be enabled. With this method, the certificate request query is sent to the client with *Server Hello*.
+With in-handshake authentication, the server requests the client certificate
+during the initial TLS handshake. This is required because TLS 1.3 does not
+support renegotiation.
 
-Please follow next steps to enable in-handshake authentication method:
+#### Windows Server 2025
 
-1.  Document `Certificate Hash` and `Application ID` values with command `netsh http show sslcert`:
+1.  In IIS Manager, select the website and open *Bindings*.
+2.  Select the HTTPS binding and choose *Edit*.
+3.  Select *Negotiate Client Certificate*.
+4.  Leave *Disable TLS 1.3 over TCP* unselected and save the binding.
+5.  If verification is needed, run `netsh http show sslcert` and confirm that
+    `Negotiate Client Certificate` is enabled for the binding.
 
-    !["negotiate client certificate" is disabled by default](./img/image18.png)
+#### Windows Server 2022 compatibility {#windows-server-2022-compatibility}
 
-2.  Remove certificate binding from port 443 with command `netsh http del sslcert 0.0.0.0:443`:
+Windows Server 2022 does not provide the binding checkbox. For this legacy
+platform only, enable client-certificate negotiation with `netsh`:
 
-    ![Remove certificate from port 443](./img/image19.png)
+1.  Display the binding configuration:
 
-3.  Bind certificate to port 443 again and also enable in-handshake authentication with command `netsh http add sslcert ipport=0.0.0.0:443 certhash=312bbb70898b5ae10753998c67bceeeb97d49f79 appid={4dc3e181-e14b-4a21-b022-59fc669b0914} certstorename=MY clientcertnegotiation=Enable`:
+    ```bat
+    netsh http show sslcert 0.0.0.0:443
+    ```
 
-    ![Enabling clientcertnegotiation](./img/image20.png)
+    Record the hash and application ID. Before the change, the relevant
+    output resembles:
 
-Checking certificate binding information again, `Negotiate Client Certificate` is now enabled:
+    ```text
+    Certificate Hash             : <CERTIFICATE_HASH>
+    Application ID               : {<APPLICATION_ID>}
+    Negotiate Client Certificate : Disabled
+    ```
 
-![In-handshake authentication method is now enabled](./img/image21.png)
+2.  Remove the certificate binding from port 443:
+
+    ```bat
+    netsh http del sslcert 0.0.0.0:443
+    ```
+
+    The command should report `SSL Certificate successfully deleted`.
+
+3.  Bind the certificate to port 443 again and enable in-handshake
+    client-certificate authentication:
+
+    ```bat
+    netsh http add sslcert ipport=0.0.0.0:443 ^
+        certhash=<CERTIFICATE_HASH> ^
+        appid={<APPLICATION_ID>} ^
+        certstorename=MY ^
+        clientcertnegotiation=Enable
+    ```
+
+    Replace `CERTIFICATE_HASH` and `APPLICATION_ID` with the values from
+    step 1. The command should report `SSL Certificate successfully added`.
+
+Run the `show sslcert` command from step 1 again. The relevant output should
+now be:
+
+```text
+Negotiate Client Certificate : Enabled
+```
 
 > **Note:** Because session renegotiation is disabled with `TLS 1.3`, it must be understood that authentication must happen on the first page. If a one-way SSL connection already exists with any website, renegotiation will fail if some parts of this site/page require it. So, if necessary, this *landing* problem must be solved.
 
@@ -216,29 +356,63 @@ In this configuration, only anonymous authentication is used:
 
 The purpose of this document is not to give exact guidance on how to configure or secure websites. This section introduces useful configurations for using two-way SSL with Estonian eID cards. The following sections cover options worth considering.
 
-### Filtering certificate list on client side
+### Filtering certificates displayed to the client
 
-By default, all personal certificates with private key and `user authentication` EKU on client side are accepted by IIS. But it is possible to teach IIS to share list of acceptable certificate authorities with clients – in this case browser shows only certificates from supported chains to user.
+By default, the client can display every personal certificate that has a
+private key and a client-authentication EKU. IIS can send a list of acceptable
+certificate authorities so that the client displays certificates from the
+supported chains.
+
+This issuer list improves certificate selection but does not prove that the
+selected leaf certificate is an ID-card authentication certificate. Different
+certificate products can share a root or intermediate CA. Enforce the
+certificate-policy check described in the next section before accepting the
+authenticated identity.
 
 The goal is to support only certificates issued from chains under root CA `EE-GovCA2018` and `EEGovCA2025`.
 
-1.  Get IIS certificate information with command `netsh http show sslcert 0.0.0.0:443`:
+1.  Display the current binding configuration:
 
-    ![Default https certificate options](./img/image23.png)
+    ```bat
+    netsh http show sslcert 0.0.0.0:443
+    ```
 
-2.  Remove certificate binding with command `netsh http del sslcert 0.0.0.0:443`:
+    Record the hash and application ID. Before the change, the relevant
+    output resembles:
 
-    ![Unbind certificate](./img/image19.png)
+    ```text
+    Certificate Hash : <CERTIFICATE_HASH>
+    Application ID   : {<APPLICATION_ID>}
+    Ctl Store Name   : (null)
+    ```
 
-3.  Add certificate again and point it to user store `Client Authentication Issuers` as list for acceptable certification authorities for clients. Command is `netsh http add sslcert ipport=0.0.0.0:443 certhash=1e75c77c696aa4d49686bb1ef73ac3b07fdff38a appid={4dc3e181-e14b-4a21-b022-59fc669b0914} sslctlstorename=ClientAuthIssuer`:
+2.  Remove the certificate binding:
 
-    ![Binding certificate with new option](./img/image24.png)
+    ```bat
+    netsh http del sslcert 0.0.0.0:443
+    ```
 
-    `Certhash` and `appid` values can be taken from the output in step 1 above.
+    The command should report `SSL Certificate successfully deleted`.
 
-4.  Check that `ClientAuthIssuer` value exists after `CTL Store Name`:
+3.  Add the certificate again and use the `Client Authentication Issuers`
+    store as the list of acceptable certification authorities:
 
-    ![Updated output](./img/image25.png)
+    ```bat
+    netsh http add sslcert ipport=0.0.0.0:443 ^
+        certhash=<CERTIFICATE_HASH> ^
+        appid={<APPLICATION_ID>} ^
+        sslctlstorename=ClientAuthIssuer
+    ```
+
+    Replace `CERTIFICATE_HASH` and `APPLICATION_ID` with the values from
+    step 1. The command should report `SSL Certificate successfully added`.
+
+4.  Run the `show sslcert` command from step 1 again and confirm the relevant
+    output:
+
+    ```text
+    Ctl Store Name : ClientAuthIssuer
+    ```
 
     The IIS configuration can also be checked to confirm the SSL certificate is correctly bound to port 443.
 
@@ -252,31 +426,148 @@ The goal is to support only certificates issued from chains under root CA `EE-Go
 
 7.  If necessary, restart the IIS service or server and check if everything works as expected.
 
-### Checking revocation status of client certificates against OCSP service
+### Validating the ID-card certificate policy
 
-Using the OCSP service, the revocation status of client certificates can be checked practically in real time. In every client authentication attempt, the web server sends a query to the OCSP service, which responds with the client certificate revocation status.
+Before accepting an authenticated identity, require all of the following:
 
-Certificates issued by `ESTEID2018` and `ESTEID2025` CA have AIA OCSP service location included in the end user certificate (<http://aia.sk.ee/esteid2018> and <http://ocsp.eidpki.ee>), so no changes are needed here. The server can still be configured to check revocation status of certificates using the AIA OCSP service:
+1.  HTTP.sys successfully validates the complete certificate chain;
+2.  the issuer is an explicitly allowed intermediate CA;
+3.  `extendedKeyUsage` permits TLS web-client authentication;
+4.  the leaf certificate's `X509v3 CertificatePolicies` extension
+    (`2.5.29.32`) contains both the NCP+ authentication-policy OID and an
+    allowed document-policy OID for the certificate's CA generation.[^9]
 
-![Configuring AIA OCSP path on IIS server](./img/image28.png)
+For production certificates covered by this guide, use this allowlist:
 
-> **Note:** I repeat here for clarity: certificates issued by `ESTEID2018` / `ESTEID2025` CA have AIA OCSP path described in certificate. CRL is not described for those certificates.
+```text
+# Required in every accepted authentication certificate
+0.4.0.2042.1.2
 
-> **Note:** Windows server by default changes from OCSP based revocation check to CRL based revocation checking after 50 OCSP queries. In this configuration, this doesn't really matter since CRL is not used at all. For other configurations, note that this behavior can be changed by changing the registry value of registry key `HKEY_LOCAL_MACHINE/Software/Policies/Microsoft/SystemCertificates/ChainEngine/Config/CryptnetCachedOcspSwitchToCrlCount`. For more information take a look at [OCSP magic count](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/ee619754(v=ws.10)#determining-preference-between-ocsp-and-crls) or *magic number*. This behavior can also be changed with windows policy:
+# ESTEID2018 - require one of these document-policy OIDs
+1.3.6.1.4.1.51361.1.1.1
+1.3.6.1.4.1.51361.1.1.2
+1.3.6.1.4.1.51361.1.1.3
+1.3.6.1.4.1.51361.1.1.4
+1.3.6.1.4.1.51361.1.1.5
+1.3.6.1.4.1.51361.1.1.6
+1.3.6.1.4.1.51361.1.1.7
+1.3.6.1.4.1.51455.1.1.1
 
-![Changing OCSP magic count](./img/image29.png)
+# ESTEID2025 - require one of these document-policy OIDs
+1.3.6.1.4.1.51361.2.1.1
+1.3.6.1.4.1.51361.2.1.2
+1.3.6.1.4.1.51361.2.1.3
+1.3.6.1.4.1.51361.2.1.4
+1.3.6.1.4.1.51361.2.1.5
+1.3.6.1.4.1.51361.2.1.6
+1.3.6.1.4.1.51455.2.1.1
+```
+
+Correlate the document-policy OID with the validated issuer: an `ESTEID2018`
+certificate must not be accepted using an `ESTEID2025` policy OID, or vice
+versa. The common NCP+ OID is not product-specific and is insufficient on its
+own. Do not add test OIDs, such as Zetes OIDs prefixed with `2.999`, to a
+production allowlist.
+
+The `Client Authentication Issuers` store and the EKU check are useful
+defence in depth, but they do not identify the certificate product. The IIS
+application or an authentication gateway must inspect the verified client
+certificate and reject authentication unless both the NCP+ OID and a
+document-policy OID matching the issuer are present. Do not infer the
+certificate product from its subject, issuer, or EKU alone, and do not treat
+the `anyPolicy` OID (`2.5.29.32.0`) as proof of an ID-card policy.
+
+Use the application platform's native client-certificate API. In a .NET
+application, validate the certificate with
+`X509ChainPolicy.CertificatePolicy`.[^10] Evaluate each permitted,
+issuer-matched combination separately: require the NCP+ OID and one allowed
+document-policy OID from the corresponding CA generation in the same chain
+validation. The document-policy OIDs are alternatives; do not add every
+allowed document-policy OID to one validation as simultaneously required
+policies.
+
+Do not accept a certificate supplied in an HTTP request header unless a
+trusted reverse proxy overwrites that header and the application is reachable
+exclusively through that proxy.
+
+To inspect an exported certificate during testing, use:
+
+```bat
+certutil -dump client.cer
+```
+
+Check the `Certificate Policies` extension against the current policy and
+certificate-profile sources cited above. Test at least one accepted
+ID-card certificate and certificates for other products issued in related
+hierarchies, including Mobile-ID where applicable.
+
+### Checking client-certificate revocation with OCSP
+
+Certificates issued under the `ESTEID2018` and `ESTEID2025` CAs contain
+their AIA OCSP service address (<http://aia.sk.ee/esteid2018> and
+<http://ocsp.eidpki.ee>). HTTP.sys uses the Windows certificate-chain engine
+to retrieve revocation information from the locations in the certificate.
+
+Display the HTTPS binding:
+
+```bat
+netsh http show sslcert 0.0.0.0:443
+```
+
+Confirm that client-certificate revocation checking and certificate usage
+checking are enabled, and that revocation checking is not restricted to
+cached data. If necessary, update those policies:[^8]
+
+```bat
+netsh http update sslcert ipport=0.0.0.0:443 ^
+    verifyclientcertrevocation=enable ^
+    verifyrevocationwithcachedclientcertonly=disable ^
+    usagecheck=enable
+```
+
+Allow outbound access to the revocation endpoints, monitor Windows CAPI2 and
+HTTP Service errors, and test both valid and revoked certificates. Define and
+test the application's behaviour when revocation information is temporarily
+unavailable. Do not use the obsolete OCSP query-count registry policy to
+force OCSP over CRL; let the current chain engine use the revocation data
+published in each certificate.
 
 ### Recommended security settings for IIS
 
 #### SSL/TLS
 
-IIS version 10 is using TLS protocol versions from 1.0 to 1.3 by default[^4]. Older SSL versions are disabled by default.
+Do not rely on the IIS or Schannel defaults to select TLS protocol
+versions. Disable TLS 1.0 and TLS 1.1. New and updated deployments
+should enable only TLS 1.3 by default.
 
-Old unsecure SSL/TLS protocols with version number lower than `TLS 1.2` should definitely no longer be used. `TLS 1.2` should be the lowest version to use! From Windows Server version 2022 `TLS 1.3` is also available. If you need one-way SSL, it can be a good idea to enable only `TLS 1.3`!
+Add TLS 1.2 only as a documented exception when the service must support
+clients from 2020 or earlier, or when a client certificate must be
+requested after the initial TLS connection has been established.
+Certificate authentication alone is not a reason to enable TLS 1.2. On
+Windows Server 2025, use the *Negotiate Client Certificate* binding option
+described above.
 
-More information about the recommendations for the use of the TLS protocol can be found in the cryptographic algorithms life cycle reports ordered by RIA at <https://www.id.ee/en/article/cryptographic-algorithms-life-cycle-reports-2/>.
+The report recommends disabling renegotiation when TLS 1.2 is enabled. A
+legacy design that requests a client certificate only after the initial
+handshake cannot both retain that flow and follow this recommendation. Prefer
+in-handshake authentication on a dedicated binding or hostname, and document
+any remaining TLS 1.2 renegotiation dependency as an exception.
 
-In addition to disabling older TLS versions in the IIS management console, `TLS 1.0` and `TLS 1.1` can be disabled in registry keys by defining the following values[^5]:
+When Schannel and deployed clients provide production support, prioritize the
+hybrid `X25519MLKEM768` group. This guide does not prescribe a registry or
+Group Policy value for it because support and the standardized identifier are
+platform-dependent. Confirm the negotiated group with a current TLS scanner
+before relying on it.
+
+More information about the recommendations for the use of the TLS
+protocol can be found in the cryptographic algorithms life cycle reports
+ordered by RIA at
+<https://www.id.ee/en/article/cryptographic-algorithms-life-cycle-reports-2/>.
+
+Manage TLS protocols through Group Policy or another Windows management
+tool. The following registry values can be used to verify the applied
+configuration or when central management is unavailable. To disable
+`TLS 1.0` and `TLS 1.1`, set[^5]:
 
 - `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\`[^6]:
   - `TLS 1.0\Server`
@@ -288,31 +579,94 @@ In addition to disabling older TLS versions in the IIS management console, `TLS 
 
 ![Disabling TLS 1.0 and 1.1 for server part in registry](./img/image30.png)
 
-Of course, it is also possible to deploy TLS/SSL versions settings through group policy by deploying registry settings.
+For a TLS 1.3-only server, TLS 1.2 can also be disabled under
+`TLS 1.2\Server` by setting `Enabled DWORD:0` and
+`DisabledByDefault DWORD:1`. This system-wide change affects all
+Schannel server applications, so check other services before applying it
+and restart them afterwards. Do not disable TLS 1.2 when a documented
+compatibility exception applies.
+
+##### Compression
+
+Keep TLS compression disabled. HTTP compression in IIS is a separate feature:
+disable dynamic-content compression for applications whose responses combine
+attacker-controlled input with secrets. If HTTP response compression must
+remain enabled, the application must prevent cross-site request forgery and
+mitigate response-length leakage. Verify the TLS result with a current scanner
+because IIS does not expose TLS compression as a normal site-level setting.
 
 #### Cipher suites
 
-There are many different cipher suites available with Windows Server. Available cipher suites can be listed with the `PowerShell` command `Get-TLSCipherSuite`[^7].
+Configure an explicit allowlist through Group Policy or the Windows TLS
+PowerShell cmdlets. First check the suites supported by the installed
+operating-system version with `Get-TlsCipherSuite`[^7].
 
-It is impossible to give an exact recommendation for configuring cipher suites because different environments have different requirements. And requirements and possibilities are changing in time. The only recommendation is to remove non-secure cipher suites from the list if any exist. Before going on with configuring cipher suites, it is recommended to get acquainted with RIA's recommendations for the use of the cipher suites in the cryptographic algorithms life cycle report at <https://www.id.ee/en/article/cryptographic-algorithms-life-cycle-reports-2/>. It can make sense to enable only specific cipher combinations.
+For the recommended TLS 1.3-only profile on Windows Server 2025, enable
+these suites in order. Schannel supports all three; ChaCha20-Poly1305 is
+supported but is not enabled by default:
 
-So, to configure specific cipher suites, the best way is probably using local or group policy. To configure cipher suites `ECDHE-ECDSA-AES256-GCM-SHA384` and `ECDHE-RSA-AES256-GCM-SHA384` as the only ones in this configuration, the policy setting `Computer Configuration/Administrative Templates/Network/SSL Configuration Settings: SSL Cipher Suite Order` must be modified. Cipher suites must be separated with comma.[^8]
+```text
+TLS_AES_256_GCM_SHA384,TLS_CHACHA20_POLY1305_SHA256,TLS_AES_128_GCM_SHA256
+```
 
-![Modifying cipher suites with group policy](./img/image31.png)
+For a documented TLS 1.2 compatibility exception, append the two ECDSA TLS 1.2
+suites supported by Windows Server 2025. This matches the ECDSA-only
+certificate profile used in this guide:
 
-Assigned configuration can be found from registry location presented on the following picture:
+```text
+TLS_AES_256_GCM_SHA384,TLS_CHACHA20_POLY1305_SHA256,TLS_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+```
 
-![Applied policy settings](./img/image32.png)
+The report also permits ECDHE-ECDSA with ChaCha20-Poly1305 for TLS 1.2,
+but Windows Server 2025 Schannel does not provide that suite. It also permits
+RSA-authenticated suites, but this ECDSA-only profile omits them.
+`TLS_AES_128_CCM_SHA256` is only a fallback when AES-GCM and
+ChaCha20-Poly1305 are unavailable and is not part of this Windows Server
+profile. Do not enable RSA authentication or key exchange, DHE fallback, CBC,
+CCM_8, or other non-AEAD suites.
 
-Default configuration settings can be found from registry location presented on the following picture:
+Enter the appropriate comma-separated allowlist under *SSL Cipher Suite
+Order*. The policy is located at:
 
-![Cipher suites default configuration](./img/image33.png)
+- Local Group Policy Editor: *Computer Configuration* → *Administrative
+  Templates* → *Network* → *SSL Configuration Settings* → *SSL Cipher Suite
+  Order*.
+- Domain Group Policy Management: *Computer Configuration* → *Policies* →
+  *Administrative Templates* → *Network* → *SSL Configuration Settings* →
+  *SSL Cipher Suite Order*.
+
+The policy stores its `Functions` value at:
+
+```text
+HKLM\SOFTWARE\Policies\Microsoft\Cryptography\Configuration\SSL\00010002
+```
+
+After applying the policy, list the effective cipher suites in priority order:
+
+```powershell
+Get-TlsCipherSuite
+```
+
+The command displays one record per suite; check its `Name` field. To verify
+the raw value delivered by policy, run:
+
+```powershell
+Get-ItemPropertyValue `
+    -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Cryptography\Configuration\SSL\00010002' `
+    -Name Functions
+```
 
 ##### Other configurable Schannel settings
 
-Default location for all Schannel settings is `HKLM\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL`. It is possible to enable or disable different Schannel components here, overwrite default configuration.
+Other Schannel settings are located under:
 
-![Schannel configurable options](./img/image34.png)
+```text
+HKLM\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL
+```
+
+Only create values documented for the installed Windows Server version.
+The presence of an algorithm name in the registry does not by itself show
+whether that algorithm is enabled or used.
 
 #### Additional possibilities
 
@@ -334,14 +688,28 @@ Please take the list above as a short demo recommendations list. Of course, it m
 
 [^2]: If certificate is issued by intermediate CA, it must be in `Intermediate Certification Authorities` container. In this case root CA certificate for intermediate CA must be in `Trusted Root Certification Authorities` container.
 
-[^3]: To support EID cards issued for organizations by SK ID Solutions, `EID-SK 2016` (<https://www.sk.ee/upload/files/EID-SK_2016.der.crt>) certificates must also be added to the list!
+[^3]: <https://techcommunity.microsoft.com/blog/iis-support-blog/addressing-tls-1-3-compatibility-issues-in-iis-express-on-windows-11/4449362/>
 
-[^4]: <https://docs.microsoft.com/en-us/windows/win32/secauthn/protocols-in-tls-ssl--schannel-ssp-?redirectedfrom=MSDN>
+[^4]: To support EID cards issued for organizations by SK ID Solutions,
+    `EID-SK 2016` (<https://www.sk.ee/upload/files/EID-SK_2016.der.crt>)
+    certificates must also be added to the list!
 
 [^5]: These entries do not exist in the registry by default.
 
-[^6]: It is also possible to configure the client part for SSL/TLS versions, but this guide covers server configuration. It does not mean that configuring the client part is not recommended, it just depends.
+[^6]: It is also possible to configure the client part for SSL/TLS versions,
+    but this guide covers server configuration. It does not mean that
+    configuring the client part is not recommended, it just depends.
 
-[^7]: <https://docs.microsoft.com/en-us/windows/win32/secauthn/cipher-suites-in-schannel>
+[^7]: <https://learn.microsoft.com/en-us/windows/win32/secauthn/tls-cipher-suites-in-windows-server-2025>
 
-[^8]: With the cipher settings described here, `TLS 1.3` will not work. So, those settings can be useful if `TLS 1.3` is not to be used for any reason, for enabling certificate authentication for example.
+[^8]: <https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh-http>
+
+[^9]: The allowlist is based on the
+    [ESTEID2018 certificate policy v4.0](https://www.id.ee/wp-content/uploads/2025/10/cp_esteid_v4.0-08.10.2025.pdf)
+    and the [ESTEID2025 certificate policy v2.0](https://repository.eidpki.ee/static/documents/eid-cp-v-2.0_04.06.2026_allkirjastatud.pdf),
+    supplemented by the [Zetes certificate profiles](https://repository.eidpki.ee/static/documents/CertificateProfiles-20260520.pdf).
+    Check the [Zetes repository](https://repository.eidpki.ee/repository/)
+    and the service providers' current policies and profiles before changing
+    the production allowlist.
+
+[^10]: <https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.x509certificates.x509chainpolicy.certificatepolicy?view=net-9.0>

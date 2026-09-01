@@ -2,7 +2,7 @@
 
 **[In English](index.md)**
 
-**Versioon:** 26.04/1
+**Versioon:** 26.08/1
 
 **Väljaandja:** [RIA](https://www.ria.ee/)
 
@@ -27,6 +27,7 @@
 | 22.08.2024 | 24.08/1  | Ubuntu uuendatud versioonile Ubuntu Server 24.04 ja Apache versioonile 2.4.62. — Muutja: Urmas Vanem
 | 31.10.2025 | 25.10/1  | Lisatud Zetes ahelad. — Muutja: Raul Kaidro
 | 22.04.2026 | 26.04/1  | Konverteeritud Markdown formaati. — Muutja: Raul Metsma
+| 21.08.2026 | 26.08/1  | Uuendatud sertifikaadivõtme, TLS-protokollide, šifrikomplektide, sertifikaadipoliitikate ja OCSP juhiseid 2026. aasta krüptograafiliste algoritmide elutsükli aruande põhjal. — Muutja: Raul Metsma
 
 ---
 
@@ -145,6 +146,17 @@ $ openssl req -new -key Apache2404.key -out Apache2404.csr -subj /C=EE/O=OctoX/C
     veebilehe tegelikule aadressile[^3]. Need nimed peavad ka
     nimeserveris lahenema.
 
+Genereeri igale sõltumatule TLS-serverile eraldi privaatvõti. Ära kopeeri
+sama võtit mitmesse serverisse üksnes seetõttu, et metamärgiga või mitme SAN
+nimega sertifikaat kataks kõik serverinimed. Eraldi võtmed piiravad serveri
+või võtme kompromiteerumise mõju.
+
+Tootmislahenduses kasuta võimaluse korral füüsilist turvamoodulit (HSM) või
+samaväärset mitteeksporditava võtmega riistvaralist võtmehoidlat. Genereeri
+võti seadmes ja hoia see mitteeksporditavana. Enne kasutuselevõttu veendu, et
+HSM, OpenSSL-i integratsioon ja sertifikaadi väljastaja toetavad valitud ECDSA
+P-384 võtit. Näite failipõhine võti ei ole HSM-i seadistus.
+
 Loodud sertifikaadi päringufaili sisu on võimalik vaadata käsuga
 
 ```bash
@@ -172,68 +184,6 @@ Certificate Request:
                     DNS:Apache2404.octox.demo, DNS:MYWEBSERVER.octox.demo
         Signature Algorithm: ecdsa-with-SHA256
         Signature Value:
-```
-
-###### RSA
-
-*See jaotis on säilitatud neile, kes eelistavad RSA-põhiseid sertifikaate. Ülejäänud dokument kasutab ECC-d.*
-
-Loo sertifikaadi päring ja privaatvõti käsuga
-
-```bash
-$ openssl req -newkey rsa:2048 -keyout Apache2021.key -sha256 -subj "/CN=Apache5.kaheksa.xi" -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf "[SAN]\nsubjectAltName=DNS:Apache2021.kaheksa.xi,DNS:Apache5.kaheksa.xi")) -out Apache2021.csr -nodes
-Generating a RSA private key
-........+++++
-.++++
-writing new private key to 'Apache2021.key'
------
-```
-
-1.  `Apache2021.key` on sertifikaadi privaatvõti;
-2.  `Apache2021.csr` on sertifikaadi päringufail, mis edastatakse
-    sertifitseerimiskeskusele;
-
-3.  `Apache5.kaheksa.xi` on väljastatava sertifikaadi subjekt;
-4.  `Apache2021.kaheksa.xi` ja `Apache5.kaheksa.xi` on sertifikaadil olevad
-    SAN DNS nimed, mis peavad kindlasti vastama veebilehe tegelikule
-    aadressile[^4]. Need nimed peavad ka nimeserveris lahenema.
-
-Loodud sertifikaadi päringufaili sisu on võimalik vaadata käsuga
-
-```bash
-$ openssl req -in Apache2021.csr -noout -text
-Certificate Request:
-    Data:
-        Version: 1 (0x0)
-        Subject: CN = Apache5.kaheksa.xi
-        Subject Public Key Info:
-            Public Key Algorithm: rsaEncryption
-                RSA Public-Key: (2048 bit)
-                Modulus:
-                    00:c9:4f:a2:54:bd:1a:bb:88:a6:ec:16:c9:3e:28:
-                    ee:f6:09:3d:a3:d7:86:fa:67:a4:e5:73:3b:38:70:
-                    70:73:b0:01:95:7a:8d:c3:47:46:49:b9:12:52:20:
-                    08:0c:ed:f5:ec:c5:4e:25:3e:27:9b:98:67:b0:bd:
-                    c2:cd:00:98:54:36:d4:bf:b8:60:d9:aa:26:de:6a:
-                    da:11:23:2e:a9:05:94:ff:e8:bb:d2:5e:c2:68:8d:
-                    63:97:71:5e:0a:a0:49:fc:27:c7:28:c4:7d:53:12:
-                    1c:e6:2e:9d:bd:81:5b:ff:6a:e5:cf:b5:1a:1b:a3:
-                    5a:2e:9b:bd:0c:fe:c8:8f:ed:ff:b6:08:9a:1a:69:
-                    4f:88:a1:1c:c7:9d:84:53:f0:77:2f:db:ba:2a:9a:
-                    16:f4:78:02:ca:e2:29:f7:f0:f3:61:df:00:ce:3f:
-                    fa:80:c5:ca:2d:37:a4:2e:a4:8c:be:a2:b3:c9:fd:
-                    46:4e:20:fb:18:8b:3d:09:6a:be:01:3d:af:29:dd:
-                    e2:b6:63:3c:3e:46:c1:7a:9b:08:83:c9:32:c5:54:
-                    b2:e6:3d:a3:68:b6:8d:53:cb:36:c2:20:7d:77:63:
-                    c7:cf:c9:11:36:b3:47:9b:10:8f:19:66:cb:a4:0f:
-                    50:f5:35:bf:0d:53:82:cb:ad:3c:1f:5a:1a:2b:70:
-                    a4:8f
-                Exponent: 65537 (0x10001)
-        Attributes:
-            Requested Extensions:
-                X509v3 Subject Alternative Name:
-                    DNS:Apache2021.kaheksa.xi, DNS:Apache5.kaheksa.xi
-        Signature Algorithm: sha256WithRSAEncryption
 ```
 
 ##### SSL sertifikaadi tellimine ja paigaldamine
@@ -425,16 +375,13 @@ To                         Action      From
 443/tcp (v6)               ALLOW       Anywhere (v6)
 ```
 
-### Kasutaja sertifikaadi staatuse kontroll OCSP teenuse vastu[^5]
+### Kliendisertifikaadi tühistusoleku kontroll OCSP abil[^4]
 
-OCSP (*Online Certificate Status Protocol*) teenuse abil saab kasutaja
-sertifikaadi staatust kontrollida reaalajas. Iga kasutaja autentimisel
-saadab veebiserver päringu OCSP teenusele, mis tagastab sertifikaadi
-staatuse info.
+OCSP (*Online Certificate Status Protocol*) võimaldab Apache'il kontrollida
+kliendisertifikaadi tühistusolekut autentimise ajal.
 
-SK ja Zetes pakuvad vaba ligipääsuga (tasuta) AIA OCSP teenust.
-`ESTEID2018` ja `ESTEID2025` CA alt väljastatud sertifikaatide puhul on AIA
-OCSP aadress juba sertifikaadis kirjas (<http://aia.sk.ee/esteid2018>,
+CA-de `ESTEID2018` ja `ESTEID2025` väljastatud sertifikaatides on AIA OCSP
+teenuse aadress (<http://aia.sk.ee/esteid2018> ja
 <http://ocsp.eidpki.ee>).
 
 ![ESTEID2018 AIA OCSP aadress sertifikaadis](./img/image8.png)
@@ -448,9 +395,50 @@ SSLOCSPEnable leaf
 SSLOCSPUseRequestNonce off
 ```
 
-Taaskäivita Apache2 veebiteenus käsuga `systemctl reload apache2`.
-Ülaltoodud konfiguratsiooni puhul võetakse OCSP teenuse aadress kasutaja
-sertifikaadist.
+Väärtus `leaf` kontrollib lõppkasutaja sertifikaati. OCSP teenuse aadress
+võetakse sellest sertifikaadist. See range konfiguratsioon ei kasuta valikut
+`no_ocsp_for_cert_ok`: puuduva OCSP aadressi või ebaõnnestunud kontrolli korral
+kliendisertifikaadiga autentimine ei õnnestu. Luba serverist väljuv
+HTTP-liiklus mõlemasse OCSP teenusesse ja monitoori Apache tõrkeid. Pärast
+muudatuse rakendamist laadi Apache uuesti käsuga `systemctl reload apache2`.
+
+### Serverisertifikaadi OCSP vastuse stapling
+
+Eespool kirjeldatud kliendisertifikaadi kontroll ja serverisertifikaadi OCSP
+stapling on eri funktsioonid. Stapling võimaldab Apache'il hankida oma
+serverisertifikaadi kohta allkirjastatud olekuvastuse ja saata selle TLS
+kätluse ajal. Nii ei pea iga veebilehitseja väljastanud CA-le eraldi päringut
+tegema ja kliendi privaatsus paraneb.[^5]
+
+Esmalt kontrolli, kas serverisertifikaat sisaldab OCSP teenuse URI-d:
+
+```bash
+$ openssl x509 -in /etc/ssl/certs/Apache2404.pem -noout -ocsp_uri
+```
+
+Kui käsk tagastab toetatud URI, luba jagatud mälu vahemälu ja tootmiskeskkonna
+tõrkekäitlus failis `/etc/apache2/mods-available/ssl.conf`:
+
+```apache
+SSLStaplingCache "shmcb:${APACHE_RUN_DIR}/ssl_stapling(32768)"
+SSLStaplingReturnResponderErrors off
+SSLStaplingResponderTimeout 4
+SSLStaplingErrorCacheTimeout 60
+```
+
+Kontrolli, et `socache_shmcb` on lubatud, ning lisa HTTPS-virtuaalhosti
+`SSLUseStapling On`. Ära luba stapling'ut, kui sertifikaadi väljastaja OCSP
+teenust ei paku.
+
+```bash
+$ a2enmod socache_shmcb
+$ systemctl restart apache2
+$ openssl s_client -connect Apache2404.octox.demo:443 \
+    -servername Apache2404.octox.demo -status </dev/null
+```
+
+Väljundis peab olema edukas OCSP vastus ja sertifikaadi olek `good`. Monitoori
+vastuse uuendamise tõrkeid ning taga serveri ligipääs OCSP teenusele.
 
 ### Vaikimisi veebilehe eemaldamine 
 
@@ -469,35 +457,44 @@ $ systemctl reload apache2
 
 #### SSL/TLS
 
-Apache versioonil 2.4.55 on vaikimisi lubatud kõik SSL/TLS protokollid,
-mis on uuemad kui SSL3:
+TLS protokollide valikul ei tohi tugineda Apache või operatsioonisüsteemi
+vaikesätetele. Kehtiva seadistuse kontrollimiseks kasuta käsku:
 
 ```bash
 $ grep -i -r "SSLProtocol" /etc/apache2/mods-available/
 /etc/apache2/mods-available/ssl.conf:SSLProtocol all -SSLv3
 ```
 
-Tänapäeval on tungivalt soovitav mitte kasutada TLS protokolli
-versioonist 1.2 madalamaid versioone. Juba mõnda aega on kasutusel ka
-TLS versioon 1.3.
+TLS 1.0 ja TLS 1.1 tuleb keelata. Uutes ja ajakohastatud lahendustes tuleb
+vaikimisi lubada ainult TLS 1.3. TLS 1.2 võib lisada üksnes dokumenteeritud
+erandina, kui teenust peavad kasutama 2020. aasta või vanemad kliendid või
+kui kliendisertifikaati peab küsima pärast esialgse TLS ühenduse loomist.
+TLS 1.2 kasutamisel tuleb konfigureerida ka selge turvaliste
+šifrikomplektide lubatud loend.
 
-Kui puudub spetsiifiline nõue TLS 1.2 versiooni lubamiseks, siis on
-soovitav kasutada vaid TLS versiooni 1.3. TLS 1.2 on küll korrektse
-konfiguratsiooni puhul väga stabiilne ja turvaline, ent TLS 1.3 on
-kiirem, vaikimisi turvalisem ja nõuab vähem konfigureerimist.
-Standardlahendustes võiks TLS 1.2 olla toetatud vaid tõestatud vajaduse
-puhul ja sel juhul tuleb olla veendunud, et kasutusel on vaid turvalised
-šifrikomplektid ja laiendused.
-
-Kui on soov Apache serveris kasutada vaid protokoll TLS 1.3, tuleb
-konfiguratsioonifaili lisada rida
+TLS 1.3 konfiguratsioon:
 
 ```apache
 SSLProtocol -all +TLSv1.3
 ```
 
-Toetamaks TLS versioone 1.2 ja 1.3, tuleb konfiguratsioonireale lisada
-`+TLSv1.2`
+Dokumenteeritud ühilduvuserandi korral võib lubada TLS 1.2 ja TLS 1.3:
+
+```apache
+SSLProtocol -all +TLSv1.2 +TLSv1.3
+```
+
+Aruanne soovitab TLS 1.2 lubamisel korduskätluse keelata. Kui lahendus sõltub
+kliendisertifikaadi küsimisest pärast esialgset kätlust, muudab korduskätluse
+keelamine selle voo võimatuks. Eelista eraldi virtuaalhosti, mis küsib
+sertifikaati esialgse kätluse ajal; ära säilita korduskätlust üksnes
+asukohapõhise autentimisvoo jaoks.
+
+Kui TLS-i teostus ja kasutatavad kliendid pakuvad tootmiskõlblikku tuge,
+eelista hübriidrühma `X25519MLKEM768`. Juhend ei määra rühma seadistust
+jäigalt, sest tugi ja standarditud identifikaator sõltuvad paigaldatud
+OpenSSL-i versioonist. Enne sellele tuginemist kontrolli tegelikku rühma
+ajakohase TLS-skanneriga.
 
 Alternatiivina saab sama muudatuse teha serveripõhiselt konfigureerides
 parameetrit `SSLProtocol` failis `/etc/apache2/mods-available/ssl.conf`.
@@ -508,50 +505,53 @@ tellitud krüptograafiliste algoritmide elutsükli uuringust aadressil
 
 ##### Šifrikomplektid (*Cipher suites*)
 
-TLS 1.3 versiooni kõiki šifreid peetakse hetkeseisuga turvaliseks, seega
-turvakaalutlustel selle protokolli jaoks lisakonfiguratsiooni looma ei
-pea.
-
-TLS 1.2 puhul see päris nii ei ole. Apache 2.4.55 versiooniga on
-vaikimisi kasutusel suur hulk erinevaid TLS šifreid[^6], mida näeb
-käsuga
-
-```bash
-$ openssl ciphers -v
-```
-
-Vaikimisi on šifrite kasutamise osas defineeritud ainult kaks reeglit:
-
-1.  HIGH -- lubatud on mõned šifrid võtme pikkusega 128 bitti ja kõik
-    tugevamad;
-2.  !aNULL -- keelatud on šifrite komplektid, mis ei toeta autentimist.
+OpenSSL-i aliastele, näiteks `HIGH`, tuginemise asemel tuleb
+konfigureerida selge lubatud loend. TLS 1.3 jaoks luba järgmised
+šifrikomplektid toodud järjekorras:
 
 ```apache
-SSLCipherSuite HIGH:!aNULL
+SSLCipherSuite TLSv1.3 "TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256"
 ```
 
-Kui on soov määrata täpsemalt TLS 1.2 protokolliga kasutatavaid
-šifrikomplekte, saab Apache kaustapõhises konfiguratsioonifailis
-kasutada direktiivi `SSLCipherSuite`. Siin omakorda saab kasutada kas
-eeldefineeritud muutujaid või täpseid šifrikomplektide kirjeldusi.
+`TLS_AES_128_CCM_SHA256` võib kasutada ainult varuvariandina, kui AES-GCM
+ja ChaCha20-Poly1305 ei ole saadaval. CCM_8 komplekte ei tohi lubada.
 
-Kindlat soovitust erinevate šifrikomplektide kasutamiseks ei ole
-võimalik ilma veebilehele esitatavaid tingimusi teadmata anda. Küll aga
-tuleb kindlasti eemaldada loendist ebaturvalised šifrikomplektid.
-Mõistlik on kirjeldada konkreetsed lubatud šifrikomplektid TLS 1.2
-kasutamiseks.
+Dokumenteeritud TLS 1.2 ühilduvuserandi korral luba ainult järgmised kolm
+ECDHE-ECDSA ja AEAD šifrikomplekti. See vastab juhendis kasutatavale
+ainult ECDSA sertifikaadi profiilile:
 
-Näide:
+```apache
+SSLCipherSuite SSL "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305"
+```
 
-- Kasutades konfiguratsioonifailis järgmist käsurida, lubatakse vaid kirjeldatud šifrikomplektide kasutamine:
-
-  ```apache
-  SSLCipherSuite "ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384"
-  ```
+Protokolli tähis `SSL` rakendub šifrikomplektidele kuni TLS 1.2-ni;
+TLS 1.3 komplekte juhib eraldi `TLSv1.3` direktiiv. Kuna käesolev juhend
+keelab vanemad protokollid, on `SSL` loend kasutatav ainult TLS 1.2-ga.
+TLS 1.2 loend välistab RSA autentimise ja võtmevahetuse, staatilise DH/ECDH,
+CBC, CCM_8 ja muud mitte-AEAD komplektid.
 
 Alternatiivina saab kasutatavaid šifreid konfigureerida serveripõhiselt
 failis `/etc/apache2/mods-available/ssl.conf` muutes selles parameetrit
 `SSLCipherSuite`.
+
+Kontrolli kehtivat loendit käsuga `openssl ciphers -v` ning testi pärast
+iga muudatust ajakohase TLS skanneriga läbiräägitud protokolli ja
+šifrikomplekti.
+
+##### Pakkimine
+
+Hoia TLS-i pakkimine selgesõnaliselt keelatuna:
+
+```apache
+SSLCompression off
+```
+
+HTTP vastuste pakkimine on TLS-i pakkimisest eraldiseisev ja võib saladusi
+lekitada, kui vastus sisaldab nii ründaja juhitavat sisendit kui ka tundlikke
+andmeid. Keela tundlike dünaamiliste vastuste jaoks `mod_deflate` ja
+`mod_brotli`. Kui vastuste pakkimine peab jääma lubatuks, peab rakendus
+takistama saitidevahelist päringuvõltsimist ning leevendama vastuse pikkuse
+leket.
 
 Rohkem infot šifrikomplektide soovituste kohta leiab RIA tellitud
 krüptograafiliste algoritmide elutsükli uuringust aadressil
@@ -567,29 +567,93 @@ määratud `off`.
 
 #### Kasutajasertifikaatide lisafiltreerimine
 
-Oluline! Kindlustamaks, et veebiteenuse poole saavad pöörduda vaid
-korrektsete sertifikaatidega kasutajad, tuleb serveri konfiguratsioonis
-kehtestada järgmised nõuded:
+CA ahela usaldamine ei tõesta, et lõppsertifikaat on ID-kaardi
+autentimissertifikaat. Erinevad sertifikaaditooted võivad kasutada sama juur-
+või kesktaseme CA-d. Enne autenditud identiteedi aktsepteerimist tuleb nõuda,
+et:
 
-1.  sertifikaadis peab olema korrektne väli `extendedKeyUsage`;
-2.  sertifikaadi väljastaja peab olema `ESTEID2018` või `ESTEID2025`.
+1.  Apache valideerib edukalt kogu sertifikaadiahela;
+2.  väljastaja on selgesõnaliselt lubatud kesktaseme CA;
+3.  `extendedKeyUsage` lubab TLS veebikliendi autentimist;
+4.  lõppsertifikaadi laiendus `X509v3 CertificatePolicies` (`2.5.29.32`)
+    sisaldab nii NCP+ autentimispoliitika OID-d kui ka sertifikaadi CA
+    põlvkonnale vastavat lubatud dokumendipoliitika OID-d.[^6]
 
-Selleks tuleb lisada Apache konfiguratsiooni read:
+Käesolevas juhendis käsitletud tootmissertifikaatide lubatud loend on:
+
+```text
+# Nõutav igas aktsepteeritavas autentimissertifikaadis
+0.4.0.2042.1.2
+
+# ESTEID2018 - nõua üht neist dokumendipoliitika OID-dest
+1.3.6.1.4.1.51361.1.1.1
+1.3.6.1.4.1.51361.1.1.2
+1.3.6.1.4.1.51361.1.1.3
+1.3.6.1.4.1.51361.1.1.4
+1.3.6.1.4.1.51361.1.1.5
+1.3.6.1.4.1.51361.1.1.6
+1.3.6.1.4.1.51361.1.1.7
+1.3.6.1.4.1.51455.1.1.1
+
+# ESTEID2025 - nõua üht neist dokumendipoliitika OID-dest
+1.3.6.1.4.1.51361.2.1.1
+1.3.6.1.4.1.51361.2.1.2
+1.3.6.1.4.1.51361.2.1.3
+1.3.6.1.4.1.51361.2.1.4
+1.3.6.1.4.1.51361.2.1.5
+1.3.6.1.4.1.51361.2.1.6
+1.3.6.1.4.1.51455.2.1.1
+```
+
+Seosta dokumendipoliitika OID valideeritud väljastajaga: `ESTEID2018`
+sertifikaati ei tohi aktsepteerida `ESTEID2025` poliitika OID alusel ega
+vastupidi. Ühine NCP+ OID ei ole tootepõhine ja sellest üksi ei piisa.
+Tootmise lubatud loendisse ei tohi lisada test-OID-sid, näiteks Zetesi OID-sid
+prefiksiga `2.999`.
+
+Järgmised väljastaja ja EKU kontrollid on kasulikud lisakaitsed, kuid ei
+asenda sertifikaadipoliitika kontrolli:
 
 ```apache
 <Location "/">
 Require expr (
-  (%{SSL_CLIENT_I_DN_CN} == "ESTEID2018" || %{SSL_CLIENT_I_DN_CN} == "ESTEID2025")
-  and "TLS Web Client Authentication, E-mail Protection" in PeerExtList('extendedKeyUsage')
+  (
+    %{SSL_CLIENT_I_DN_CN} == "ESTEID2018"
+    || %{SSL_CLIENT_I_DN_CN} == "ESTEID2025"
+  )
+  and (
+    "TLS Web Client Authentication, E-mail Protection"
+    in PeerExtList('extendedKeyUsage')
+  )
 )
 </Location>
 ```
 
-Selle konfiguratsiooni võib lisada kas virtuaalse hosti või Apache
-serveri üld-konfiguratsiooni juurde. Pärast ülaltoodud tingimuste
-lisamist on teenuse poole lubatud pöörduda vaid sertifikaatidega millel
-on korrektne `extendedKeyUsage` väli ning mis on väljastatud serveri
-poolt lubatud ahelast.
+Konfiguratsiooni võib lisada virtuaalhosti või Apache üldkonfiguratsiooni.
+Rakendus või autentimislüüs peab seejärel parsima valideeritud
+lõppsertifikaati ja autentimise tagasi lükkama, kui selles ei ole nii NCP+
+OID-d kui ka väljastajale vastavat dokumendipoliitika OID-d.
+Sertifikaaditoodet ei tohi tuletada ainult subjekti, väljastaja või EKU järgi
+ning `anyPolicy` OID-d (`2.5.29.32.0`) ei tohi käsitleda ID-kaardi poliitika
+tõendina.
+
+Kui rakendus on liidestatud CGI või mõne muu Apache keskkonnamuutujaid
+kasutava liidese kaudu, teeb `SSLOptions +ExportCertData` PEM-kodeeritud
+lõppsertifikaadi kättesaadavaks muutujas `SSL_CLIENT_CERT`. Muude liideste
+puhul tuleb kasutada rakendusplatvormi TLS kliendisertifikaadi API-t.
+Sertifikaadi andmeid tohib usaldada ainult kaitstud Apache ja rakenduse
+vahelisest ühendusest; kliendi saadetud sertifikaadipäist ei tohi usaldada.
+
+Eksporditud sertifikaadi laienduse kontrollimiseks testi:
+
+```bash
+$ openssl x509 -in client.pem -noout -text
+```
+
+Võrdle jaotist `X509v3 Certificate Policies` eespool viidatud kehtivate
+poliitika- ja sertifikaadiprofiilide allikatega. Testi vähemalt üht
+lubatud ID-kaardi sertifikaati ja seotud hierarhiates väljastatud muude
+toodete sertifikaate, sealhulgas vajaduse korral Mobiil-ID-d.
 
 > **Märkus:** Kui on kasutusel mõni muu liikluse filtreerimise vahend/võimalus, siis
 > on soovitav turvaline konfiguratsioon juurutada ka seal. SK on F5
@@ -599,16 +663,6 @@ poolt lubatud ahelast.
 
 > **Märkus:** SK soovitused turvaliseks autentimiseks ID-kaardiga on leitavad
 > peatükist „Defence: implement ID-card authentication securely":
-> <https://github.com/SK-EID/smart-id-documentation/wiki/Secure-Implementation-Guide>
-
-> **Märkus:** Soovituslik meetod ebakorrektsete sertifikaatide vältimiseks on
-> kasutada sertifikaatides olevaid OIDe. Paraku ei ole hetkeseisuga
-> teada meetodit, kuidas seda serveri tasemel teha. Võimalusel tuleks
-> võtta autentimise sertifikaat veebirakenduse tasemel lahti ja
-> kontrollida, kas see sisaldab mõnda korrektset OIDi ning kui ei
-> sisalda, siis mitte autentida. Hetkeseisuga teadaolevad OIDid on SK
-> publitseerinud peatükis „Only accept certificates with trusted
-> issuance policy":
 > <https://github.com/SK-EID/smart-id-documentation/wiki/Secure-Implementation-Guide>
 
 #### Kasutajale kuvatavate sertifikaatide filtreerimine
@@ -868,20 +922,33 @@ Täielik näidiskonfiguratsiooni fail on saadaval aadressil <https://installer.i
     SSLOCSPEnable leaf
     SSLOCSPUseRequestNonce off
 
+    # Serverisertifikaadi OCSP stapling - luba ainult CA OCSP toe korral
+    # SSLUseStapling On
+
     # TLS häälestus — kasutada ainult TLS 1.3
     SSLProtocol -all +TLSv1.3
-    # TLS 1.2 toetamiseks lisada: SSLProtocol -all +TLSv1.2 +TLSv1.3
-    # SSLCipherSuite "ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384"
+    SSLCipherSuite TLSv1.3 "TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256"
+    # Dokumenteeritud ühilduvuserand TLS 1.2 jaoks:
+    # SSLProtocol -all +TLSv1.2 +TLSv1.3
+    # SSLCipherSuite SSL "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305"
     SSLHonorCipherOrder ON
+    SSLCompression off
 
     # Kasutajale kuvatavate sertifikaatide filtreerimine
     SSLCADNRequestFile /etc/ssl/certs/DN_Bundle.pem
 
-    # Kasutajasertifikaatide lisafiltreerimine
+    # Kasutajasertifikaatide osaline filtreerimine; rakendus peab lisaks
+    # lubama ainult ID-kaardi CertificatePolicies OID-d
     <Location "/">
     Require expr (
-      (%{SSL_CLIENT_I_DN_CN} == "ESTEID2018" || %{SSL_CLIENT_I_DN_CN} == "ESTEID2025")
-      and "TLS Web Client Authentication, E-mail Protection" in PeerExtList('extendedKeyUsage')
+      (
+        %{SSL_CLIENT_I_DN_CN} == "ESTEID2018"
+        || %{SSL_CLIENT_I_DN_CN} == "ESTEID2025"
+      )
+      and (
+        "TLS Web Client Authentication, E-mail Protection"
+        in PeerExtList('extendedKeyUsage')
+      )
     )
     </Location>
 
@@ -901,16 +968,19 @@ Täielik näidiskonfiguratsiooni fail on saadaval aadressil <https://installer.i
     on võimalik soovi korral lisaks kirjeldada atribuudid L, OU ja S.
     Võib kasutada ka ainult CNi.
 
-[^3]: Kaasaegsed veebilehitsejad ei pea veebilehte usaldusväärseks, kui
-    vähemalt üks SAN DNS ei vasta veebilehe tegelikule aadressile.
+[^3]: Kaasaegsed veebilehitsejad usaldavad sertifikaati ainult siis, kui
+    veebilehe aadress vastab vähemalt ühele sertifikaadi SAN DNS nimele.
 
-[^4]: Kaasaegsed veebilehitsejad ei pea veebilehte usaldusväärseks, kui
-    vähemalt üks SAN DNS ei vasta veebilehe tegelikule aadressile.
-
-[^5]: Sertifikaatide kehtivust on võimalik kontrollida ka sertifikaatide
+[^4]: Sertifikaatide kehtivust on võimalik kontrollida ka sertifikaatide
     tühistusnimekirjade (CRL) abil, ent sellel käesolevas dokumendis ei
     peatuta, kuna OCSP-põhine lahendus on eelistatum.
 
-[^6]: Siin ei käsitleta teiste TLS protokollide šifreid, kuna
-    versioonist 1.2 vanemad protokollid on eelduslikult keelatud ja 1.3
-    versioon on hetkel eelistatuim.
+[^5]: <https://httpd.apache.org/docs/2.4/ssl/ssl_howto.html#ocspstapling>
+
+[^6]: Lubatud loend põhineb
+    [ESTEID2018 sertifitseerimispoliitikal v4.0](https://www.id.ee/wp-content/uploads/2025/10/cp_esteid_v4.0-08.10.2025.pdf),
+    [ESTEID2025 sertifitseerimispoliitikal v2.0](https://repository.eidpki.ee/static/documents/eid-cp-v-2.0_04.06.2026_allkirjastatud.pdf)
+    ja [Zetesi sertifikaadiprofiilidel](https://repository.eidpki.ee/static/documents/CertificateProfiles-20260520.pdf).
+    Enne tootmise lubatud loendi muutmist kontrolli
+    [Zetesi repositooriumi](https://repository.eidpki.ee/repository/) ning
+    teenuseosutajate kehtivaid poliitikaid ja profiile.

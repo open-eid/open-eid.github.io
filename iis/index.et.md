@@ -2,7 +2,7 @@
 
 **[In English](index.md)**
 
-**Versioon:** 26.04/1
+**Versioon:** 26.08/1
 
 **Väljaandja:** [RIA](https://www.ria.ee/)
 
@@ -26,6 +26,7 @@
 | 18.12.2023 | 23.12/1  | Eemaldatud `ESTEID-SK 2015` ahel. — Muutja: Urmas Vanem
 | 31.10.2025 | 25.10/1  | Lisatud Zetes ahelad. — Muutja: Raul Kaidro
 | 22.04.2026 | 26.04/1  | Konverteeritud Markdown formaati. — Muutja: Raul Metsma
+| 21.08.2026 | 26.08/1  | Uuendatud platvorm Windows Server 2025 versioonile ning sertifikaadivõtme, TLS-i, šifrikomplektide, sertifikaadipoliitikate ja OCSP juhiseid 2026. aasta krüptograafiliste algoritmide elutsükli aruande põhjal. — Muutja: Raul Metsma
 
 Juhend, kuidas autentida kasutajat IIS veebiserveril Eesti eID kaartidega.
 
@@ -38,7 +39,13 @@ Juhend, kuidas autentida kasutajat IIS veebiserveril Eesti eID kaartidega.
 
 Käesolev juhend kirjeldab IIS veebiserveri konfiguratsiooni kahepoolse SSL-i kasutamiseks, kus kliendi poolseks sertifikaadiks on Eesti eID kaardile (ID-kaart, elamisloakaart, digi-ID ja e-residendi digi-ID) väljastatud sertifikaat.
 
-Juhendi loomisel on kasutatud Windows Server 2022 ja Windows 10 operatsioonisüsteeme. Näidisjuhendis on toetatud [SK ID Solutions](https://www.skidsolutions.eu/resources/certificates/) `EE-GovCA2018` ja [Zetes](https://repository.eidpki.ee/) `EEGovCA2025` ahelast pärinevad sertifikaadid. Tagamaks sertifikaatide äratundmist on kohustuslikuks komponendiks kliendi poolel ka ID-tarkvara[^1]. Näidisjuhendi serveri sertifikaat on väljastatud OctoX testkeskkonnast.
+Juhendi serveriplatvorm on Windows Server 2025; kliendi poolel kasutatakse
+Windows 10 operatsioonisüsteemi. Näidisjuhendis toetatakse
+[SK ID Solutions](https://www.skidsolutions.eu/resources/certificates/)
+`EE-GovCA2018` ja [Zetes](https://repository.eidpki.ee/) `EEGovCA2025`
+ahelast pärinevaid sertifikaate. Kliendi poolel on kiipkaardi sertifikaadi
+äratundmiseks vajalik ka ID-tarkvara[^1]. Näidisjuhendi serveri sertifikaat
+on väljastatud OctoX testkeskkonnast.
 
 IIS kasutamisel on võimalik rakendada erinevaid autentimismeetodeid. Käesolev dokument vaatleb sertifikaadi nõude kehtestamist IIS anonüümse autentimise jaoks – st. peale sertifikaadi kehtivuse kontrolli lubatakse kasutaja eelnevalt määratud kasutaja (IUSR) õigustes veebisaidile ligi.
 
@@ -96,19 +103,57 @@ Aknas *Extensions* tuleb määrata järgmised omadused:
 
 ##### Sakk Private Key
 
-Siit aknast valitakse CSP ehk sertifikaadi võtmete algoritm. Näidis-konfiguratsioonis kasutatakse algoritmi `ECDSA_P256`, seega valitakse loendist `ECDSA_P256` ja eemaldatakse nimekirja alguses olev RSA.
+Siit aknast valitakse CSP ehk sertifikaadi võtmete algoritm.
+Näidiskonfiguratsioonis eemaldatakse RSA valik ja valitakse `ECDSA_P384`.
 
-![CSP valimine](./img/image6.png)
+![ECDSA P-384 CSP valimine](./img/image6.png)
+
+Genereeri igale sõltumatule TLS-serverile eraldi privaatvõti. Ära kopeeri
+sama võtit mitmesse serverisse üksnes seetõttu, et metamärgiga või mitme SAN
+nimega sertifikaat kataks kõik serverinimed. Eraldi võtmed piiravad serveri
+või võtme kompromiteerumise mõju.
+
+Tootmislahenduses kasuta võimaluse korral füüsilist turvamoodulit (HSM) või
+samaväärset mitteeksporditava võtmega riistvaralist võtmepakkujat. Genereeri
+võti seadmes ja hoia see mitteeksporditavana. Enne kasutuselevõttu veendu, et
+HSM-i võtmepakkuja, IIS ja sertifikaadi väljastaja toetavad valitud ECDSA
+P-384 võtit. Siin näidatud tarkvaralise võtmepakkuja töövoog ei ole HSM-i
+seadistus.
 
 Klikkige *OK* ja *Next*, määrake kaust ning nimi ja salvestage sertifikaadi päring `Base64` formaadis.
 
-Värskelt loodud sertifikaadi päringufaili omadused on võimalik kontrollida käsuga `certutil -dump PÄRINGUFAILI_NIMI`.
+Kontrolli värskelt loodud sertifikaadi päringufaili `certutil` abil:
 
-![Päringufaili sisu](./img/image7.png)
+```bat
+certutil -dump iis2112.req
+```
 
-Tuleb veenduda, et ka DNS alternatiivsed nimed on päringufailis olemas:
+Oluline väljund peaks sarnanema järgmisega; päringuspetsiifilised räsid ja
+avaliku võtme toorbaidid on välja jäetud:
 
-![DNS aliased päringufailis](./img/image8.png)
+```text
+PKCS10 Certificate Request:
+Version: 1
+Subject:
+    CN=iis2111.kaheksa.xi
+    C=EE
+    O=OctoX
+    OU=DEV
+
+Public Key Algorithm:
+    Algorithm ObjectId: 1.2.840.10045.2.1 ECC
+    Algorithm Parameters:
+        1.3.132.0.34 ECDH_P384
+Public Key Length: 384 bits
+
+Subject Alternative Name
+    DNS Name=iis2112.kaheksa.xi
+    DNS Name=iis2111.kaheksa.xi
+    DNS Name=MyWebServer.kaheksa.xi
+```
+
+Kontrolli, et avalik võti on 384-bitine ja kõik vajalikud DNS-nimed on
+jaotises `Subject Alternative Name` olemas.
 
 Sertifikaadi päringufail edastatakse mõnele CA serverile, paludes selle alusel sertifikaat genereerida. Tulemus on järgmine:
 
@@ -116,7 +161,11 @@ Sertifikaadi päringufail edastatakse mõnele CA serverile, paludes selle alusel
 
 #### Sertifikaadi installeerimine
 
-IIS server peab usaldama sertifikaati `OctoX Demo CA 21.11`, mis on serveri sertifikaadi väljastajaks. Selleks tuleb kontrollida selle sertifikaadi olemasolu *usaldusväärsete juursertifikaatide*[^2] konteineris. Kui väljastaja CA sertifikaat sealt puudub, tuleb see lisada![^3]
+IIS server peab usaldama sertifikaati `OctoX Demo CA 21.11`, mis on serveri
+sertifikaadi väljastajaks. Selleks tuleb kontrollida selle sertifikaadi
+olemasolu *usaldusväärsete juursertifikaatide* (*Trusted Root Certification
+Authorities*) konteineris. Kui väljastaja CA sertifikaat sealt puudub, tuleb
+see lisada![^2]
 
 ![IIS server usaldab temale sertifikaadi väljastanud CA-d.](./img/image10.png)
 
@@ -126,9 +175,14 @@ IIS serveri sertifikaat ise tuleb paigaldada IIS serveril lokaalse arvuti person
 
 ### Ühepoolse SSL-konfiguratsiooni loomine
 
-Ühepoolse SSL-i kehtestamiseks peab veebisaidil olema kirjeldatud SSL port (vaikimisi 443) ja see peab olema seotud soovitava sertifikaadiga. Koheselt tuleb keelata ka vanade SSL/TLS protokollide (vanemad kui 1.2) kasutamine!
+Ühepoolse TLS-i konfigureerimiseks lisa HTTPS-seos (tavaliselt port 443),
+vali serveri sertifikaat ja keela pärand-TLS-protokollid.
 
-![Veebisaidil on lubatud 443 port ja kasutatavaks sertifikaadiks on iis2111.kaheksa.xi, vanad TLS protokollid tuleb keelata!](./img/image12.png)
+Järgmisel ekraanipildil on Windows Server 2025 seose olulised seadistused.
+Vali serveri sertifikaat, hoia *Disable Legacy TLS* märgituna ja jäta
+*Disable TLS 1.3 over TCP* märkimata.
+
+![Windows Server 2025 HTTPS-seose seadistused](./img/image12.png)
 
 Peale määrangute kinnitamist ühepoolne SSL töötab!
 
@@ -139,6 +193,37 @@ Peale määrangute kinnitamist ühepoolne SSL töötab!
 1.  Kasutusel on värskelt installeeritud sertifikaat `2111.kaheksa.xi`;
 2.  Kasutusel on TLS 1.3 protokoll.
 
+#### Serverisertifikaadi OCSP vastuse stapling
+
+Kui serverisertifikaat sisaldab OCSP teenuse URI-d ja sertifikaadi väljastanud
+CA toetab OCSP-d, jäta HTTPS-seose valik *Disable OCSP Stapling* märkimata.
+HTTP.sys saab siis hankida serverisertifikaadi kohta allkirjastatud
+olekuvastuse ja saata selle TLS kätluse ajal. Nii ei pea iga veebilehitseja
+väljastanud CA-le eraldi päringut tegema ja kliendi privaatsus paraneb.[^8]
+
+Kuva seos ja kontrolli, et OCSP stapling ei ole keelatud:
+
+```bat
+netsh http show sslcert 0.0.0.0:443
+```
+
+Vajadusel luba stapling olemasoleval seosel:
+
+```bat
+netsh http update sslcert ipport=0.0.0.0:443 disableocspstapling=disable
+```
+
+Ära luba stapling'ut, kui sertifikaadi väljastaja OCSP teenust ei paku.
+Kontrolli tulemust OpenSSL-iga kliendist:
+
+```bash
+$ openssl s_client -connect iis2111.kaheksa.xi:443 \
+    -servername iis2111.kaheksa.xi -status </dev/null
+```
+
+Väljundis peab olema edukas OCSP vastus ja sertifikaadi olek `good`. Monitoori
+vastuse hankimise tõrkeid ning taga HTTP.sys-i ligipääs OCSP teenusele.
+
 #### HTTP ligipääsu piiramine
 
 HTTP ligipääsu keelamiseks eemaldatakse port 80 seotud protokollide loendist ja keelatakse tulemüürist ka vastav ligipääs. Alternatiivina on võimalik suunata HTTP liiklus automaatselt HTTPS saidile, vältimaks probleemi, kus kasutajad kirjutavad ise brauserisse saidi aadressi ent ei taipa sinna ette HTTPS:// määrangut panna.
@@ -147,13 +232,28 @@ HTTP ligipääsu keelamiseks eemaldatakse port 80 seotud protokollide loendist j
 
 ### Eelhäälestus
 
-> **Märkus:** IIS 10/Schannel, mis töötab Windows Server 2022 platvormil, kasutab sertifikaadiga autentimiseks protokolli `TLS 1.3` abil vaikimisi post-handshake autentimismeetodit (kehtib alates 2022. aastast, aktuaalne ka 2026. aastal). Kuna aga enimlevinud brauserid seda ei toeta[^4], siis see lahendus paraku praktikas ei tööta! Juhul, kui `TLS 1.3` on sisse lülitatud, ei saada server kliendile vaikimisi konfiguratsioonis sertifikaadi päringut ja katkestab ühenduse! Sertifikaadiga autentimise tööle saamiseks tuleb keelata `TLS 1.3` kasutamine. Alternatiivina saab sisse lülitada in-handshake autentimismeetodi, vt. peatükk „[In-handshake autentimismeetodi lubamine](#in-handshake-autentimismeetodi-lubamine)".
+> **Märkus:** TLS 1.3 koos *in-handshake* kliendisertifikaadi autentimisega
+> on Windows Server 2025 soovituslik konfiguratsioon. HTTPS-seose
+> seadistustes tuleb märkida *Negotiate Client Certificate*, et HTTP.sys
+> küsiks kliendisertifikaati esialgse TLS kätluse ajal. Valikut
+> *Disable TLS 1.3 over TCP* ei märgita. Microsoft kirjeldab Server 2025
+> lahendust IIS Support Blogis[^3].
 
-> **Märkus:** Windows Server 2025 platvormil on see probleem lahendatud — IIS lisab HTTPS-seose seadistustesse „Negotiate Client Certificate" märkeruudu, mis võimaldab in-handshake autentimist otse liidesest ilma allpool kirjeldatud `netsh` käsuta.
+> **Ühilduvus:** Windows Server 2022 ei kuva IIS Manageris valikut
+> *Negotiate Client Certificate*. Kui Server 2022 kasutamine peab jätkuma,
+> tuleb kasutada allpool kirjeldatud
+> [`netsh` protseduuri](#windows-server-2022-uhilduvus). Levinud
+> veebilehitsejad ei toeta selle platvormi vaikimisi kasutatavat TLS 1.3
+> *post-handshake* autentimist. TLS 1.3 võib keelata ja TLS 1.2 kasutada
+> ainult dokumenteeritud erandina, kui rakendus peab küsima
+> kliendisertifikaati pärast esialgse TLS ühenduse loomist ja rakenduse
+> voogu ei ole võimalik muuta.
 
-`TLS 1.3` protokolli versiooni saab välja lülitada IIS HTTPS seose lehelt, märkides linnukese lahtrisse `Disable TLS 1.3 over TCP`:
+Järgmine Windows Server 2025 ekraanipilt näitab TLS 1.2 ühilduvuserandit.
+Enne seose salvestamist vali serveri sertifikaat. See ei ole Windows Server
+2025 soovituslik konfiguratsioon:
 
-![Sertifikaadiga autentimise lubamiseks peame paraku TLS 1.3 protokolli keelama](./img/image14.png)
+![TLS 1.2 ühilduvuserand: TLS 1.3 keelamine HTTPS-seose seadistustes](./img/image14.png)
 
 ### Eesti eID sertifikaatide häälestus IIS serveril
 
@@ -164,7 +264,7 @@ IIS serveris tuleb sertifikaadid publitseerida järgmiselt:
 1.  Usaldusväärsete juursertifikaatide konteinerisse:
     1.  `EE-GovCA2018` (<https://c.sk.ee/EE-GovCA2018.der.crt>)
     2.  `EEGovCA2025` (<https://crt.eidpki.ee/EEGovCA2025.crt>)
-2.  Kesktaseme sertifikaatide konteinerisse[^5]:
+2.  Kesktaseme sertifikaatide konteinerisse[^4]:
     1.  `ESTEID2018` (<http://c.sk.ee/esteid2018.der.crt>)
     2.  `ESTEID2025` (<https://crt.eidpki.ee/ESTEID2025.crt>)
 
@@ -178,31 +278,75 @@ Loodud konfiguratsioon lubab veebisaidile ligipääsu 443 pordi kaudu, kasutajal
 
 Peale PIN-i sisestamist kontrollitakse sertifikaadi kehtivust veebiserveri poolt ja kui kõik on korras, lastakse kasutaja veebisaidile ligi.
 
-![Autentimine õnnestus kasutades protokolli TLS 1.2](./img/image17.png)
+![TLS 1.2 ühilduvuserandi näide: autentimine õnnestus](./img/image17.png)
+
+Enne soovitusliku TLS 1.3 konfiguratsiooni testimist tuleb lubada allpool
+kirjeldatud *in-handshake* autentimine.
 
 Alternatiivina võib IIS-i poolse sertifikaadinõude (`Require`) asemel kasutada ka lihtsat sertifikaadi aktsepteerimist (`Accept`) IIS serveri poolt – see võimaldab lisaks sertifikaadile saada serverile ligi ka kasutajanime ja parooliga või üldse autentimata.
 
 ### In-handshake autentimismeetodi lubamine
 
-Kui soovitakse siiski kasutada `TLS 1.3` protokolli ja sertifikaadiga autentimist, saab lubada in-handshake autentimismeetodi. Selle meetodi puhul küsib server kliendilt *Server Hello* saatmisel koheselt ka sertifikaati.
+*In-handshake* autentimise korral küsib server kliendisertifikaati esialgse
+TLS kätluse ajal. See on vajalik, sest TLS 1.3 ei toeta korduskätlust.
 
-In-handshake autentimismeetodi lubamiseks tuleb teha järgmist:
+#### Windows Server 2025
 
-1.  Dokumenteerida olemasoleva sertifikaadi määrangud käsuga `netsh http show sslcert`. Oluline on üles märkida `Certificate Hash` ja `Application ID`:
+1.  Vali IIS Manageris veebisait ja ava *Bindings*.
+2.  Vali HTTPS-seos ja vajuta *Edit*.
+3.  Märgi *Negotiate Client Certificate*.
+4.  Jäta *Disable TLS 1.3 over TCP* märkimata ja salvesta seos.
+5.  Vajadusel kontrolli käsuga `netsh http show sslcert`, et seose väärtus
+    `Negotiate Client Certificate` on lubatud.
 
-    ![Vaikimisi on määrang "negotiate client certificate" keelatud](./img/image18.png)
+#### Windows Server 2022 ühilduvus {#windows-server-2022-uhilduvus}
 
-2.  Eemaldatakse sertifikaadi seotus 443 pordiga käsuga `netsh http del sslcert 0.0.0.0:443`:
+Windows Server 2022 ei paku seose juures vastavat märkeruutu. Ainult sellel
+vanemal platvormil tuleb kliendisertifikaadi läbirääkimine lubada käsuga
+`netsh`:
 
-    ![Sertifikaadi eemaldamine 443 pordi küljest.](./img/image19.png)
+1.  Kuva seose konfiguratsioon:
 
-3.  Sertifikaat lisatakse uuesti, lubades ühtlasi ka in-handshake autentimismeetodi käsuga `netsh http add sslcert ipport=0.0.0.0:443 certhash=312bbb70898b5ae10753998c67bceeeb97d49f79 appid={4dc3e181-e14b-4a21-b022-59fc669b0914} certstorename=MY clientcertnegotiation=Enable`:
+    ```bat
+    netsh http show sslcert 0.0.0.0:443
+    ```
 
-    ![Clientcertnegotiation lubamine](./img/image20.png)
+    Salvesta räsi ja rakenduse ID. Enne muudatust sarnaneb oluline väljund
+    järgmisega:
 
-Vaadates uuesti sertifikaadi infot, on näha, et `Negotiate Client Certificate` on nüüd lubatud:
+    ```text
+    Certificate Hash             : <CERTIFICATE_HASH>
+    Application ID               : {<APPLICATION_ID>}
+    Negotiate Client Certificate : Disabled
+    ```
 
-![In-handshake autentimismeetod on nüüd sees](./img/image21.png)
+2.  Eemalda sertifikaadi seotus 443 pordiga:
+
+    ```bat
+    netsh http del sslcert 0.0.0.0:443
+    ```
+
+    Käsu edukas väljund on `SSL Certificate successfully deleted`.
+
+3.  Seo sertifikaat uuesti pordiga 443 ja luba *in-handshake*
+    kliendisertifikaadiga autentimine:
+
+    ```bat
+    netsh http add sslcert ipport=0.0.0.0:443 ^
+        certhash=<CERTIFICATE_HASH> ^
+        appid={<APPLICATION_ID>} ^
+        certstorename=MY ^
+        clientcertnegotiation=Enable
+    ```
+
+    Asenda `CERTIFICATE_HASH` ja `APPLICATION_ID` 1. sammus saadud
+    väärtustega. Käsu edukas väljund on `SSL Certificate successfully added`.
+
+Käivita uuesti 1. sammu käsk `show sslcert`. Oluline väljund peab nüüd olema:
+
+```text
+Negotiate Client Certificate : Enabled
+```
 
 > **Märkus:** Kuna *session renegotiation* on `TLS 1.3` puhul keelatud, siis selle meetodi puhul tuleb arvestada asjaoluga, et autentimine peab toimuma „esimesel lehel". Kui ühepoolne SSL ühendus on juba kliendi sertifikaadiga autentimata loodud ja samal lehel soovitakse kliendi sertifikaadiga autentides mõnele kaitstud ressursile ligi pääseda, siis see ebaõnnestub, kuna `TLS 1.3` ei toeta sellist lähenemist. Vajadusel tuleb see „maandumise" probleem ühel või teisel viisil lahendada.
 
@@ -216,29 +360,61 @@ Käesolevas näites on lubatud ainult anonüümne autentimine:
 
 Selle dokumendi eesmärgiks ei ole anda täpseid juhiseid optimaalseks veebisaitide konfigureerimiseks ega turvamiseks. Pigem tutvustatakse siin konfiguratsiooni kahepoolse SSL-i kasutamiseks Eesti eID kaartidega. Siiski tuuakse järgnevalt välja punktid, mida on oluline mainida.
 
-### Kasutajapoolsete sertifikaatide filtreerimine
+### Kasutajale kuvatavate sertifikaatide filtreerimine
 
-Vaikimisi pakutakse kasutajapoolse kahepoolse SSL sessiooni alustamisel IIS puhul kliendile välja kõik sertifikaadid, millistel on EKU omaduste all kirjas kliendi autentimine (ja loomulikult peab olema ka sertifikaadi privaatvõti). IIS-i poolt on aga kliendile võimalik ette anda loend autentimiskeskustest millised on lubatud ja seeläbi kuvatakse edaspidi klientidele vaid toetatud ahelate sertifikaadid.
+Vaikimisi võib klient kuvada kõiki isiklikke sertifikaate, millel on privaatvõti
+ja kliendi autentimise EKU. IIS saab saata lubatud sertimiskeskuste loendi, et
+klient kuvaks toetatud ahelate sertifikaate.
+
+Väljastajate loend parandab sertifikaadi valimist, kuid ei tõesta, et valitud
+lõppsertifikaat on ID-kaardi autentimissertifikaat. Erinevad
+sertifikaaditooted võivad kasutada sama juur- või kesktaseme CA-d. Enne
+autenditud identiteedi aktsepteerimist tuleb rakendada järgmises jaotises
+kirjeldatud sertifikaadipoliitika kontroll.
 
 Seame eesmärgiks kuvada kasutaja pool vaid sertifikaadid, mis pärinevad kindla juurserveri `EE-GovCA2018` ja `EEGovCA2025` ahelast.
 
-1.  Kuvatakse aktiivse IIS sertifikaadi info käsuga `netsh http show sslcert 0.0.0.0:443`:
+1.  Kuva aktiivse seose konfiguratsioon:
 
-    ![Vaikimisi seotud sertifikaadi omadused](./img/image23.png)
+    ```bat
+    netsh http show sslcert 0.0.0.0:443
+    ```
 
-2.  Eemaldatakse sertifikaadi seos käsuga `netsh http del sslcert 0.0.0.0:443`:
+    Salvesta räsi ja rakenduse ID. Enne muudatust sarnaneb oluline väljund
+    järgmisega:
 
-    ![Sertifikaadi eemaldamine](./img/image19.png)
+    ```text
+    Certificate Hash : <CERTIFICATE_HASH>
+    Application ID   : {<APPLICATION_ID>}
+    Ctl Store Name   : (null)
+    ```
 
-3.  Sertifikaat lisatakse uuesti, määrates sertifikaatide filtreerimiseks arvuti sertifikaatide kaust `Client Authentication Issuers`. Käsuks on `netsh http add sslcert ipport=0.0.0.0:443 certhash=1e75c77c696aa4d49686bb1ef73ac3b07fdff38a appid={4dc3e181-e14b-4a21-b022-59fc669b0914} sslctlstorename=ClientAuthIssuer`:
+2.  Eemalda sertifikaadi seos:
 
-    ![Lisame sertifikaadi uute omadustega](./img/image24.png)
+    ```bat
+    netsh http del sslcert 0.0.0.0:443
+    ```
 
-    `Certhash` ja `appid` väärtused saab võtta 1. sammu väljundist ülal.
+    Käsu edukas väljund on `SSL Certificate successfully deleted`.
 
-4.  Tuleb kontrollida, et `CTL Store Name` on uuel sertifikaadi väljavõttel `ClientAuthIssuer`:
+3.  Lisa sertifikaat uuesti ja kasuta lubatud sertimiskeskuste loendina
+    sertifikaadihoidlat `Client Authentication Issuers`:
 
-    ![Uuesti seotud sertifikaadi omadused](./img/image25.png)
+    ```bat
+    netsh http add sslcert ipport=0.0.0.0:443 ^
+        certhash=<CERTIFICATE_HASH> ^
+        appid={<APPLICATION_ID>} ^
+        sslctlstorename=ClientAuthIssuer
+    ```
+
+    Asenda `CERTIFICATE_HASH` ja `APPLICATION_ID` 1. sammus saadud
+    väärtustega. Käsu edukas väljund on `SSL Certificate successfully added`.
+
+4.  Käivita uuesti 1. sammu käsk `show sslcert` ja kontrolli olulist väljundit:
+
+    ```text
+    Ctl Store Name : ClientAuthIssuer
+    ```
 
     Soovi korral on võimalik vaadata ka IIS-i konfiguratsioonist, et SSL sertifikaat on uuesti korrektselt seotud 443 pordiga.
 
@@ -252,33 +428,148 @@ Seame eesmärgiks kuvada kasutaja pool vaid sertifikaadid, mis pärinevad kindla
 
 7.  Vajadusel taaskäivitatakse IIS teenus või server ja kontrollitakse soovitud lahenduse toimimist!
 
-### Kliendisertifikaatide kehtivuse kontroll OCSP teenuse vastu
+### ID-kaardi sertifikaadipoliitika valideerimine
 
-OCSP teenuse abil on võimalik kasutaja sertifikaadi kehtivust kontrollida praktiliselt reaalajas. Iga kasutaja autentimisel saadab veebiserver päringu OCSP teenusele, mis tagastab sertifikaadi kehtivuse info.
+Enne autenditud identiteedi aktsepteerimist tuleb nõuda, et:
 
-`ESTEID2018` ja `ESTEID2025` CA alt väljastatud sertifikaatide puhul on AIA OCSP aadress juba sertifikaadis kirjas (<http://aia.sk.ee/esteid2018> ja <http://ocsp.eidpki.ee>), nii et tegelikult midagi eraldi konfigureerima ei ole vaja. Küll aga on soovi korral võimalik kehtestada ka keskelt AIA OCSP kontroll:
+1.  HTTP.sys valideerib edukalt kogu sertifikaadiahela;
+2.  väljastaja on selgesõnaliselt lubatud kesktaseme CA;
+3.  `extendedKeyUsage` lubab TLS veebikliendi autentimist;
+4.  lõppsertifikaadi laiendus `X509v3 CertificatePolicies` (`2.5.29.32`)
+    sisaldab nii NCP+ autentimispoliitika OID-d kui ka sertifikaadi CA
+    põlvkonnale vastavat lubatud dokumendipoliitika OID-d.[^9]
 
-![AIA OCSP tee konfigureerimine](./img/image28.png)
+Käesolevas juhendis käsitletud tootmissertifikaatide lubatud loend on:
 
-> **Märkus:** Kordan siin selguse mõttes, et `ESTEID2018` / `ESTEID2025` CA alt väljastatud sertifikaatidel on kehtivuskontrollina kasutusel AIA OCSP teenus aadressiga <http://aia.sk.ee/esteid2018>. CRL teed neis kirjeldatud ei ole.
+```text
+# Nõutav igas aktsepteeritavas autentimissertifikaadis
+0.4.0.2042.1.2
 
-> **Märkus:** Windows serveri puhul pöördutakse vaikimisi OCSP põhiselt sertifikaatide kehtivuse kontrollilt tagasi CRL põhisele kontrollile, kui vahemälus olevate OCSP päringute hulk ületab 50-ne piiri. Käesoleva konfiguratsiooni puhul ei ole see tegelikult oluline, kuna CRL-i üldse ei kasutata. Muude konfiguratsioonide puhuks mainin, et seda numbrit on võimalik muuta luues registri väärtuse `HKEY_LOCAL_MACHINE/Software/Policies/Microsoft/SystemCertificates/ChainEngine/Config/CryptnetCachedOcspSwitchToCrlCount` ja määrates sinna uue väärtuse. Vt. ka OCSP [*magic count*](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/ee619754(v=ws.10)#determining-preference-between-ocsp-and-crls) või *magic number*. Ehk aga lihtsamgi tee selle omaduse muutmiseks on *windows policy*:
+# ESTEID2018 - nõua üht neist dokumendipoliitika OID-dest
+1.3.6.1.4.1.51361.1.1.1
+1.3.6.1.4.1.51361.1.1.2
+1.3.6.1.4.1.51361.1.1.3
+1.3.6.1.4.1.51361.1.1.4
+1.3.6.1.4.1.51361.1.1.5
+1.3.6.1.4.1.51361.1.1.6
+1.3.6.1.4.1.51361.1.1.7
+1.3.6.1.4.1.51455.1.1.1
 
-![Maagilise OCSP numbri muutmine](./img/image29.png)
+# ESTEID2025 - nõua üht neist dokumendipoliitika OID-dest
+1.3.6.1.4.1.51361.2.1.1
+1.3.6.1.4.1.51361.2.1.2
+1.3.6.1.4.1.51361.2.1.3
+1.3.6.1.4.1.51361.2.1.4
+1.3.6.1.4.1.51361.2.1.5
+1.3.6.1.4.1.51361.2.1.6
+1.3.6.1.4.1.51455.2.1.1
+```
+
+Seosta dokumendipoliitika OID valideeritud väljastajaga: `ESTEID2018`
+sertifikaati ei tohi aktsepteerida `ESTEID2025` poliitika OID alusel ega
+vastupidi. Ühine NCP+ OID ei ole tootepõhine ja sellest üksi ei piisa.
+Tootmise lubatud loendisse ei tohi lisada test-OID-sid, näiteks Zetesi OID-sid
+prefiksiga `2.999`.
+
+Sertifikaadihoidla `Client Authentication Issuers` ja EKU kontroll on
+kasulikud lisakaitsed, kuid need ei tuvasta sertifikaaditoodet. IIS-i rakendus
+või autentimislüüs peab valideeritud kliendisertifikaati kontrollima ja
+autentimise tagasi lükkama, kui selles ei ole nii NCP+ OID-d kui ka
+väljastajale vastavat dokumendipoliitika OID-d. Sertifikaaditoodet ei tohi
+tuletada ainult subjekti, väljastaja või EKU järgi ning `anyPolicy` OID-d
+(`2.5.29.32.0`) ei tohi käsitleda ID-kaardi poliitika tõendina.
+
+Kasuta rakendusplatvormi kliendisertifikaadi API-t. .NET-i rakenduses valideeri
+sertifikaat `X509ChainPolicy.CertificatePolicy` abil.[^10] Kontrolli iga
+lubatud, väljastajaga seotud kombinatsiooni eraldi: nõua samas ahela
+valideerimises NCP+ OID-d ja üht vastava CA põlvkonna lubatud
+dokumendipoliitika OID-d. Dokumendipoliitika OID-d on alternatiivid; ära lisa
+kõiki lubatud dokumendipoliitika OID-sid ühte valideerimisse samaaegselt
+nõutavate poliitikatena.
+
+HTTP päringu päises edastatud sertifikaati ei tohi usaldada, välja arvatud
+juhul, kui usaldatud pöördproksi kirjutab päise üle ja rakendus on ligipääsetav
+üksnes selle proksi kaudu.
+
+Eksporditud sertifikaadi kontrollimiseks testi:
+
+```bat
+certutil -dump client.cer
+```
+
+Võrdle laiendust `Certificate Policies` eespool viidatud kehtivate poliitika-
+ja sertifikaadiprofiilide allikatega. Testi vähemalt üht lubatud ID-kaardi
+sertifikaati ja seotud hierarhiates väljastatud muude toodete sertifikaate,
+sealhulgas vajaduse korral Mobiil-ID-d.
+
+### Kliendisertifikaadi tühistusoleku kontroll OCSP abil
+
+CA-de `ESTEID2018` ja `ESTEID2025` väljastatud sertifikaatides on AIA OCSP
+teenuse aadress (<http://aia.sk.ee/esteid2018> ja
+<http://ocsp.eidpki.ee>). HTTP.sys kasutab sertifikaadis avaldatud
+tühistusinfo hankimiseks Windowsi sertifikaadiahela mootorit.
+
+Kuva HTTPS-seos:
+
+```bat
+netsh http show sslcert 0.0.0.0:443
+```
+
+Kontrolli, et kliendisertifikaadi tühistusoleku ja kasutusotstarbe kontroll on
+lubatud ning tühistusoleku kontroll ei piirdu ainult vahemällu salvestatud
+andmetega. Vajadusel uuenda neid poliitikaid:[^8]
+
+```bat
+netsh http update sslcert ipport=0.0.0.0:443 ^
+    verifyclientcertrevocation=enable ^
+    verifyrevocationwithcachedclientcertonly=disable ^
+    usagecheck=enable
+```
+
+Luba serverist väljuv liiklus tühistusinfo teenustesse, monitoori Windowsi
+CAPI2 ja HTTP Service'i tõrkeid ning testi kehtiva ja tühistatud
+sertifikaadiga. Määra ja testi rakenduse käitumine tühistusinfo ajutise
+kättesaamatuse korral. Ära kasuta aegunud OCSP päringute arvu registripoliitikat
+OCSP eelistamiseks CRL-ile; lase praegusel sertifikaadiahela mootoril kasutada
+igas sertifikaadis avaldatud tühistusinfot.
 
 ### Soovituslikud IIS'i sätted
 
 #### SSL/TLS
 
-IIS'i versioon 10 serveril 2022 kasutab vaikimisi kõiki TLS protokollide versioone, 1.0–1.3[^6]. Vanemad SSL protokollid ei ole vaikimisi kasutusel.
+TLS protokollide valikul ei tohi tugineda IIS-i või Schanneli
+vaikesätetele. TLS 1.0 ja TLS 1.1 tuleb keelata. Uutes ja ajakohastatud
+lahendustes tuleb vaikimisi lubada ainult TLS 1.3.
 
-Tänapäeval ei tohiks kindlasti enam kasutada `TLS 1.0` ja `TLS 1.1`. Kahepoolse autentimise toimimiseks peab olema lubatud `TLS 1.2` ja loodetavasti ajutiselt keelatud `TLS 1.3` (loe täpsemalt peatükist „Kahepoolse SSL-i, sertifikaadiga autentimise nõudmine – Eelhäälestus"). Kui sertifikaadiga autentimine ei ole oluline, võib hea mõte olla lubada vaid `TLS 1.3`.
+TLS 1.2 võib lisada üksnes dokumenteeritud erandina, kui teenust peavad
+kasutama 2020. aasta või vanemad kliendid või kui kliendisertifikaati
+peab küsima pärast esialgse TLS ühenduse loomist. Sertifikaadiga
+autentimine iseenesest ei ole põhjus TLS 1.2 lubamiseks. Windows Server
+2025 puhul tuleb kasutada eespool kirjeldatud seose valikut
+*Negotiate Client Certificate*.
 
-Rohkem infot TLS protokolli kasutamise soovituste kohta leiab RIA tellitud krüptograafiliste algoritmide elutsükli uuringust aadressil <https://www.id.ee/artikkel/kruptograafiliste-algoritmide-elutsukli-uuringud-2/>.
+Aruanne soovitab TLS 1.2 lubamisel korduskätluse keelata. Pärandlahendus, mis
+küsib kliendisertifikaati alles pärast esialgset kätlust, ei saa samaaegselt
+seda voogu säilitada ja soovitust järgida. Eelista eraldi seosel või
+serverinimel kätluse ajal autentimist ning dokumenteeri allesjääv TLS 1.2
+korduskätluse sõltuvus erandina.
 
-Lisaks IIS konfiguratsiooni juures vanade TLS protokollide keelamisele saab seda teha ka otse registris. `TLS 1.0` ja `TLS 1.1` keelamiseks tuleb registrisse lisada järgmine konfiguratsioon[^7]:
+Kui Schannel ja kasutatavad kliendid pakuvad tootmiskõlblikku tuge, eelista
+hübriidrühma `X25519MLKEM768`. Juhend ei määra selle jaoks registri- ega
+rühmapoliitika väärtust, sest tugi ja standarditud identifikaator sõltuvad
+platvormist. Enne sellele tuginemist kontrolli läbiräägitud rühma ajakohase
+TLS-skanneriga.
 
-- `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\`[^8]:
+Rohkem infot TLS protokolli kasutamise soovituste kohta leiab RIA
+tellitud krüptograafiliste algoritmide elutsükli uuringust aadressil
+<https://www.id.ee/artikkel/kruptograafiliste-algoritmide-elutsukli-uuringud-2/>.
+
+TLS protokollid tuleks hallata keskse poliitika või muu Windowsi
+haldusvahendiga. Järgmisi registriväärtusi võib kasutada rakendatud
+seadistuse kontrollimiseks või juhul, kui keskne haldusvahend ei ole
+kasutatav. `TLS 1.0` ja `TLS 1.1` keelamiseks tuleb määrata[^5]:
+
+- `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\`[^6]:
   - `TLS 1.0\Server`
     - `Enabled DWORD:0`
     - `DisabledByDefault = DWORD:1`
@@ -288,31 +579,96 @@ Lisaks IIS konfiguratsiooni juures vanade TLS protokollide keelamisele saab seda
 
 ![TLS versioonide 1.0 ja 1.1 keelamine registris](./img/image30.png)
 
-Ja muidugi on võimalik ülaltoodud registri konfiguratsiooni levitada ka kesksete poliitikate abil.
+Ainult TLS 1.3 kasutava serveri jaoks võib samas asukohas keelata ka
+`TLS 1.2\Server`, määrates `Enabled DWORD:0` ja
+`DisabledByDefault DWORD:1`. See on kogu süsteemi Schanneli
+serverirakendusi mõjutav muudatus, mistõttu tuleb enne rakendamist
+kontrollida teisi teenuseid ja pärast muudatust need taaskäivitada.
+Dokumenteeritud TLS 1.2 ühilduvuserandi korral TLS 1.2 ei keelata.
+
+##### Pakkimine
+
+Hoia TLS-i pakkimine keelatuna. HTTP pakkimine on IIS-is eraldiseisev
+funktsioon: keela dünaamilise sisu pakkimine rakendustes, mille vastused
+sisaldavad koos ründaja juhitavat sisendit ja saladusi. Kui HTTP vastuste
+pakkimine peab jääma lubatuks, peab rakendus takistama saitidevahelist
+päringuvõltsimist ning leevendama vastuse pikkuse leket. Kontrolli TLS-i
+tulemust ajakohase skanneriga, sest IIS ei paku TLS-i pakkimiseks tavapärast
+saiditaseme seadistust.
 
 #### Šifrikomplektid (Cipher suites)
 
-Windows serveriga tuleb vaikimisi kaasa mitmeid šifrikomplekte. Kõiki neid saab vaadata näiteks `PowerShell` käsuga `Get-TLSCipherSuite`[^9].
+Konfigureeri selge lubatud loend keskse poliitika või Windowsi TLS
+PowerShelli käskude abil. Esmalt kontrolli paigaldatud operatsioonisüsteemi
+toetatud komplekte käsuga `Get-TlsCipherSuite`[^7].
 
-Kindlat soovitust erinevate šifrikomplektide kasutamiseks ei ole veebisaidile esitatavaid tingimusi teadmata võimalik anda. Küll aga tundub mõistlik eemaldada loendist ebaturvalised šifrikomplektid (juhul, kui neid seal on). Enne konfiguratsiooniga jätkamist soovitame kindlasti tutvuda RIA tellitud krüptograafiliste algoritmide elutsükli uuringu soovitustega aadressil <https://www.id.ee/artikkel/kruptograafiliste-algoritmide-elutsukli-uuringud-2/>. Mõistlik võib olla konkreetsete šifrikomplektide lubamine.
+Windows Server 2025 soovitusliku, ainult TLS 1.3 kasutava profiili jaoks
+luba järgmised komplektid toodud järjekorras. Schannel toetab kõiki kolme;
+ChaCha20-Poly1305 on toetatud, kuid ei ole vaikimisi lubatud:
 
-Seega, täpsema kontrolli soovimiseks kasutatavate šifrikomplektide üle, on ilmselt parim kasutada kohalikke või keskseid poliitikaid. Kasutamaks ainult šifrikomplekte `ECDHE-ECDSA-AES256-GCM-SHA384` ja `ECDHE-RSA-AES256-GCM-SHA384`, tuleb modifitseerida määrangut `Computer Configuration/Administrative Templates/Network/SSL Configuration Settings: SSL Cipher Suite Order`. Šifrikomplektid tuleb eraldada komaga.[^10]
+```text
+TLS_AES_256_GCM_SHA384,TLS_CHACHA20_POLY1305_SHA256,TLS_AES_128_GCM_SHA256
+```
 
-![Kindlate šifrikomplektide määramine keskse poliitikaga](./img/image31.png)
+Dokumenteeritud TLS 1.2 ühilduvuserandi korral lisa Windows Server 2025
+toetatud kaks ECDSA TLS 1.2 komplekti. See vastab juhendis kasutatavale ainult
+ECDSA sertifikaadi profiilile:
 
-Eelmises punktis määratud konfiguratsioon kirjutatakse registrisse:
+```text
+TLS_AES_256_GCM_SHA384,TLS_CHACHA20_POLY1305_SHA256,TLS_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+```
 
-![Poliitikaga määratud konfiguratsioon](./img/image32.png)
+Aruanne lubab TLS 1.2 puhul ka ECDHE-ECDSA komplekti šifriga
+ChaCha20-Poly1305, kuid Windows Server 2025 Schannel seda ei paku. Aruanne
+lubab ka RSA-ga autenditud komplekte, kuid see ainult ECDSA profiil jätab need
+välja. `TLS_AES_128_CCM_SHA256` on ainult varuvariant juhuks, kui AES-GCM ja
+ChaCha20-Poly1305 ei ole saadaval, ning ei kuulu sellesse Windows Serveri
+profiili. RSA autentimist ega võtmevahetust, DHE varuvarianti, CBC-d, CCM_8-t
+ega muid mitte-AEAD komplekte ei tohi lubada.
 
-Vaikimisi on šifrikomplektid kirjeldatud järgmisel pildil kirjeldatud asukohas:
+Sisesta sobiv komadega eraldatud lubatud loend määrangusse *SSL Cipher Suite
+Order*. Poliitika asub:
 
-![Vaikimisi šifrikomplektide konfiguratsioon](./img/image33.png)
+- kohalikus rühmapoliitika redaktoris: *Computer Configuration* →
+  *Administrative Templates* → *Network* → *SSL Configuration Settings* →
+  *SSL Cipher Suite Order*;
+- domeeni rühmapoliitika halduses: *Computer Configuration* → *Policies* →
+  *Administrative Templates* → *Network* → *SSL Configuration Settings* →
+  *SSL Cipher Suite Order*.
+
+Poliitika väärtus `Functions` talletatakse registris:
+
+```text
+HKLM\SOFTWARE\Policies\Microsoft\Cryptography\Configuration\SSL\00010002
+```
+
+Pärast poliitika rakendamist kuva tegelikud šifrikomplektid tähtsuse
+järjekorras:
+
+```powershell
+Get-TlsCipherSuite
+```
+
+Käsk kuvab iga komplekti eraldi kirjena; komplekti nimi on väljal `Name`.
+Poliitikaga määratud toorväärtuse kontrollimiseks käivita:
+
+```powershell
+Get-ItemPropertyValue `
+    -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Cryptography\Configuration\SSL\00010002' `
+    -Name Functions
+```
 
 ##### Muud konfigureeritavad Schannel omadused
 
-Vaikimisi asukoht Schanneli konfigureeritavatele omadustele on registris: `HKLM\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL`. Siin on võimalik erinevaid komponente lubada või keelata, kirjutada vajadusel üle vaikimisi konfiguratsiooni määranguid.
+Muud Schanneli seadistused asuvad registris:
 
-![Schannel konfigureeritavad omadused](./img/image34.png)
+```text
+HKLM\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL
+```
+
+Loo ainult paigaldatud Windows Serveri versiooni jaoks dokumenteeritud
+väärtusi. Algoritmi nime olemasolu registris ei näita iseenesest, kas
+algoritm on lubatud või kasutusel.
 
 #### Muud võimalused
 
@@ -332,20 +688,34 @@ Palume suhtuda ülaltoodusse kui näidisloendisse demonstreerimaks, mida veel sa
 
 [^1]: <https://www.id.ee/artikkel/paigalda-id-tarkvara/>
 
-[^2]: Trusted root certification authorities
+[^2]: Juhul, kui sertifikaadi on väljastanud mõni kesktaseme CA, siis tuleb
+    see puudumisel lisada *kesktaseme sertimiskeskuste* konteinerisse. Ja
+    kesktaseme CA sertifikaadi väljastanud juur-CA sertifikaat tuleb
+    puudumisel lisada *usaldusväärsete juursertifikaatide* konteinerisse.
 
-[^3]: Juhul, kui sertifikaadi on väljastanud mõni kesktaseme CA, siis tuleb see puudumisel lisada *kesktaseme sertimiskeskuste* konteinerisse. Ja kesktaseme CA sertifikaadi väljastanud juur-CA sertifikaat tuleb puudumisel lisada *usaldusväärsete juursertifikaatide* konteinerisse.
+[^3]: <https://techcommunity.microsoft.com/blog/iis-support-blog/addressing-tls-1-3-compatibility-issues-in-iis-express-on-windows-11/4449362/>
 
-[^4]: Firefox teadaolevalt toetab, ent ka sellel brauseril ei ole see vaikimisi lubatud.
+[^4]: SK poolt väljastatud organisatsioonide kaartide kasutuse puhul peavad
+    kesktaseme sertifikaatide hulka olema häälestatud ka `EID-SK 2016`
+    (<https://www.sk.ee/upload/files/EID-SK_2016.der.crt>) sertifikaadid!
 
-[^5]: SK poolt väljastatud organisatsioonide kaartide kasutuse puhul peavad kesktaseme sertifikaatide hulka olema häälestatud ka `EID-SK 2016` (<https://www.sk.ee/upload/files/EID-SK_2016.der.crt>) sertifikaadid!
+[^5]: Vaikimisi neid väärtuseid ei eksisteeri.
 
-[^6]: <https://docs.microsoft.com/en-us/windows/win32/secauthn/protocols-in-tls-ssl--schannel-ssp-?redirectedfrom=MSDN>
+[^6]: Võimalik on konfigureerida eraldi ka kliendi osa SSL/TLS protokollide
+    vaates. Käesolev juhend käsitleb ainult serveri poole häälestust. See ei
+    tähenda, et kliendi osa konfigureerimine ei ole soovitatav, see sõltub
+    alati konkreetsest situatsioonist.
 
-[^7]: Vaikimisi neid väärtuseid ei eksisteeri.
+[^7]: <https://learn.microsoft.com/en-us/windows/win32/secauthn/tls-cipher-suites-in-windows-server-2025>
 
-[^8]: Võimalik on konfigureerida eraldi ka kliendi osa SSL/TLS protokollide vaates. Käesolev juhend käsitleb ainult serveri poole häälestust. See ei tähenda, et kliendi osa konfigureerimine ei ole soovitatav, see sõltub alati konkreetsest situatsioonist.
+[^8]: <https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh-http>
 
-[^9]: <https://docs.microsoft.com/en-us/windows/win32/secauthn/cipher-suites-in-schannel>
+[^9]: Lubatud loend põhineb
+    [ESTEID2018 sertifitseerimispoliitikal v4.0](https://www.id.ee/wp-content/uploads/2025/10/cp_esteid_v4.0-08.10.2025.pdf),
+    [ESTEID2025 sertifitseerimispoliitikal v2.0](https://repository.eidpki.ee/static/documents/eid-cp-v-2.0_04.06.2026_allkirjastatud.pdf)
+    ja [Zetesi sertifikaadiprofiilidel](https://repository.eidpki.ee/static/documents/CertificateProfiles-20260520.pdf).
+    Enne tootmise lubatud loendi muutmist kontrolli
+    [Zetesi repositooriumi](https://repository.eidpki.ee/repository/) ning
+    teenuseosutajate kehtivaid poliitikaid ja profiile.
 
-[^10]: Märgitagu siinkohal, et nende konkreetsete määrangutega `TLS 1.3` ei toimi! Pigem võib nende määrangute kasutamine olla mõttekas juhul, kui `TLS 1.3`-e ei soovita kasutada, kasvõi näiteks sertifikaadiga autentimise lubamise puhul.
+[^10]: <https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.x509certificates.x509chainpolicy.certificatepolicy?view=net-9.0>

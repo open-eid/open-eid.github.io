@@ -2,7 +2,7 @@
 
 **[Eesti keeles (In Estonian)](index.et.md)**
 
-**Version:** 26.04/1
+**Version:** 26.08/1
 
 **Published by:** [RIA](https://www.ria.ee/)
 
@@ -27,6 +27,7 @@
 | 22/08/2024 | 24.08/1 | Ubuntu version updated to Ubuntu Server 24.04. Apache version updated to 2.4.62. Updates in the virtual host configuration. — Changed by: Urmas Vanem
 | 31/10/2025 | 25.10/1 | Added Zetes certificates. — Changed by: Raul Kaidro
 | 22/04/2026 | 26.04/1 | Converted to Markdown format. — Changed by: Raul Metsma
+| 21/08/2026 | 26.08/1 | Updated certificate-key, TLS protocol, cipher-suite, certificate-policy, and OCSP guidance based on the 2026 cryptographic algorithms life-cycle report. — Changed by: Raul Metsma
 
 ---
 
@@ -143,6 +144,17 @@ $ openssl req -new -key Apache2404.key -out Apache2404.csr -subj /C=EE/O=OctoX/C
     the actual address of the website[^3]. The names must also be
     resolvable in name services.
 
+Generate a separate private key for every independent TLS server. Do not copy
+one key between servers merely because a wildcard or multi-SAN certificate
+could cover all their names. Keeping keys separate limits the impact of a
+server or key compromise.
+
+For production deployments, use a hardware security module (HSM) or an
+equivalent non-exportable hardware-backed key store where supported. Generate
+the key inside the device and keep it non-exportable. Confirm that the HSM,
+OpenSSL integration, and certificate issuer support the selected ECDSA P-384
+key before deployment. The file-based key in this example is not an HSM setup.
+
 The contents of the CSR can be viewed by running
 
 ```bash
@@ -170,67 +182,6 @@ Certificate Request:
                     DNS:Apache2404.octox.demo, DNS:MYWEBSERVER.octox.demo
         Signature Algorithm: ecdsa-with-SHA256
         Signature Value:
-```
-
-###### RSA
-
-*This section is retained for those who prefer RSA-based certificates. The rest of the document uses ECC.*
-
-Create a CSR and a private key with the command
-
-```bash
-$ openssl req -newkey rsa:2048 -keyout Apache2021.key -sha256 -subj "/CN=Apache5.kaheksa.xi" -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf "[SAN]\nsubjectAltName=DNS:Apache2021.kaheksa.xi,DNS:Apache5.kaheksa.xi")) -out Apache2021.csr -nodes
-Generating a RSA private key
-........+++++
-.++++
-writing new private key to 'Apache2021.key'
------
-```
-
-1.  `Apache2021.key` is the private key of the certificate;
-2.  `Apache2021.csr` is the CSR for the CA;
-3.  `Apache5.kaheksa.xi` is the subject name for the certificate;
-4.  `Apache2021.kaheksa.xi` and `Apache5.kaheksa.xi` are the SAN DNS names
-    for the certificate. These names must correspond to the actual
-    address of the website[^4]. The names must also be resolvable in
-    name services.
-
-The contents of the CSR can be viewed with the command
-
-```bash
-$ openssl req -in Apache2021.csr -noout -text
-Certificate Request:
-    Data:
-        Version: 1 (0x0)
-        Subject: CN = Apache5.kaheksa.xi
-        Subject Public Key Info:
-            Public Key Algorithm: rsaEncryption
-                RSA Public-Key: (2048 bit)
-                Modulus:
-                    00:c9:4f:a2:54:bd:1a:bb:88:a6:ec:16:c9:3e:28:
-                    ee:f6:09:3d:a3:d7:86:fa:67:a4:e5:73:3b:38:70:
-                    70:73:b0:01:95:7a:8d:c3:47:46:49:b9:12:52:20:
-                    08:0c:ed:f5:ec:c5:4e:25:3e:27:9b:98:67:b0:bd:
-                    c2:cd:00:98:54:36:d4:bf:b8:60:d9:aa:26:de:6a:
-                    da:11:23:2e:a9:05:94:ff:e8:bb:d2:5e:c2:68:8d:
-                    63:97:71:5e:0a:a0:49:fc:27:c7:28:c4:7d:53:12:
-                    1c:e6:2e:9d:bd:81:5b:ff:6a:e5:cf:b5:1a:1b:a3:
-                    5a:2e:9b:bd:0c:fe:c8:8f:ed:ff:b6:08:9a:1a:69:
-                    4f:88:a1:1c:c7:9d:84:53:f0:77:2f:db:ba:2a:9a:
-                    16:f4:78:02:ca:e2:29:f7:f0:f3:61:df:00:ce:3f:
-                    fa:80:c5:ca:2d:37:a4:2e:a4:8c:be:a2:b3:c9:fd:
-                    46:4e:20:fb:18:8b:3d:09:6a:be:01:3d:af:29:dd:
-                    e2:b6:63:3c:3e:46:c1:7a:9b:08:83:c9:32:c5:54:
-                    b2:e6:3d:a3:68:b6:8d:53:cb:36:c2:20:7d:77:63:
-                    c7:cf:c9:11:36:b3:47:9b:10:8f:19:66:cb:a4:0f:
-                    50:f5:35:bf:0d:53:82:cb:ad:3c:1f:5a:1a:2b:70:
-                    a4:8f
-                Exponent: 65537 (0x10001)
-        Attributes:
-            Requested Extensions:
-                X509v3 Subject Alternative Name:
-                    DNS:Apache2021.kaheksa.xi, DNS:Apache5.kaheksa.xi
-        Signature Algorithm: sha256WithRSAEncryption
 ```
 
 ##### Ordering and installing an SSL certificate
@@ -420,17 +371,14 @@ To                         Action      From
 443/tcp (v6)               ALLOW       Anywhere (v6)
 ```
 
-### Checking the status of the user's certificate against the OCSP service[^5]
+### Checking client-certificate revocation with OCSP[^4]
 
-Using the OCSP (Online Certificate Status Protocol) service, you can
-check the revocation status of client certificates practically in real
-time. With every client authentication attempt, the web server sends a
-query to the OCSP service, which responds with the certificate status.
+OCSP (Online Certificate Status Protocol) lets Apache check the revocation
+status of a client certificate during authentication.
 
-SK and Zetes offer a free-access (free-of-charge) AIA OCSP service. For
-certificates issued under the `ESTEID2018` and `ESTEID2025` CA, AIA OCSP
-service location is already included in the certificate
-(<http://aia.sk.ee/esteid2018>, <http://ocsp.eidpki.ee>).
+Certificates issued under the `ESTEID2018` and `ESTEID2025` CAs contain
+their AIA OCSP service address (<http://aia.sk.ee/esteid2018> and
+<http://ocsp.eidpki.ee>).
 
 ![ESTEID2018 AIA OCSP address in the certificate](./img/image8.png)
 
@@ -443,8 +391,49 @@ SSLOCSPEnable leaf
 SSLOCSPUseRequestNonce off
 ```
 
-Reload the Apache2 web service with `systemctl reload apache2`. With this configuration, the OCSP service address is taken
-from the user certificate.
+The `leaf` value checks the end-user certificate. The responder address is
+taken from that certificate. This strict configuration does not use
+`no_ocsp_for_cert_ok`: a missing responder URL or an unsuccessful OCSP check
+prevents client-certificate authentication. Allow outbound HTTP access to
+both responders and monitor Apache errors. Reload Apache with
+`systemctl reload apache2` after applying the change.
+
+### Stapling the server-certificate OCSP response
+
+Client-certificate validation above and server-certificate OCSP stapling are
+separate functions. Stapling lets Apache obtain a signed status response for
+its own server certificate and send it during the TLS handshake. This avoids
+each browser querying the issuing CA and improves client privacy.[^5]
+
+First check whether the server certificate contains an OCSP responder URI:
+
+```bash
+$ openssl x509 -in /etc/ssl/certs/Apache2404.pem -noout -ocsp_uri
+```
+
+If the command returns a supported URI, enable the shared-memory cache and
+production error handling in `/etc/apache2/mods-available/ssl.conf`:
+
+```apache
+SSLStaplingCache "shmcb:${APACHE_RUN_DIR}/ssl_stapling(32768)"
+SSLStaplingReturnResponderErrors off
+SSLStaplingResponderTimeout 4
+SSLStaplingErrorCacheTimeout 60
+```
+
+Ensure `socache_shmcb` is enabled, then add `SSLUseStapling On` to the HTTPS
+virtual host. Do not enable stapling when the issuing CA does not provide an
+OCSP service.
+
+```bash
+$ a2enmod socache_shmcb
+$ systemctl restart apache2
+$ openssl s_client -connect Apache2404.octox.demo:443 \
+    -servername Apache2404.octox.demo -status </dev/null
+```
+
+The output must contain a successful OCSP response and a `good` certificate
+status. Monitor refresh errors and ensure the server can reach the responder.
 
 ### Default webpage removal
 
@@ -463,33 +452,44 @@ $ systemctl reload apache2
 
 #### SSL/TLS
 
-Apache version 2.4.55 uses all SSL/TLS protocols with a version higher
-than SSL3 by default:
+Do not rely on the Apache or operating-system defaults to select TLS
+protocol versions. Check the effective configuration with:
 
 ```bash
 $ grep -i -r "SSLProtocol" /etc/apache2/mods-available/
 /etc/apache2/mods-available/ssl.conf:SSLProtocol all -SSLv3
 ```
 
-It is no longer recommended to use TLS protocols with a version number
-lower than TLS 1.2. TLS version 1.3 has also been in use for a while.
+Disable TLS 1.0 and TLS 1.1. New and updated deployments should enable
+only TLS 1.3 by default. Add TLS 1.2 only as a documented exception when
+the service must support clients from 2020 or earlier, or when a client
+certificate must be requested after the initial TLS connection has been
+established. When TLS 1.2 is enabled, configure an explicit secure
+cipher-suite allowlist.
 
-If there is no specific requirement to allow TLS 1.2, it is recommended
-to only use TLS 1.3. While TLS 1.2 is very stable and secure with the
-correct configuration, TLS version 1.3 is faster, more secure by
-default, and needs less configuration. In standard situations, TLS 1.2
-should be enabled only if really needed, and if it is enabled, it is
-mandatory to allow only secure cipher suites and extensions.
-
-To configure Apache to support only TLS protocol version 1.3, you need
-to add the following line to the Apache configuration file:
+TLS 1.3 configuration:
 
 ```apache
 SSLProtocol -all +TLSv1.3
 ```
 
-To support TLS versions 1.2 and 1.3, add `+TLSv1.2` to the
-configuration line.
+For a documented compatibility exception, enable TLS 1.2 and TLS 1.3:
+
+```apache
+SSLProtocol -all +TLSv1.2 +TLSv1.3
+```
+
+The report recommends disabling renegotiation when TLS 1.2 is enabled. If a
+deployment depends on requesting a client certificate after the initial
+handshake, disabling renegotiation prevents that flow. Prefer a separate
+virtual host that requests the certificate during the initial handshake; do
+not retain renegotiation merely for a location-specific authentication flow.
+
+When the TLS implementation and deployed clients provide production support,
+prioritize the hybrid `X25519MLKEM768` group. This guide does not hard-code a
+group setting because support and the standardized identifier depend on the
+installed OpenSSL version. Confirm the effective group with a current TLS
+scanner before relying on it.
 
 If you want to make the change at the server level, modify the parameter
 `SSLProtocol` in the file `/etc/apache2/mods-available/ssl.conf`.
@@ -501,48 +501,51 @@ ordered by RIA at
 
 ##### Cipher suites
 
-All TLS 1.3 cipher suites are currently considered safe, no additional
-configuration is required for security considerations for this protocol.
-
-TLS 1.2 is different. There are many different TLS cipher suites
-available with Apache version 2.4.55,[^6] which can be viewed with the
-command
-
-```bash
-$ openssl ciphers -v
-```
-
-By default, only two rules are defined regarding ciphers:
-
-1.  HIGH -- some ciphers with a key length of 128 bits and all stronger
-    ones are enabled;
-2.  !aNULL -- ciphers not supporting authentication are disabled.
+Configure an explicit allowlist instead of relying on OpenSSL aliases
+such as `HIGH`. For TLS 1.3, enable the following suites in this order:
 
 ```apache
-SSLCipherSuite HIGH:!aNULL
+SSLCipherSuite TLSv1.3 "TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256"
 ```
 
-If you wish to configure the available cipher suites used with TLS 1.2
-in more detail, you can use the `SSLCipherSuite` directive in the Apache
-configuration file. Here, you can use predefined aliases or exact cipher
-suite descriptions.
+`TLS_AES_128_CCM_SHA256` may be used only as a fallback when AES-GCM and
+ChaCha20-Poly1305 are unavailable. Do not enable CCM_8 suites.
 
-It is impossible to give an exact recommendation for configuring cipher
-suites without knowing the requirements applicable to the webpage.
-However, non-secure cipher suites must be removed from the list. It is
-reasonable to describe the specific enabled cipher suites for TLS 1.2.
+When the documented TLS 1.2 compatibility exception applies, enable only the
+three ECDHE-ECDSA and AEAD suites below. This matches the ECDSA-only
+certificate profile used in this guide:
 
-Example:
+```apache
+SSLCipherSuite SSL "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305"
+```
 
-- Using the following command line in the configuration file, only the described cipher suites are allowed:
-
-  ```apache
-  SSLCipherSuite "ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384"
-  ```
+The `SSL` protocol qualifier applies to cipher suites through TLS 1.2;
+the separate `TLSv1.3` directive controls TLS 1.3. Because this guide
+disables older protocol versions, the `SSL` list is available only to
+TLS 1.2. The TLS 1.2 list excludes RSA authentication and key exchange,
+static DH/ECDH, CBC, CCM_8, and non-AEAD suites.
 
 You can also configure cipher suites at the server level by modifying
 the parameter `SSLCipherSuite` in the file
 `/etc/apache2/mods-available/ssl.conf`.
+
+Check the effective list with `openssl ciphers -v` and verify the
+negotiated protocol and suite with a current TLS scanner after every
+configuration change.
+
+##### Compression
+
+Keep TLS compression disabled explicitly:
+
+```apache
+SSLCompression off
+```
+
+HTTP response compression is separate from TLS compression and can disclose
+secrets when a response contains both attacker-controlled input and sensitive
+data. Disable `mod_deflate` and `mod_brotli` for sensitive dynamic responses.
+If response compression must remain enabled, the application must prevent
+cross-site request forgery and mitigate response-length leakage.
 
 More information about the recommendations for the use of the cipher
 suites can be found in the cryptographic algorithms life cycle report
@@ -559,28 +562,92 @@ user's. By default, this parameter is undefined and its default value is
 
 #### Additional filtering of user certificates
 
-Important! To avoid access to the web service with incorrect
-certificates, you must add the following requirements in the server
-configuration:
+Trusting a CA chain does not prove that the leaf certificate is an ID-card
+authentication certificate. Different certificate products can share a root
+or intermediate CA. Before accepting the authenticated identity, require all
+of the following:
 
-1.  The certificate must have the correct `extendedKeyUsage` field;
-2.  The issuer of the certificate must be `ESTEID2018` or `ESTEID2025`.
+1.  Apache successfully validates the complete certificate chain;
+2.  the issuer is an explicitly allowed intermediate CA;
+3.  `extendedKeyUsage` permits TLS web-client authentication;
+4.  the leaf certificate's `X509v3 CertificatePolicies` extension
+    (`2.5.29.32`) contains both the NCP+ authentication-policy OID and an
+    allowed document-policy OID for the certificate's CA generation.[^6]
 
-Add the following lines to the Apache configuration:
+For production certificates covered by this guide, use this allowlist:
+
+```text
+# Required in every accepted authentication certificate
+0.4.0.2042.1.2
+
+# ESTEID2018 - require one of these document-policy OIDs
+1.3.6.1.4.1.51361.1.1.1
+1.3.6.1.4.1.51361.1.1.2
+1.3.6.1.4.1.51361.1.1.3
+1.3.6.1.4.1.51361.1.1.4
+1.3.6.1.4.1.51361.1.1.5
+1.3.6.1.4.1.51361.1.1.6
+1.3.6.1.4.1.51361.1.1.7
+1.3.6.1.4.1.51455.1.1.1
+
+# ESTEID2025 - require one of these document-policy OIDs
+1.3.6.1.4.1.51361.2.1.1
+1.3.6.1.4.1.51361.2.1.2
+1.3.6.1.4.1.51361.2.1.3
+1.3.6.1.4.1.51361.2.1.4
+1.3.6.1.4.1.51361.2.1.5
+1.3.6.1.4.1.51361.2.1.6
+1.3.6.1.4.1.51455.2.1.1
+```
+
+Correlate the document-policy OID with the validated issuer: an `ESTEID2018`
+certificate must not be accepted using an `ESTEID2025` policy OID, or vice
+versa. The common NCP+ OID is not product-specific and is insufficient on its
+own. Do not add test OIDs, such as Zetes OIDs prefixed with `2.999`, to a
+production allowlist.
+
+The issuer and EKU checks below are useful defence in depth, but they do not
+replace the certificate-policy check:
 
 ```apache
 <Location "/">
 Require expr (
-  (%{SSL_CLIENT_I_DN_CN} == "ESTEID2018" || %{SSL_CLIENT_I_DN_CN} == "ESTEID2025")
-  and "TLS Web Client Authentication, E-mail Protection" in PeerExtList('extendedKeyUsage')
+  (
+    %{SSL_CLIENT_I_DN_CN} == "ESTEID2018"
+    || %{SSL_CLIENT_I_DN_CN} == "ESTEID2025"
+  )
+  and (
+    "TLS Web Client Authentication, E-mail Protection"
+    in PeerExtList('extendedKeyUsage')
+  )
 )
 </Location>
 ```
 
-The configuration above can be added to the virtual host or to the
-Apache main configuration. After adding these requirements, only
-certificates with the correct `extendedKeyUsage` field issued from the
-enabled chain can access the services.
+The configuration can be added to the virtual host or Apache's main
+configuration. The application or an authentication gateway must then parse
+the verified leaf certificate and reject authentication unless both the NCP+
+OID and a matching document-policy OID are present. Do not infer the
+certificate product from its subject, issuer, or EKU alone, and do not treat
+the `anyPolicy` OID (`2.5.29.32.0`) as proof of an ID-card policy.
+
+When the application is integrated through CGI or another interface that
+uses Apache environment variables, `SSLOptions +ExportCertData` makes the
+PEM-encoded leaf certificate available as `SSL_CLIENT_CERT`. Other
+application interfaces should use their native TLS client-certificate API.
+Only accept certificate data supplied through the trusted Apache-to-
+application connection; never trust a client-provided certificate header.
+
+To inspect the extension while testing an exported certificate:
+
+```bash
+$ openssl x509 -in client.pem -noout -text
+```
+
+Check the `X509v3 Certificate Policies` section against the current policy
+and certificate-profile sources cited above. Test at least one
+accepted ID-card certificate and certificates for other products issued in
+related hierarchies, including Mobile-ID where applicable.
 
 > **Note:** If you are using another feature to filter network traffic, the secure
 > configuration should be implemented there, too. SK has published
@@ -591,16 +658,6 @@ enabled chain can access the services.
 > **Note:** SK's recommendations for secure ID-card authentication are published
 > here in the chapter 'Defence: implement ID-card authentication
 > securely':
-> <https://github.com/SK-EID/smart-id-documentation/wiki/Secure-Implementation-Guide>
-
-> **Note:** The recommended method for avoiding incorrect certificates is using
-> OIDs in the certificates. Unfortunately, there is currently no method
-> for doing this at the server level. If possible, open the certificate
-> at the web application level, check for a correct OID in the
-> certificate, and if there is none, reject the authentication request.
-> All currently known OIDs are listed in the chapter 'Only accept
-> certificates with trusted issuance policy' in the following article
-> published by SK:
 > <https://github.com/SK-EID/smart-id-documentation/wiki/Secure-Implementation-Guide>
 
 #### Filtering certificates displayed to the user
@@ -861,20 +918,33 @@ The full demonstrative configuration file is available at <https://installer.id.
     SSLOCSPEnable leaf
     SSLOCSPUseRequestNonce off
 
+    # Server-certificate OCSP stapling - enable only if its CA supports OCSP
+    # SSLUseStapling On
+
     # TLS configuration — use only TLS 1.3
     SSLProtocol -all +TLSv1.3
-    # To also allow TLS 1.2: SSLProtocol -all +TLSv1.2 +TLSv1.3
-    # SSLCipherSuite "ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384"
+    SSLCipherSuite TLSv1.3 "TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256"
+    # Documented TLS 1.2 compatibility exception:
+    # SSLProtocol -all +TLSv1.2 +TLSv1.3
+    # SSLCipherSuite SSL "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305"
     SSLHonorCipherOrder ON
+    SSLCompression off
 
     # Filtering certificates displayed to the user
     SSLCADNRequestFile /etc/ssl/certs/DN_Bundle.pem
 
-    # Additional filtering of user certificates
+    # Partial filtering of user certificates; the application must also
+    # allowlist ID-card CertificatePolicies OIDs
     <Location "/">
     Require expr (
-      (%{SSL_CLIENT_I_DN_CN} == "ESTEID2018" || %{SSL_CLIENT_I_DN_CN} == "ESTEID2025")
-      and "TLS Web Client Authentication, E-mail Protection" in PeerExtList('extendedKeyUsage')
+      (
+        %{SSL_CLIENT_I_DN_CN} == "ESTEID2018"
+        || %{SSL_CLIENT_I_DN_CN} == "ESTEID2025"
+      )
+      and (
+        "TLS Web Client Authentication, E-mail Protection"
+        in PeerExtList('extendedKeyUsage')
+      )
     )
     </Location>
 
@@ -894,16 +964,19 @@ The full demonstrative configuration file is available at <https://installer.id.
     on the command line, it is also possible to describe the attributes
     L, OU, and S if desired. However, only CN can also be used.
 
-[^3]: Modern browsers do not trust websites where at least one SAN DNS
-    name is not equal to the actual address of the website.
+[^3]: Modern browsers trust the certificate only when the requested
+    hostname matches at least one of its SAN DNS names.
 
-[^4]: Modern browsers do not trust websites where at least one SAN DNS
-    name is not equal to the actual address of the website.
-
-[^5]: The certificate check is also doable with certificate revocation
+[^4]: The certificate check is also doable with certificate revocation
     lists (CRL), but this is not covered in this document, as the
     OCSP-based solution is preferred.
 
-[^6]: The ciphers of other protocols are not covered in this chapter,
-    because protocols older than version 1.2 should be disabled and
-    version 1.3. is currently preferred.
+[^5]: <https://httpd.apache.org/docs/2.4/ssl/ssl_howto.html#ocspstapling>
+
+[^6]: The allowlist is based on the
+    [ESTEID2018 certificate policy v4.0](https://www.id.ee/wp-content/uploads/2025/10/cp_esteid_v4.0-08.10.2025.pdf)
+    and the [ESTEID2025 certificate policy v2.0](https://repository.eidpki.ee/static/documents/eid-cp-v-2.0_04.06.2026_allkirjastatud.pdf),
+    supplemented by the [Zetes certificate profiles](https://repository.eidpki.ee/static/documents/CertificateProfiles-20260520.pdf).
+    Check the [Zetes repository](https://repository.eidpki.ee/repository/)
+    and the service providers' current policies and profiles before changing
+    the production allowlist.
